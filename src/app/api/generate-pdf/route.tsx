@@ -1,0 +1,318 @@
+import { NextResponse } from 'next/server'
+import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer'
+import type { UserInputs, CalculationResult, LeadData } from '@/lib/types'
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 40,
+    fontFamily: 'Helvetica',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  logo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#4B8E82',
+  },
+  memoLabel: {
+    fontSize: 10,
+    color: '#6b7280',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  preparedFor: {
+    fontSize: 12,
+    marginBottom: 24,
+    color: '#374151',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 24,
+    gap: 16,
+  },
+  statBox: {
+    width: '48%',
+    border: '1px solid #4B8E82',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 8,
+  },
+  statLabel: {
+    fontSize: 9,
+    color: '#6b7280',
+    marginBottom: 4,
+  },
+  statValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#121213',
+  },
+  summary: {
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginBottom: 20,
+    color: '#374151',
+  },
+  countryIntel: {
+    fontSize: 10,
+    marginBottom: 16,
+  },
+  readiness: {
+    fontSize: 10,
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 8,
+    color: '#121213',
+  },
+  bulletList: {
+    fontSize: 9,
+    marginBottom: 8,
+    color: '#374151',
+  },
+  checklistItem: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  checklistDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 8,
+    marginTop: 5,
+  },
+  dataTable: {
+    fontSize: 9,
+    marginTop: 8,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 30,
+    left: 40,
+    right: 40,
+    fontSize: 8,
+    color: '#9ca3af',
+    textAlign: 'center',
+  },
+})
+
+function getCurrencySymbol(currency: string): string {
+  const symbols: Record<string, string> = {
+    GBP: '£',
+    EUR: '€',
+    USD: '$',
+    CHF: 'CHF ',
+    SEK: 'SEK ',
+    DKK: 'DKK ',
+    NOK: 'NOK ',
+    PLN: 'PLN ',
+    CZK: 'CZK ',
+    AUD: 'A$',
+    NZD: 'NZ$',
+    SGD: 'S$',
+    CAD: 'CA$',
+    AED: 'AED ',
+    ZAR: 'R',
+    BRL: 'R$',
+    MXN: 'MX$',
+    JPY: '¥',
+    INR: '₹',
+    KES: 'KES ',
+    RON: 'RON ',
+    HUF: 'HUF ',
+  }
+  return symbols[currency] ?? currency + ' '
+}
+
+function formatCurrencyPdf(amount: number, currency: string): string {
+  const symbol = getCurrencySymbol(currency)
+  if (Math.abs(amount) >= 1_000_000) {
+    return `${symbol}${(amount / 1_000_000).toFixed(1)}M`
+  }
+  if (Math.abs(amount) >= 10_000) {
+    return `${symbol}${Math.round(amount / 1000)}k`
+  }
+  return `${symbol}${Math.round(amount).toLocaleString()}`
+}
+
+function CrossoverMemoDoc({
+  inputs,
+  result,
+  lead,
+}: {
+  inputs: UserInputs
+  result: CalculationResult
+  lead: LeadData
+}) {
+  const country = inputs.country!
+  const currency = country.currency
+
+  const crossoverText = result.crossoverMonth
+    ? `Month ${result.crossoverMonth}`
+    : 'Not within 3 years'
+
+  let summaryText = ''
+  if (result.status === 'ABOVE_THRESHOLD') {
+    summaryText = `Based on your inputs, ${lead.companyName} is currently past the economic crossover point in ${country.name}. At ${inputs.currentHeadcount} employees, an entity would save approximately ${formatCurrencyPdf(result.totalSavings, currency)} over the next 3 years compared to your current EOR arrangement.`
+  } else if (result.status === 'NEAR_THRESHOLD') {
+    summaryText = `Based on your inputs, ${lead.companyName} is approaching the crossover point in ${country.name}. Now is the time to begin transition planning.`
+  } else {
+    summaryText = `Based on your inputs, ${lead.companyName} is currently best served by EOR in ${country.name}. Review when headcount reaches ${result.threshold}.`
+  }
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.header}>
+          <Text style={styles.logo}>TEAMED</Text>
+          <Text style={styles.memoLabel}>
+            Crossover Memo · {new Date().toLocaleDateString('en-GB')}
+          </Text>
+        </View>
+
+        <Text style={styles.title}>EOR vs Entity Analysis — {country.name}</Text>
+        <Text style={styles.preparedFor}>
+          Prepared for: {lead.firstName}, {lead.companyName}
+        </Text>
+
+        <View style={styles.statsGrid}>
+          <View style={styles.statBox}>
+            <Text style={styles.statLabel}>Crossover Month</Text>
+            <Text style={styles.statValue}>{crossoverText}</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statLabel}>3-Year EOR Cost</Text>
+            <Text style={styles.statValue}>{formatCurrencyPdf(result.totalEorCost, currency)}</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statLabel}>3-Year Entity Cost</Text>
+            <Text style={styles.statValue}>
+              {formatCurrencyPdf(result.totalEntityCost, currency)}
+            </Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statLabel}>3-Year Savings</Text>
+            <Text style={styles.statValue}>
+              {formatCurrencyPdf(Math.abs(result.totalSavings), currency)}
+              {result.totalSavings >= 0 ? ' saved' : ' more with EOR'}
+            </Text>
+          </View>
+        </View>
+
+        <Text style={styles.summary}>{summaryText}</Text>
+
+        <Text style={styles.sectionTitle}>Crossover data (cumulative costs)</Text>
+        <View style={styles.dataTable}>
+          {[1, 6, 12, 18, 24, 30, 36].map((m) => {
+            const point = result.dataPoints.find((p) => p.month === m) ?? result.dataPoints[m - 1]
+            if (!point) return null
+            return (
+              <Text key={m} style={styles.bulletList}>
+                Month {point.month}: EOR {formatCurrencyPdf(point.eorCumulative, currency)} · Entity{' '}
+                {formatCurrencyPdf(point.entityCumulative, currency)}
+              </Text>
+            )
+          })}
+        </View>
+
+        <Text style={styles.sectionTitle}>What you need to know about {country.name}</Text>
+        <Text style={styles.bulletList}>Setup complexity: {country.complexityLabel}</Text>
+        <Text style={styles.bulletList}>
+          Teamed recommends considering an entity from {result.threshold} employees
+        </Text>
+        <Text style={styles.bulletList}>
+          {country.setupMonthsLow}–{country.setupMonthsHigh} months to establish a legal entity
+        </Text>
+        <Text style={styles.bulletList}>Key factors:</Text>
+        {country.complexityFactors.map((f, i) => (
+          <Text key={i} style={styles.bulletList}>
+            • {f}
+          </Text>
+        ))}
+        <Text style={styles.bulletList}>Red flags to review:</Text>
+        {country.redFlags.map((f, i) => (
+          <Text key={i} style={styles.bulletList}>
+            • {f}
+          </Text>
+        ))}
+
+        <Text style={styles.sectionTitle}>Your transition readiness</Text>
+        {result.readinessItems.map((item, i) => (
+          <View key={i} style={styles.checklistItem}>
+            <View
+              style={[
+                styles.checklistDot,
+                {
+                  backgroundColor:
+                    item.status === 'green' ? '#4B8E82' : item.status === 'amber' ? '#EAB308' : '#F43855',
+                },
+              ]}
+            />
+            <View>
+              <Text style={{ fontSize: 9, fontWeight: 'bold' }}>{item.criterion}</Text>
+              <Text style={styles.bulletList}>{item.question}</Text>
+              <Text style={styles.bulletList}>{item.detail}</Text>
+            </View>
+          </View>
+        ))}
+        <Text style={styles.readiness}>
+          You meet {result.readinessScore}/5 transition criteria.
+          {result.readinessScore >= 4
+            ? ' You look ready to move.'
+            : result.readinessScore >= 2
+              ? " You're getting closer — a few things to address."
+              : ' Not yet — stay on EOR and review when you grow.'}
+        </Text>
+
+        <Text style={styles.footer}>
+          Generated by Teamed · teamed.global · This model is based on market averages and is not a
+          binding quote. Contact Teamed for a personalised assessment.
+        </Text>
+      </Page>
+    </Document>
+  )
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const { inputs, result, lead } = body as {
+      inputs: UserInputs
+      result: CalculationResult
+      lead: LeadData
+    }
+
+    if (!inputs?.country || !result || !lead) {
+      console.error('[generate-pdf] Missing inputs, result, or lead')
+      return NextResponse.json({ success: false }, { status: 400 })
+    }
+
+    const doc = <CrossoverMemoDoc inputs={inputs} result={result} lead={lead} />
+    const streamOrBuffer = await pdf(doc).toBuffer()
+    let pdfBase64: string
+    if (Buffer.isBuffer(streamOrBuffer) || streamOrBuffer instanceof Uint8Array) {
+      pdfBase64 = Buffer.from(streamOrBuffer as Buffer).toString('base64')
+    } else {
+      const arrBuf = await new Response(
+        streamOrBuffer as unknown as ReadableStream
+      ).arrayBuffer()
+      pdfBase64 = Buffer.from(new Uint8Array(arrBuf)).toString('base64')
+    }
+
+    return NextResponse.json({ success: true, pdfBase64 })
+  } catch (err) {
+    console.error('[generate-pdf]', err)
+    return NextResponse.json({ success: false }, { status: 500 })
+  }
+}
