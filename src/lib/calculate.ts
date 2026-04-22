@@ -40,7 +40,8 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
 
   const totalEorCost = eorCumulative
   const totalEntityCost = entityCumulative
-  const totalSavings = totalEntityCost - totalEorCost
+  /** Positive = entity path is cheaper over 3 years (EOR spend minus entity spend). */
+  const totalSavings = totalEorCost - totalEntityCost
 
   let status: CalculationResult['status']
   if (inputs.currentHeadcount >= threshold) {
@@ -56,7 +57,8 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
     country,
     threshold,
     crossoverMonth,
-    totalSavings
+    totalEorCost,
+    totalEntityCost
   )
   const readinessScore = Math.round(
     readinessItems.reduce((sum, item) => {
@@ -85,7 +87,8 @@ function buildReadinessItems(
   country: Country,
   threshold: number,
   crossoverMonth: number | null,
-  totalSavings: number
+  totalEorCost: number,
+  totalEntityCost: number
 ): ReadinessItem[] {
   const concentrationStatus =
     inputs.currentHeadcount >= threshold
@@ -101,12 +104,13 @@ function buildReadinessItems(
         ? 'amber'
         : 'red'
 
-  const economicsStatus =
-    crossoverMonth !== null && crossoverMonth <= 18
-      ? 'green'
-      : crossoverMonth !== null
-        ? 'amber'
-        : 'red'
+  /** GEMO criterion 3: 3-year EOR cost vs entity cost (same window as the model). */
+  const entityEconomicallyViable = totalEorCost > totalEntityCost
+  const economicsStatus = entityEconomicallyViable
+    ? 'green'
+    : crossoverMonth !== null
+      ? 'amber'
+      : 'red'
 
   const controlStatus: 'amber' = 'amber'
 
@@ -115,55 +119,58 @@ function buildReadinessItems(
 
   return [
     {
-      criterion: 'Concentration',
-      question: `Do you have or expect ${threshold}+ employees concentrated in ${country.name}?`,
+      criterion: 'Employee concentration',
+      question: `Have you reached or exceeded the GEMO threshold (${threshold} employees) for ${country.name}, accounting for local-language operation?`,
       status: concentrationStatus,
       detail:
         concentrationStatus === 'green'
-          ? `You're at or above the threshold for considering an entity.`
+          ? `At or above the Tier ${country.tier} threshold — entity concentration criteria are met.`
           : concentrationStatus === 'amber'
-            ? `You're within 20% of the threshold — start planning.`
-            : `Stay on EOR until you're closer to ${threshold} employees.`,
+            ? `Within 20% of threshold — flag for review per GEMO (e.g. 8+ in Tier 1).`
+            : `Below threshold — GEMO recommends staying on EOR until closer to ${threshold} employees.`,
     },
     {
-      criterion: 'Commitment',
-      question: 'Is your headcount in this country growing or stable?',
+      criterion: 'Long-term commitment',
+      question:
+        'Are you planning a 3+ year presence in this market with stable or growing headcount?',
       status: commitmentStatus,
       detail:
         commitmentStatus === 'green'
-          ? 'Growing headcount supports entity investment.'
+          ? 'Growing headcount supports amortising entity setup (GEMO criterion 2).'
           : commitmentStatus === 'amber'
-            ? 'Flat headcount — ensure entity payback fits your timeline.'
-            : 'Declining headcount makes entity less attractive.',
+            ? 'Flat headcount — ensure multi-year payback still works for entity setup.'
+            : 'Declining headcount — GEMO suggests EOR may remain the better fit.',
     },
     {
-      criterion: 'Economics',
-      question: 'Does the crossover fall within 18 months?',
+      criterion: 'Economic viability',
+      question:
+        'Over 3 years, do total EOR costs exceed entity setup plus ongoing entity costs in this model?',
       status: economicsStatus,
-      detail:
-        economicsStatus === 'green'
-          ? 'Fast payback — entity makes strong economic sense.'
-          : economicsStatus === 'amber'
-            ? 'Payback beyond 18 months — plan accordingly.'
-            : 'EOR remains more cost-effective for the 3-year window.',
+      detail: entityEconomicallyViable
+        ? 'Three-year projection favours entity — aligns with GEMO cost comparison.'
+        : crossoverMonth !== null
+          ? 'Monthly crossover appears before 36 months, but 3-year totals still favour EOR — validate inputs and setup assumptions.'
+          : 'EOR remains cheaper on a 3-year cumulative view — GEMO suggests staying on EOR unless other drivers apply.',
     },
     {
-      criterion: 'Control',
-      question: 'Do you need direct local contracts, IP protection, or bank accounts?',
+      criterion: 'Control requirements',
+      question:
+        'Do you need direct control over local operations, IP protection, or customer contracts that require a local entity?',
       status: controlStatus,
       detail:
-        'Only you can answer this — entity gives full control; EOR keeps it with the provider.',
+        'GEMO criterion 4 — only you can confirm. Entity enables direct contracts and bank accounts; EOR keeps the employment relationship with the provider.',
     },
     {
-      criterion: 'Readiness',
-      question: `How complex is entity setup in ${country.name}?`,
+      criterion: 'Operational readiness',
+      question:
+        'Do you have HR and legal resources (internal or outsourced) capable of managing local compliance?',
       status: readinessStatus,
       detail:
         readinessStatus === 'green'
-          ? 'Straightforward setup — minimal barriers.'
+          ? `Tier ${country.tier} (${country.complexityLabel}): allow ${country.setupMonthsLow}–${country.setupMonthsHigh} months for establishment per GEMO.`
           : readinessStatus === 'amber'
-            ? 'Moderate complexity — plan for local support.'
-            : 'Complex jurisdiction — factor in time and expert support.',
+            ? `Tier ${country.tier}: plan for local payroll, accounting, and HR advisory — typically ${country.setupMonthsLow}–${country.setupMonthsHigh} months to establish.`
+            : `Tier ${country.tier} (high complexity): budget ${country.setupMonthsLow}–${country.setupMonthsHigh} months and specialist in-country support.`,
     },
   ]
 }

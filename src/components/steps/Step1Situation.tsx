@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { useState, useRef, useEffect, useMemo, useLayoutEffect } from 'react'
 import { COUNTRIES } from '@/lib/countries'
 import { calculateCrossover } from '@/lib/calculate'
 import { getCurrencySymbol } from '@/lib/format'
 import { trackEvent } from '@/lib/analytics'
-import type { UserInputs, Country } from '@/lib/types'
+import { MACRO_REGION_OPTIONS } from '@/lib/macro-region'
+import type { UserInputs, Country, CountryMacroRegion } from '@/lib/types'
 
 interface Step1SituationProps {
   inputs: UserInputs
@@ -13,10 +15,14 @@ interface Step1SituationProps {
   onComplete: (inputs: UserInputs, result: ReturnType<typeof calculateCrossover>) => void
 }
 
+const COUNTRY_ROW_PX = 48
+
 export function Step1Situation({ inputs, setInputs, onComplete }: Step1SituationProps) {
   const [countrySearch, setCountrySearch] = useState('')
+  const [macroFilter, setMacroFilter] = useState<'all' | CountryMacroRegion>('all')
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const listParentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     trackEvent('step_1_view')
@@ -32,11 +38,27 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const filteredCountries = COUNTRIES.filter(
-    (c) =>
-      c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
-      c.code.toLowerCase().includes(countrySearch.toLowerCase())
-  )
+  const filteredCountries = useMemo(() => {
+    const q = countrySearch.trim().toLowerCase()
+    return COUNTRIES.filter((c) => {
+      if (macroFilter !== 'all' && c.macroRegion !== macroFilter) return false
+      if (!q) return true
+      return c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q)
+    })
+  }, [countrySearch, macroFilter])
+
+  const rowVirtualizer = useVirtualizer({
+    count: filteredCountries.length,
+    getScrollElement: () => listParentRef.current,
+    estimateSize: () => COUNTRY_ROW_PX,
+    overscan: 12,
+  })
+
+  useLayoutEffect(() => {
+    if (dropdownOpen && listParentRef.current) {
+      listParentRef.current.scrollTop = 0
+    }
+  }, [macroFilter, countrySearch, dropdownOpen])
 
   const handleCountrySelect = (country: Country) => {
     setInputs({
@@ -45,6 +67,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
       eorFeePerMonth: country.eorMarketRateMonthly,
     })
     setCountrySearch('')
+    setMacroFilter('all')
     setDropdownOpen(false)
     trackEvent('country_selected', {
       country_name: country.name,
@@ -98,21 +121,64 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                 className="w-full border border-gray-200 rounded-input px-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
               />
               {dropdownOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-grey-mid rounded-input shadow-lg max-h-60 overflow-auto">
-                  {filteredCountries.map((country) => (
-                    <button
-                      key={country.code}
-                      type="button"
-                      onClick={() => handleCountrySelect(country)}
-                      className="w-full px-4 py-3 text-left font-sans text-black hover:bg-grey-mid flex items-center gap-2"
-                    >
-                      <span>{country.flag}</span>
-                      <span>{country.name}</span>
-                    </button>
-                  ))}
-                  {filteredCountries.length === 0 && (
-                    <div className="px-4 py-3 font-sans text-gray-500">No countries found</div>
-                  )}
+                <div className="absolute z-10 mt-1 w-full bg-white border border-grey-mid rounded-input shadow-lg overflow-hidden">
+                  <div className="flex flex-wrap gap-1.5 px-2 pt-2 pb-2 border-b border-gray-100">
+                    {MACRO_REGION_OPTIONS.map((opt) => {
+                      const active =
+                        opt.id === 'all' ? macroFilter === 'all' : macroFilter === opt.id
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          aria-pressed={active}
+                          onClick={() => setMacroFilter(opt.id)}
+                          className={`rounded-full px-2.5 py-1 text-xs font-sans font-medium transition-colors ${
+                            active
+                              ? 'bg-forest text-white'
+                              : 'bg-grey-mid/60 text-black hover:bg-grey-mid'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <div ref={listParentRef} className="h-60 overflow-y-auto">
+                    {filteredCountries.length === 0 ? (
+                      <div className="px-4 py-3 font-sans text-gray-500">No countries found</div>
+                    ) : (
+                      <div
+                        className="relative w-full"
+                        style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+                      >
+                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                          const country = filteredCountries[virtualRow.index]
+                          return (
+                            <div
+                              key={virtualRow.key}
+                              className="absolute left-0 top-0 w-full"
+                              style={{
+                                height: `${virtualRow.size}px`,
+                                transform: `translateY(${virtualRow.start}px)`,
+                              }}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => handleCountrySelect(country)}
+                                className="w-full h-full px-4 text-left font-sans text-black hover:bg-grey-mid flex items-center gap-2 border-b border-transparent hover:border-gray-100"
+                              >
+                                <span className="shrink-0">{country.flag}</span>
+                                <span className="truncate">{country.name}</span>
+                                <span className="ml-auto shrink-0 text-xs text-gray-400 font-medium">
+                                  {country.code}
+                                </span>
+                              </button>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

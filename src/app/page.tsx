@@ -154,11 +154,24 @@ export default function Home() {
               What is GEMO?
             </h2>
             <p className="font-sans text-gray-700 leading-relaxed mb-4">
-              GEMO, Global Employment Management and Operations, is our term for the full
-              scope of global employment. Not just EOR. It covers entity setup, payroll
-              registration, statutory compliance, and governance. One system, one
-              relationship, from first hire to your own presence in-country. For companies
-              past their Crossover Point, GEMO is the practical path off EOR without
+              <strong>Country Concentration &amp; Entity Transition Framework (GEMO Framework)</strong>{' '}
+              is Teamed&apos;s strategic model (v2.0, November 2024) for when mid-market companies
+              (about 50–5,000 employees) should move from Employer of Record (EOR) to their own legal
+              entity in each country. Evidence base: advisory work with 1,000+ companies across 70+
+              countries. Core principle: the optimal transition point varies by country complexity —
+              Tier 1 (low) from 10 employees (native language) or about 13–15 (non-native); Tier 2
+              (moderate) from 15–20 / 20–30; Tier 3 (high) from 25–35 / 35–50, applying the{' '}
+              <strong>Language Buffer Rule</strong> (add roughly 30–50% to thresholds when your team
+              cannot work from local-language employment and compliance materials).
+            </p>
+            <p className="font-sans text-gray-700 leading-relaxed mb-4">
+              <strong>Global Entity Management Operations (GEMO)</strong> is the operating approach
+              where one supplier carries you from initial EOR hiring through advice on when an entity
+              makes sense, executes the transition, then continues payroll and compliance on the
+              entity — so you avoid switching providers at each stage and reduce the fragmentation
+              cost that often runs £50,000–£150,000 per year for multi-country mid-market teams. It
+              covers entity setup, payroll registration, statutory compliance, and governance in one
+              relationship — the practical path off EOR past your Crossover Point without
               re-onboarding employees or switching vendors.
             </p>
           </article>
@@ -228,12 +241,24 @@ export default function Home() {
                   <span className="text-pastel-purple group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <p className="font-sans text-gray-700 mt-4 leading-relaxed">
-                  It varies by country. In Straightforward jurisdictions, the threshold is
-                  often five to ten employees. In Complex markets, it can sit between fifteen
-                  and twenty-five. The threshold also depends on whether you operate in the
-                  local language, because that reduces compliance complexity. The calculator
-                  applies country-specific thresholds and your headcount, so you see the
-                  exact point where an entity becomes the right structure.
+                  It varies by GEMO country tier: Tier 1 (low complexity) typically from 10
+                  employees in the local language, or about 13–15 if not; Tier 2 from 15–20 / 20–30;
+                  Tier 3 from 25–35 / 35–50 with the Language Buffer Rule for non-native operations.
+                  This calculator applies those thresholds per country and combines them with your
+                  3-year EOR vs entity economics.
+                </p>
+              </details>
+              <details className="group bg-white rounded-card border border-forest/20 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <summary className="font-heading font-bold text-black cursor-pointer list-none flex justify-between items-center">
+                  What is GEMO and why does it matter?
+                  <span className="text-forest group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p className="font-sans text-gray-700 mt-4 leading-relaxed">
+                  GEMO is Global Entity Management Operations: one supplier manages global employment
+                  from EOR through entity transition to ongoing entity payroll and compliance. For
+                  mid-market companies in several countries, that avoids juggling separate EOR,
+                  formation, payroll, and advisory firms — which Teamed observes can cost tens to low
+                  hundreds of thousands per year in coordination alone.
                 </p>
               </details>
             </div>
@@ -285,7 +310,15 @@ export default function Home() {
                 name: 'How many employees before I should consider my own entity?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'It varies by country. In Straightforward jurisdictions, the threshold is often five to ten employees. In Complex markets, it can sit between fifteen and twenty-five. The threshold also depends on whether you operate in the local language, because that reduces compliance complexity. The calculator applies country-specific thresholds and your headcount, so you see the exact point where an entity becomes the right structure.',
+                  text: 'It varies by GEMO country tier: Tier 1 from 10 employees (native language) or about 13–15 non-native; Tier 2 from 15–20 / 20–30; Tier 3 from 25–35 / 35–50, using the Language Buffer Rule for non-native operations. The calculator applies these per country with your headcount and 3-year economics.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What is GEMO and why does it matter?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'GEMO is Global Entity Management Operations: one supplier manages employment from EOR through entity transition to ongoing entity operations, avoiding fragmented vendors. For mid-market companies across multiple countries, this reduces heavy coordination cost.',
                 },
               },
             ],

@@ -1,7 +1,16 @@
+/** Geographic filter bucket for the country picker (not GEMO tier). */
+export type CountryMacroRegion =
+  | 'europe'
+  | 'americas'
+  | 'asia_pacific'
+  | 'middle_east_africa'
+
 export interface Country {
   code: string
   name: string
   flag: string
+  /** UN-style macro region for UX filters (Europe includes selected transcontinental codes). */
+  macroRegion: CountryMacroRegion
   tier: 1 | 2 | 3
   complexityLabel: 'Straightforward' | 'Moderate' | 'Complex'
   thresholdNative: number

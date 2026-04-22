@@ -35,8 +35,10 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
         </div>
 
         <p className="font-sans text-black">
-          Teamed recommends considering an entity from{' '}
-          <span className="font-bold">{threshold}</span> employees in {country.name}.
+          Under the <span className="font-medium">GEMO Framework</span> (Country Concentration
+          &amp; Entity Transition), Teamed recommends considering an entity from{' '}
+          <span className="font-bold">{threshold}</span> employees in {country.name} (Tier{' '}
+          {country.tier}, accounting for your language selection).
         </p>
 
         <p className="font-sans text-black">
