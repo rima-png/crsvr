@@ -46,7 +46,14 @@ const CURRENCY_MANUAL: Record<string, string> = {
   PS: 'USD',
 }
 
-const TIER_ECONOMICS = {
+/**
+ * Tier defaults expressed as **USD-equivalent** values. These get converted to each
+ * country's local currency at build time (using the FX snapshot) before any
+ * per-country override is applied. Without that conversion the templates render as
+ * raw local-currency numbers — fine for USD/GBP/EUR, but absurd for INR (₹28k ≈ $336)
+ * or MXN (MX$20k ≈ $1,180). See `applyFxToTierEcon` below.
+ */
+const TIER_ECONOMICS_USD = {
   1: {
     setupCostLow: 18000,
     setupCostHigh: 32000,
@@ -66,6 +73,23 @@ const TIER_ECONOMICS = {
     eorMarketRateMonthly: 699,
   },
 } as const
+
+/**
+ * Convert the USD-denominated tier-default economics into a country's local currency.
+ * `fxToUsd` is "USD per 1 unit of local currency" — to go USD → local we divide.
+ * Falls back to USD-equivalent when no FX rate is available (better than rendering
+ * a raw USD number as if it were local currency).
+ */
+function applyFxToTierEcon(tier: 1 | 2 | 3, fxToUsd: number | undefined) {
+  const usd = TIER_ECONOMICS_USD[tier]
+  const rate = fxToUsd ?? 1.0
+  return {
+    setupCostLow: Math.round(usd.setupCostLow / rate),
+    setupCostHigh: Math.round(usd.setupCostHigh / rate),
+    ongoingCostPerEmployeePerYear: Math.round(usd.ongoingCostPerEmployeePerYear / rate),
+    eorMarketRateMonthly: Math.round(usd.eorMarketRateMonthly / rate),
+  }
+}
 
 function resolveAlpha2(displayName: string): string {
   const primary = LOOKUP_NAME[displayName] ?? displayName
@@ -94,9 +118,11 @@ function currencyForCode(code: string): string {
 
 function seedFromTierRow(displayName: string, tier: 1 | 2 | 3): CountrySeed {
   const code = resolveAlpha2(displayName)
-  const econ = TIER_ECONOMICS[tier]
   const tierLabel = tier === 1 ? 'low' : tier === 2 ? 'moderate' : 'high'
   const currency = currencyForCode(code)
+  const fxToUsd = fxToUsdFor(currency)
+  // FX-converted tier defaults; per-country overrides win on top of these.
+  const econ = applyFxToTierEcon(tier, fxToUsd)
   const override = COUNTRY_OVERRIDES[code]
   const dataConfidence: DataConfidence = override
     ? override.verified
@@ -132,7 +158,7 @@ function seedFromTierRow(displayName: string, tier: 1 | 2 | 3): CountrySeed {
     thresholdJustification: override?.thresholdJustification,
     terminationCostPerEmployee: override?.terminationCostPerEmployee,
     terminationBasisNote: override?.terminationBasisNote,
-    fxToUsd: fxToUsdFor(currency),
+    fxToUsd,
     dataConfidence,
   }
 }
