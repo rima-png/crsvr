@@ -36,18 +36,36 @@ export default function Home() {
               Crossover Economics, the data layer behind the Graduation Model we&apos;ve applied
               advising over 1,000 companies across 187+ countries.
             </p>
-            <Link
-              href="/calculator"
-              className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
-            >
-              Calculate your Crossover Point
-            </Link>
-            <a
-              href="#learn-more"
-              className="inline-block mt-6 font-sans text-base font-semibold text-forest hover:text-forest-dark underline underline-offset-4 decoration-2 transition-colors"
-            >
-              Learn more ↓
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
+              <Link
+                href="/calculator"
+                className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
+              >
+                Calculate your Crossover Point
+              </Link>
+              <a
+                href="#learn-more"
+                className="group inline-flex items-center gap-2 font-sans text-base font-semibold text-forest hover:text-forest-dark px-6 py-4 rounded-btn border border-forest/30 hover:border-forest/60 hover:bg-forest/5 transition-colors"
+              >
+                Learn more
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover:translate-y-0.5"
+                >
+                  <path
+                    d="M7 2v9M3 7l4 4 4-4"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
         </section>
 
@@ -99,15 +117,29 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA again — outline style */}
-        <section className="py-12 bg-grey-light">
+        {/* Second-chance CTA — mirrors the hero pair on a soft band */}
+        <section className="py-16 bg-grey-light border-y border-grey-mid">
           <div className="max-w-2xl mx-auto px-6 text-center">
-            <Link
-              href="/calculator"
-              className="inline-block border-2 border-black text-black rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-black hover:text-white transition-colors"
-            >
-              Calculate your Crossover Point
-            </Link>
+            <h2 className="font-heading font-bold text-black text-2xl mb-3">
+              See your Crossover Point in 2 minutes
+            </h2>
+            <p className="font-sans text-gray-600 mb-8">
+              Country-specific data, three-year economics, and a Crossover Memo you can share.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
+              <Link
+                href="/calculator"
+                className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
+              >
+                Calculate your Crossover Point
+              </Link>
+              <a
+                href="#learn-more"
+                className="inline-flex items-center gap-2 font-sans text-base font-semibold text-forest hover:text-forest-dark px-6 py-4 rounded-btn border border-forest/30 hover:border-forest/60 hover:bg-forest/5 transition-colors"
+              >
+                Read the detail
+              </a>
+            </div>
           </div>
         </section>
 
@@ -265,15 +297,18 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer CTA — dark section, ghost CTA */}
-        <section className="py-12 bg-black text-white">
+        {/* Footer CTA — final dark-section conversion */}
+        <section className="py-16 bg-black text-white">
           <div className="max-w-2xl mx-auto px-6 text-center">
-            <p className="font-sans text-gray-300 mb-4">
-              Ready to see your Crossover Point?
+            <h2 className="font-heading font-bold text-white text-2xl mb-3">
+              Stop guessing when to graduate off EOR
+            </h2>
+            <p className="font-sans text-gray-300 mb-8">
+              The Crossover Point gives you the target month. Two minutes, no signup until you want the memo.
             </p>
             <Link
               href="/calculator"
-              className="inline-block border-2 border-white text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-white hover:text-black transition-colors"
+              className="inline-block bg-white text-black rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg shadow-white/10"
             >
               Calculate your Crossover Point
             </Link>
