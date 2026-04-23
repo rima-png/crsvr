@@ -3,9 +3,23 @@
  *
  * Keyed by ISO-3166 alpha-2 code. Keys missing from this map inherit tier defaults.
  *
- * `verified: true` → signed off against advisor-grade data (green confidence badge).
- * `verified: false` → drafted from public sources, pending advisor review (amber badge).
- * No entry → `tier_default` (grey "regional averages" disclaimer).
+ * Confidence model (drives the badge on the results page + PDF memo):
+ * - `verified: true`  → signed off against advisor-grade data (green badge).
+ * - `verified: false` → drafted from public sources, pending advisor review (amber).
+ * - No entry          → tier defaults only (grey "regional averages" disclaimer).
+ *
+ * Numeric fields here are denominated in the country's **local currency** (BRL, INR, etc.).
+ * Tier-template defaults in build-tier-countries.ts are USD-equivalent and get FX-converted
+ * to local currency at build time before any override is merged. So:
+ *   - When you have local-source data, override.
+ *   - When you don't, the FX-converted tier default is a reasonable conservative fallback.
+ *   - You only need an `ongoingCostPerEmployeePerYear` override if the FX-converted default
+ *     diverges meaningfully from local advisor-quoted costs (typically only matters when
+ *     local labour rates for accountants/payroll deviate sharply from US rates).
+ *
+ * Wave 1 (verified): BR, US.
+ * Wave 2 (baseline): GB, DE, FR, ES, NL, IN, PL, MX.
+ * Wave 3 will flip Wave-2 entries to `verified: true` as advisors sign off, country by country.
  */
 
 export interface CountryOverride {
@@ -120,6 +134,6 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     terminationBasisNote:
       'Unjustified-dismissal exposure under Ley Federal del Trabajo (LFT) Art. 48: indemnización constitucional of 3 months\' integrated daily salary (SDI) + 20 días por año de servicio (the 20-day-per-year figure was re-affirmed in the 24 December 2024 LFT reform for indefinite-term contracts) + prima de antigüedad of 12 days\' salary per year of service (capped at 2× the UMA/minimum wage per day) + proportional aguinaldo (15-day minimum annual bonus) + proportional vacaciones + prima vacacional (25% on vacation days). Figure assumes mid-level at ~MXN 40,000/month gross at ~3 years tenure: ~MXN 120k constitutional + ~MXN 80k for the 20-day accrual + ~MXN 5k seniority premium + accruals. Most Mexican exits settle via renuncia with a negotiated finiquito or a Junta-de-Conciliación-registered mutual termination to avoid the new Tribunal Laboral procedure (Reforma Laboral 2019 rolled out state-by-state through 2022). Pre-2022 Junta de Conciliación cases are still being wound down; the new conciliation-first requirement adds 45 days before any labour court filing.',
     thresholdJustification:
-      'Tier 2 default (18 native / 25 non-native) applies, but the underlying economics lean *later* than the tier template suggests — if anything the threshold errs on the high side for EOR-lean positioning, not the low side. Setup is heavier than the MXN-denominated Tier 2 default: SA de CV or S. de R.L. de C.V. formation through a fedatario público (notary) typically lands MXN 70k–160k (~$3.5k–$8k) end-to-end — notary MXN 17k–20k, public-registry fees MXN 1.5k–5k (varies by state), legal counsel MXN 5k–20k, plus RFC/IMSS/INFONAVIT/SAT registrations and first-year accountant retainer. Employer statutory load is among the heaviest in LatAm at ~30–40% of integrated base salary (SBC): IMSS ~20–25%, INFONAVIT 5%, SAR retirement 2%, state payroll tax (ISN) 1–3% varying by state, plus mandatory aguinaldo (15 days min), prima vacacional (25% on vacation days), and PTU profit-sharing capped at 3 months\' salary or the 3-year average per the 2021 outsourcing reform (Mexican Supreme Court upheld the cap as constitutional in April 2024, Amparo en revisión 633/2023). Ongoing per-employee admin overhead (payroll processing, monthly IMSS/SAT filings, quarterly provisional taxes, Mexican accountant retainer) also runs higher than the PLN/EUR Tier 2 peers, so entity economics converge later than the tier default — expect the effective threshold to sit closer to 20–28 than 18/25 once ongoing-cost overrides are advisor-verified. Compliance triggers cluster well above the threshold: union-contract / Contrato Colectivo obligations become a live question at 20+ employees post-Reforma Laboral 2019, and internal-committee requirements (Comisión Mixta de Seguridad e Higiene, Comisión Mixta de Capacitación) apply from 1 employee but scale in complexity at 50+. Mexican labour law is federal not state-based, so distributed hiring across CDMX / Nuevo León / Jalisco does not fragment the core regulatory picture — only the state payroll tax rate (ISN, 1–3%) varies meaningfully by location.',
+      'Tier 2 default (18 native / 25 non-native) applies. Setup overridden upward to reflect real SA de CV / S. de R.L. de C.V. formation costs: notary MXN 17k–20k, public-registry fees MXN 1.5k–5k (varies by state), legal counsel MXN 5k–20k, plus RFC/IMSS/INFONAVIT/SAT registrations and first-year accountant retainer — typical end-to-end landing MXN 70k–160k (~$3.5k–$8k). Ongoing per-employee admin overhead inherits the FX-converted Tier 2 default (~MXN 76k/year ≈ $4.5k) which is in the right ballpark for SA de CV with monthly contador retainer + IMSS/SAT filings + quarterly provisional taxes — refine with advisor in Wave 3. Employer statutory load is among the heaviest in LatAm at ~30–40% of integrated base salary (SBC): IMSS ~20–25%, INFONAVIT 5%, SAR retirement 2%, state payroll tax (ISN) 1–3% varying by state, plus mandatory aguinaldo (15 days min), prima vacacional (25% on vacation days), and PTU profit-sharing capped at 3 months\' salary or the 3-year average per the 2021 outsourcing reform (Mexican Supreme Court upheld the cap as constitutional in April 2024, Amparo en revisión 633/2023). Compliance triggers cluster well above the threshold: union-contract / Contrato Colectivo obligations become a live question at 20+ employees post-Reforma Laboral 2019, and internal-committee requirements (Comisión Mixta de Seguridad e Higiene, Comisión Mixta de Capacitación) apply from 1 employee but scale in complexity at 50+. Mexican labour law is federal not state-based, so distributed hiring across CDMX / Nuevo León / Jalisco does not fragment the core regulatory picture — only the state payroll tax rate (ISN, 1–3%) varies meaningfully by location.',
   },
 }
