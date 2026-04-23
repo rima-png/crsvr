@@ -42,11 +42,17 @@ export default function Home() {
             >
               Calculate your Crossover Point
             </Link>
+            <a
+              href="#how-it-works"
+              className="block mt-6 font-sans text-sm text-gray-600 hover:text-forest transition-colors"
+            >
+              See how it works ↓
+            </a>
           </div>
         </section>
 
         {/* How it works */}
-        <section className="py-16 bg-white">
+        <section id="how-it-works" className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-6">
             <h2 className="font-heading font-bold text-black text-2xl text-center mb-14">
               How it works
