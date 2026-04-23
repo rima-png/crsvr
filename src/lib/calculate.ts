@@ -1,8 +1,16 @@
 import type { Country, UserInputs, CalculationResult, MonthlyDataPoint, ReadinessItem } from './types'
+import fxSnapshot from '@/data/fx-snapshot.json'
 
-export function calculateCrossover(inputs: UserInputs, country: Country): CalculationResult {
-  const threshold = inputs.operatesInLocalLanguage ? country.thresholdNative : country.thresholdNonNative
-  const setupCostMidpoint = (country.setupCostLow + country.setupCostHigh) / 2
+const FX_SNAPSHOT_DATE: string = fxSnapshot.snapshotDate
+
+interface ScenarioRun {
+  dataPoints: MonthlyDataPoint[]
+  crossoverMonth: number | null
+  totalEorCost: number
+  totalEntityCost: number
+}
+
+function runScenario(inputs: UserInputs, country: Country, setupCost: number): ScenarioRun {
   const dataPoints: MonthlyDataPoint[] = []
   let eorCumulative = 0
   let entityCumulative = 0
@@ -19,7 +27,7 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
 
     const eorMonthly = headcount * inputs.eorFeePerMonth
     const entityMonthly =
-      (month === 1 ? setupCostMidpoint : 0) + headcount * (country.ongoingCostPerEmployeePerYear / 12)
+      (month === 1 ? setupCost : 0) + headcount * (country.ongoingCostPerEmployeePerYear / 12)
 
     eorCumulative += eorMonthly
     entityCumulative += entityMonthly
@@ -38,10 +46,41 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
     }
   }
 
-  const totalEorCost = eorCumulative
-  const totalEntityCost = entityCumulative
+  return {
+    dataPoints,
+    crossoverMonth,
+    totalEorCost: eorCumulative,
+    totalEntityCost: entityCumulative,
+  }
+}
+
+export function calculateCrossover(inputs: UserInputs, country: Country): CalculationResult {
+  const threshold = inputs.operatesInLocalLanguage ? country.thresholdNative : country.thresholdNonNative
+  const setupCostMidpoint = (country.setupCostLow + country.setupCostHigh) / 2
+
+  const midRun = runScenario(inputs, country, setupCostMidpoint)
+  const lowRun = runScenario(inputs, country, country.setupCostLow)
+  const highRun = runScenario(inputs, country, country.setupCostHigh)
+
+  const totalEorCost = midRun.totalEorCost
+  const totalEntityCost = midRun.totalEntityCost
+  const totalEntityCostLow = lowRun.totalEntityCost
+  const totalEntityCostHigh = highRun.totalEntityCost
+
   /** Positive = entity path is cheaper over 3 years (EOR spend minus entity spend). */
   const totalSavings = totalEorCost - totalEntityCost
+  /** Worst case for entity: setup landed high, so entity total is highest → savings are lowest. */
+  const totalSavingsLow = totalEorCost - totalEntityCostHigh
+  /** Best case for entity: setup landed low, so entity total is lowest → savings are highest. */
+  const totalSavingsHigh = totalEorCost - totalEntityCostLow
+
+  /** Flag when low/high variants disagree on the sign of 3-year savings — recommendation could flip. */
+  const marginFlag = Math.sign(totalSavingsLow) !== Math.sign(totalSavingsHigh)
+
+  const usdTotalEorCost = country.fxToUsd != null ? totalEorCost * country.fxToUsd : null
+  const usdTotalEntityCost = country.fxToUsd != null ? totalEntityCost * country.fxToUsd : null
+  const usdTotalSavings = country.fxToUsd != null ? totalSavings * country.fxToUsd : null
+  const fxSnapshotDate = country.fxToUsd != null ? FX_SNAPSHOT_DATE : null
 
   let status: CalculationResult['status']
   if (inputs.currentHeadcount >= threshold) {
@@ -56,7 +95,7 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
     inputs,
     country,
     threshold,
-    crossoverMonth,
+    midRun.crossoverMonth,
     totalEorCost,
     totalEntityCost
   )
@@ -69,8 +108,8 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
   ) / 10
 
   return {
-    dataPoints,
-    crossoverMonth,
+    dataPoints: midRun.dataPoints,
+    crossoverMonth: midRun.crossoverMonth,
     totalEorCost,
     totalEntityCost,
     totalSavings,
@@ -79,6 +118,17 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
     readinessItems,
     setupCostUsed: setupCostMidpoint,
     threshold,
+    totalEntityCostLow,
+    totalEntityCostHigh,
+    totalSavingsLow,
+    totalSavingsHigh,
+    crossoverMonthLow: lowRun.crossoverMonth,
+    crossoverMonthHigh: highRun.crossoverMonth,
+    marginFlag,
+    usdTotalEorCost,
+    usdTotalEntityCost,
+    usdTotalSavings,
+    fxSnapshotDate,
   }
 }
 

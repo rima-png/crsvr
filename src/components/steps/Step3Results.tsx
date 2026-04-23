@@ -58,6 +58,17 @@ export function Step3Results({
         />
       </div>
 
+      {/* Margin-of-error warning when low/high variants flip the recommendation */}
+      {result.marginFlag && (
+        <div className="bg-red-50 border-l-4 border-teamed-red rounded-card p-4">
+          <p className="font-sans text-sm text-red-900">
+            <span className="font-bold">Recommendation is directional only.</span> The setup-cost
+            range straddles the decision point — the low and high scenarios give opposite answers.
+            Refine with a local advisor before committing to a path.
+          </p>
+        </div>
+      )}
+
       {/* Section B — StatCards */}
       <StatCards
         crossoverMonth={result.crossoverMonth}

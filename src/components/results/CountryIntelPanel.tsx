@@ -18,6 +18,19 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
         ? 'bg-yellow-400/20 text-amber-700'
         : 'bg-teamed-red/10 text-teamed-red'
 
+  const confidenceBadge =
+    country.dataConfidence === 'verified'
+      ? { label: 'Advisor-verified figures', classes: 'bg-forest/10 text-forest' }
+      : country.dataConfidence === 'baseline'
+        ? {
+            label: 'Baseline estimates — contact Teamed to verify',
+            classes: 'bg-yellow-400/20 text-amber-700',
+          }
+        : {
+            label: 'Regional tier averages — contact Teamed for country-specific figures',
+            classes: 'bg-grey-light text-gray-600',
+          }
+
   return (
     <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm">
       <h3 className="font-heading font-bold text-black text-lg mb-4">
@@ -25,6 +38,14 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
       </h3>
 
       <div className="space-y-4">
+        <div>
+          <span
+            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${confidenceBadge.classes}`}
+          >
+            {confidenceBadge.label}
+          </span>
+        </div>
+
         <div>
           <p className="font-sans text-gray-500 text-sm mb-1">Setup complexity</p>
           <span
@@ -40,6 +61,12 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
           <span className="font-bold">{threshold}</span> employees in {country.name} (Tier{' '}
           {country.tier}, accounting for your language selection).
         </p>
+
+        {country.thresholdJustification && (
+          <p className="font-sans text-gray-600 text-sm italic border-l-2 border-forest/40 pl-3">
+            {country.thresholdJustification}
+          </p>
+        )}
 
         <p className="font-sans text-black">
           <span className="font-bold">

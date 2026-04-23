@@ -2,10 +2,20 @@ import countries from 'i18n-iso-countries'
 import en from 'i18n-iso-countries/langs/en.json'
 import { getAllInfoByISO } from 'iso-country-currency'
 import tierData from '@/data/gemo-country-tiers.json'
+import fxSnapshot from '@/data/fx-snapshot.json'
 import { getEmojiFlag } from 'countries-list'
-import type { Country } from './types'
+import type { Country, DataConfidence } from './types'
 import { buildCountryFromGemo, type CountrySeed } from './gemo'
 import { macroRegionFromCountryCode } from './macro-region'
+import { COUNTRY_OVERRIDES } from '@/data/country-overrides'
+
+/** Date stamp of the committed FX snapshot — surfaced in the memo's "Your assumptions" block. */
+export const FX_SNAPSHOT_DATE: string = fxSnapshot.snapshotDate
+
+function fxToUsdFor(currency: string): number | undefined {
+  const rates = fxSnapshot.rates as Record<string, number>
+  return rates[currency.toUpperCase()]
+}
 
 countries.registerLocale(en)
 
@@ -86,17 +96,26 @@ function seedFromTierRow(displayName: string, tier: 1 | 2 | 3): CountrySeed {
   const code = resolveAlpha2(displayName)
   const econ = TIER_ECONOMICS[tier]
   const tierLabel = tier === 1 ? 'low' : tier === 2 ? 'moderate' : 'high'
+  const currency = currencyForCode(code)
+  const override = COUNTRY_OVERRIDES[code]
+  const dataConfidence: DataConfidence = override
+    ? override.verified
+      ? 'verified'
+      : 'baseline'
+    : 'tier_default'
+
   return {
     code,
     name: displayName,
     flag: getEmojiFlag(code as Parameters<typeof getEmojiFlag>[0]),
     macroRegion: macroRegionFromCountryCode(code),
     tier,
-    setupCostLow: econ.setupCostLow,
-    setupCostHigh: econ.setupCostHigh,
-    ongoingCostPerEmployeePerYear: econ.ongoingCostPerEmployeePerYear,
+    setupCostLow: override?.setupCostLow ?? econ.setupCostLow,
+    setupCostHigh: override?.setupCostHigh ?? econ.setupCostHigh,
+    ongoingCostPerEmployeePerYear:
+      override?.ongoingCostPerEmployeePerYear ?? econ.ongoingCostPerEmployeePerYear,
     eorMarketRateMonthly: econ.eorMarketRateMonthly,
-    currency: currencyForCode(code),
+    currency,
     complexityFactors: [
       `GEMO Tier ${tier} (${tierLabel} complexity): thresholds and timelines follow the Country Concentration & Entity Transition Framework.`,
       'Operating language vs local language affects the concentration threshold (Language Buffer Rule).',
@@ -108,6 +127,13 @@ function seedFromTierRow(displayName: string, tier: 1 | 2 | 3): CountrySeed {
       'Missing local HR, payroll, tax, and legal capacity (or budget for outsourced GEMO-style support)?',
     ],
     languageBufferApplies: tier !== 1,
+    thresholdNative: override?.thresholdNative,
+    thresholdNonNative: override?.thresholdNonNative,
+    thresholdJustification: override?.thresholdJustification,
+    terminationCostPerEmployee: override?.terminationCostPerEmployee,
+    terminationBasisNote: override?.terminationBasisNote,
+    fxToUsd: fxToUsdFor(currency),
+    dataConfidence,
   }
 }
 

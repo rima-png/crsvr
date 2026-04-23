@@ -105,6 +105,97 @@ const styles = StyleSheet.create({
     color: '#9ca3af',
     textAlign: 'center',
   },
+  memoHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    fontSize: 9,
+  },
+  memoHeaderLeft: {
+    color: '#374151',
+  },
+  memoHeaderRight: {
+    color: '#6b7280',
+    maxWidth: '65%',
+    textAlign: 'right',
+  },
+  memoHeaderRule: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#4B8E82',
+    marginBottom: 16,
+  },
+  confidenceBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 4,
+    fontSize: 8,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  confidenceVerified: {
+    backgroundColor: '#DEF1EC',
+    color: '#2F6B61',
+  },
+  confidenceBaseline: {
+    backgroundColor: '#FEF3C7',
+    color: '#92400E',
+  },
+  confidenceTierDefault: {
+    backgroundColor: '#F3F4F6',
+    color: '#4B5563',
+  },
+  marginWarning: {
+    backgroundColor: '#FEF2F2',
+    borderLeftWidth: 3,
+    borderLeftColor: '#F43855',
+    padding: 8,
+    marginBottom: 16,
+    fontSize: 9,
+    color: '#991B1B',
+  },
+  statRange: {
+    fontSize: 8,
+    color: '#6b7280',
+    marginTop: 2,
+  },
+  terminationBlock: {
+    borderWidth: 1,
+    borderColor: '#FCA5A5',
+    borderRadius: 6,
+    padding: 10,
+    marginBottom: 16,
+    backgroundColor: '#FEF2F2',
+  },
+  footnote: {
+    fontSize: 8,
+    fontStyle: 'italic',
+    color: '#6b7280',
+    marginLeft: 6,
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  assumptionsBlock: {
+    marginTop: 12,
+    marginBottom: 12,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+  },
+  assumptionsRow: {
+    flexDirection: 'row',
+    fontSize: 9,
+    marginBottom: 3,
+    color: '#374151',
+  },
+  assumptionsLabel: {
+    width: '40%',
+    color: '#6b7280',
+  },
+  assumptionsValue: {
+    width: '60%',
+    color: '#121213',
+  },
 })
 
 function getCurrencySymbol(currency: string): string {
@@ -135,8 +226,7 @@ function getCurrencySymbol(currency: string): string {
   return symbols[currency] ?? currency + ' '
 }
 
-function formatCurrencyPdf(amount: number, currency: string): string {
-  const symbol = getCurrencySymbol(currency)
+function formatAmountWithSymbol(amount: number, symbol: string): string {
   if (Math.abs(amount) >= 1_000_000) {
     return `${symbol}${(amount / 1_000_000).toFixed(1)}M`
   }
@@ -144,6 +234,23 @@ function formatCurrencyPdf(amount: number, currency: string): string {
     return `${symbol}${Math.round(amount / 1000)}k`
   }
   return `${symbol}${Math.round(amount).toLocaleString()}`
+}
+
+function formatCurrencyPdf(amount: number, currency: string, amountUsd?: number | null): string {
+  const local = formatAmountWithSymbol(amount, getCurrencySymbol(currency))
+  if (amountUsd == null || currency === 'USD') return local
+  const usd = formatAmountWithSymbol(amountUsd, '$')
+  return `${local} (~${usd})`
+}
+
+function formatDatePdf(date: Date): string {
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+function confidenceBadgeLabel(confidence: 'verified' | 'baseline' | 'tier_default'): string {
+  if (confidence === 'verified') return 'Advisor-verified figures'
+  if (confidence === 'baseline') return 'Baseline estimates — contact Teamed to verify'
+  return 'Regional tier averages — contact Teamed for country-specific figures'
 }
 
 function CrossoverMemoDoc({
@@ -181,36 +288,104 @@ function CrossoverMemoDoc({
           </Text>
         </View>
 
+        <View style={styles.memoHeader}>
+          <Text style={styles.memoHeaderLeft}>Prepared on {formatDatePdf(new Date())}</Text>
+          <Text style={styles.memoHeaderRight}>
+            Based on inputs submitted at this date. Advisory only — refresh before any board or legal decision.
+          </Text>
+        </View>
+        <View style={styles.memoHeaderRule} />
+
         <Text style={styles.title}>EOR vs Entity Analysis — {country.name}</Text>
         <Text style={styles.preparedFor}>
           Prepared for: {lead.firstName}, {lead.companyName}
         </Text>
 
+        <Text
+          style={[
+            styles.confidenceBadge,
+            country.dataConfidence === 'verified'
+              ? styles.confidenceVerified
+              : country.dataConfidence === 'baseline'
+                ? styles.confidenceBaseline
+                : styles.confidenceTierDefault,
+          ]}
+        >
+          {confidenceBadgeLabel(country.dataConfidence)} — {country.name}
+        </Text>
+
+        {result.marginFlag && (
+          <Text style={styles.marginWarning}>
+            The cost range straddles the decision point. Low and high setup-cost scenarios give
+            opposite recommendations. Treat this memo as directional, not determinative — refine
+            with a local advisor before committing.
+          </Text>
+        )}
+
         <View style={styles.statsGrid}>
           <View style={styles.statBox}>
             <Text style={styles.statLabel}>Crossover Month</Text>
             <Text style={styles.statValue}>{crossoverText}</Text>
+            {(result.crossoverMonthLow !== result.crossoverMonth ||
+              result.crossoverMonthHigh !== result.crossoverMonth) && (
+              <Text style={styles.statRange}>
+                Range: {result.crossoverMonthLow ? `M${result.crossoverMonthLow}` : 'none'} –{' '}
+                {result.crossoverMonthHigh ? `M${result.crossoverMonthHigh}` : 'none'}
+              </Text>
+            )}
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statLabel}>3-Year EOR Cost</Text>
-            <Text style={styles.statValue}>{formatCurrencyPdf(result.totalEorCost, currency)}</Text>
+            <Text style={styles.statValue}>
+              {formatCurrencyPdf(result.totalEorCost, currency, result.usdTotalEorCost)}
+            </Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statLabel}>3-Year Entity Cost</Text>
             <Text style={styles.statValue}>
-              {formatCurrencyPdf(result.totalEntityCost, currency)}
+              {formatCurrencyPdf(result.totalEntityCost, currency, result.usdTotalEntityCost)}
+            </Text>
+            <Text style={styles.statRange}>
+              Range: {formatCurrencyPdf(result.totalEntityCostLow, currency)} –{' '}
+              {formatCurrencyPdf(result.totalEntityCostHigh, currency)}
             </Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statLabel}>3-Year Savings</Text>
             <Text style={styles.statValue}>
-              {formatCurrencyPdf(Math.abs(result.totalSavings), currency)}
+              {formatCurrencyPdf(Math.abs(result.totalSavings), currency, result.usdTotalSavings != null ? Math.abs(result.usdTotalSavings) : null)}
               {result.totalSavings >= 0 ? ' saved' : ' more with EOR'}
+            </Text>
+            <Text style={styles.statRange}>
+              Range: {formatCurrencyPdf(result.totalSavingsLow, currency)} –{' '}
+              {formatCurrencyPdf(result.totalSavingsHigh, currency)}
             </Text>
           </View>
         </View>
 
         <Text style={styles.summary}>{summaryText}</Text>
+
+        {country.terminationCostPerEmployee != null && (
+          <View style={styles.terminationBlock}>
+            <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#991B1B', marginBottom: 4 }}>
+              If you wind the entity down at month 36
+            </Text>
+            <Text style={{ fontSize: 10, color: '#374151', marginBottom: 4 }}>
+              Estimated exit cost:{' '}
+              {formatCurrencyPdf(
+                country.terminationCostPerEmployee * inputs.plannedHeadcount,
+                currency,
+                country.fxToUsd != null
+                  ? country.terminationCostPerEmployee * inputs.plannedHeadcount * country.fxToUsd
+                  : null
+              )}{' '}
+              ({inputs.plannedHeadcount} employees × {formatCurrencyPdf(country.terminationCostPerEmployee, currency)} per employee)
+            </Text>
+            {country.terminationBasisNote && (
+              <Text style={styles.footnote}>{country.terminationBasisNote}</Text>
+            )}
+          </View>
+        )}
 
         <Text style={styles.sectionTitle}>Crossover data (cumulative costs)</Text>
         <View style={styles.dataTable}>
@@ -231,6 +406,9 @@ function CrossoverMemoDoc({
         <Text style={styles.bulletList}>
           Teamed recommends considering an entity from {result.threshold} employees
         </Text>
+        {country.thresholdJustification && (
+          <Text style={styles.footnote}>{country.thresholdJustification}</Text>
+        )}
         <Text style={styles.bulletList}>
           {country.setupMonthsLow}–{country.setupMonthsHigh} months to establish a legal entity
         </Text>
@@ -274,6 +452,64 @@ function CrossoverMemoDoc({
               ? " You're getting closer — a few things to address."
               : ' Not yet — stay on EOR and review when you grow.'}
         </Text>
+
+        <View style={styles.assumptionsBlock}>
+          <Text style={styles.sectionTitle}>Your assumptions</Text>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Country</Text>
+            <Text style={styles.assumptionsValue}>
+              {country.flag} {country.name} (Tier {country.tier})
+            </Text>
+          </View>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Current headcount</Text>
+            <Text style={styles.assumptionsValue}>{inputs.currentHeadcount}</Text>
+          </View>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Planned headcount (by month 12)</Text>
+            <Text style={styles.assumptionsValue}>{inputs.plannedHeadcount}</Text>
+          </View>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Operating language</Text>
+            <Text style={styles.assumptionsValue}>
+              {inputs.operatesInLocalLanguage
+                ? `Native (${country.name}) — threshold ${country.thresholdNative}`
+                : `Non-native — threshold ${country.thresholdNonNative} (Language Buffer Rule applied)`}
+            </Text>
+          </View>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>EOR fee per employee / month</Text>
+            <Text style={styles.assumptionsValue}>
+              {formatCurrencyPdf(inputs.eorFeePerMonth, currency)}
+            </Text>
+          </View>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Entity setup cost band (midpoint used)</Text>
+            <Text style={styles.assumptionsValue}>
+              {formatCurrencyPdf(country.setupCostLow, currency)} –{' '}
+              {formatCurrencyPdf(country.setupCostHigh, currency)} (midpoint{' '}
+              {formatCurrencyPdf(result.setupCostUsed, currency)})
+            </Text>
+          </View>
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Ongoing entity cost / employee / year</Text>
+            <Text style={styles.assumptionsValue}>
+              {formatCurrencyPdf(country.ongoingCostPerEmployeePerYear, currency)}
+            </Text>
+          </View>
+          {result.fxSnapshotDate && (
+            <View style={styles.assumptionsRow}>
+              <Text style={styles.assumptionsLabel}>FX snapshot (for USD comparison)</Text>
+              <Text style={styles.assumptionsValue}>{result.fxSnapshotDate}</Text>
+            </View>
+          )}
+          <View style={styles.assumptionsRow}>
+            <Text style={styles.assumptionsLabel}>Data confidence</Text>
+            <Text style={styles.assumptionsValue}>
+              {confidenceBadgeLabel(country.dataConfidence)}
+            </Text>
+          </View>
+        </View>
 
         <Text style={styles.footer}>
           Generated by Teamed · teamed.global · Employee thresholds follow the GEMO Framework v2.0
