@@ -117,7 +117,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Second-chance CTA — mirrors the hero pair on a soft band */}
+        {/* Second-chance CTA — single primary on a soft band */}
         <section className="py-16 bg-grey-light border-y border-grey-mid">
           <div className="max-w-2xl mx-auto px-6 text-center">
             <h2 className="font-heading font-bold text-black text-2xl mb-3">
@@ -126,20 +126,12 @@ export default function Home() {
             <p className="font-sans text-gray-600 mb-8">
               Country-specific data, three-year economics, and a Crossover Memo you can share.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
-              <Link
-                href="/calculator"
-                className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
-              >
-                Calculate your Crossover Point
-              </Link>
-              <a
-                href="#learn-more"
-                className="inline-flex items-center gap-2 font-sans text-base font-semibold text-forest hover:text-forest-dark px-6 py-4 rounded-btn border border-forest/30 hover:border-forest/60 hover:bg-forest/5 transition-colors"
-              >
-                Read the detail
-              </a>
-            </div>
+            <Link
+              href="/calculator"
+              className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
+            >
+              Calculate your Crossover Point
+            </Link>
           </div>
         </section>
 
