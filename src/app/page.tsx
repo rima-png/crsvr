@@ -43,10 +43,10 @@ export default function Home() {
               Calculate your Crossover Point
             </Link>
             <a
-              href="#how-it-works"
-              className="block mt-6 font-sans text-sm text-gray-600 hover:text-forest transition-colors"
+              href="#learn-more"
+              className="inline-block mt-6 font-sans text-base font-semibold text-forest hover:text-forest-dark underline underline-offset-4 decoration-2 transition-colors"
             >
-              See how it works ↓
+              Learn more ↓
             </a>
           </div>
         </section>
@@ -112,7 +112,7 @@ export default function Home() {
         </section>
 
         {/* SEO content */}
-        <section className="py-16 bg-white border-t border-grey-mid">
+        <section id="learn-more" className="py-16 bg-white border-t border-grey-mid">
           <article className="max-w-3xl mx-auto px-6">
             <h2 className="font-heading font-bold text-black text-2xl mb-6">
               What is the EOR to entity Crossover Point?
