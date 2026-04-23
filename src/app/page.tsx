@@ -168,7 +168,7 @@ export default function Home() {
                 provider&rsquo;s interest to move you off the model, so they don&rsquo;t.&rdquo;
               </blockquote>
               <figcaption className="font-sans text-gray-500 text-sm">
-                Tom Price-Daniel, Co-founder and CIO, Teamed
+                Tom Price-Daniel, Co-founder and CRO, Teamed
               </figcaption>
             </figure>
           </div>
