@@ -8,6 +8,27 @@ export type CountryMacroRegion =
 /** Confidence tier for per-country economics. */
 export type DataConfidence = 'verified' | 'baseline' | 'tier_default'
 
+/** Direction in which a known regulatory change is expected to move the threshold or cost. */
+export type ChangeImpact =
+  | 'raises_threshold'
+  | 'lowers_threshold'
+  | 'raises_cost'
+  | 'lowers_cost'
+  | 'informational'
+
+/** A legislated-or-confirmed regulatory change that has not yet taken effect. */
+export interface UpcomingChange {
+  /** ISO date (YYYY-MM-DD) when the change becomes effective. */
+  effectiveDate: string
+  /** Short label, e.g. "Employment Rights Act 2025 cap abolition". */
+  title: string
+  /** 1–2 sentence explanation of what changes and the practical impact. */
+  summary: string
+  impact: ChangeImpact
+  /** Optional URL or reference for provenance. */
+  source?: string
+}
+
 export interface Country {
   code: string
   name: string
@@ -38,6 +59,10 @@ export interface Country {
   fxToUsd?: number
   /** Confidence level of the per-country economics (verified by advisor, baseline from public sources, or tier template). */
   dataConfidence: DataConfidence
+  /** ISO date (YYYY-MM-DD) when the per-country override data was last reviewed. Drives "refresh due" amber state when >12 months stale. */
+  lastReviewedDate?: string
+  /** Legislated-or-confirmed regulatory changes that have not yet taken effect. Drives the regulatory-calendar block + planning-window banner. */
+  upcomingChanges?: UpcomingChange[]
 }
 
 export interface UserInputs {

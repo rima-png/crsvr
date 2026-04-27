@@ -22,8 +22,13 @@
  * Wave 3 will flip Wave-2 entries to `verified: true` as advisors sign off, country by country.
  */
 
+import type { UpcomingChange } from '@/lib/types'
+
 export interface CountryOverride {
   verified: boolean
+  /** ISO date (YYYY-MM-DD) when this entry was last reviewed against source data or an advisor.
+   *  Surfaced in the memo + UI; auto-flags as "refresh due" when >12 months old. */
+  lastReviewedDate: string
   thresholdNative?: number
   thresholdNonNative?: number
   setupCostLow?: number
@@ -32,11 +37,15 @@ export interface CountryOverride {
   terminationCostPerEmployee?: number
   terminationBasisNote?: string
   thresholdJustification?: string
+  /** Legislated-or-confirmed regulatory changes that have not yet taken effect.
+   *  Past-effective items belong in the prose above, not here. */
+  upcomingChanges?: UpcomingChange[]
 }
 
 export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   BR: {
     verified: true,
+    lastReviewedDate: '2026-04-27',
     thresholdNative: 18,
     thresholdNonNative: 25,
     setupCostLow: 50000,
@@ -49,6 +58,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   US: {
     verified: true,
+    lastReviewedDate: '2026-04-27',
     thresholdNative: 25,
     thresholdNonNative: 35,
     thresholdJustification:
@@ -56,6 +66,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   GB: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 5000,
     setupCostHigh: 15000,
     terminationCostPerEmployee: 6000,
@@ -63,9 +74,20 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'Statutory redundancy pay (weekly cap £751 from 6 April 2026, max £22,530 at 20 years) + statutory notice + accrued holiday at ~3 years tenure. Contractual PILON and extended notice periods push this higher for senior roles. Post-2027 risk: the Employment Rights Act 2025 drops the unfair-dismissal qualifying period from 2 years to 6 months and removes the compensatory award cap entirely on 1 January 2027. Contested unfair-dismissal exits will have no statutory ceiling on compensation (currently capped at £118,223 or 52 weeks\' pay, whichever is lower; rising to £123,543 from 6 April 2026 before abolition), materially raising risk-adjusted exit cost for any employee past month 6 of tenure. Based on GOV.UK and ACAS guidance; confirm with local counsel.',
     thresholdJustification:
       'UK setup is fast and relatively cheap for a Tier 1 market: Companies House digital incorporation is same-day (fee £100 from 1 February 2026), PAYE registration is free, and end-to-end setup (accountant, payroll, banking, employment handbook) typically lands at £5k–£15k — below the Tier 1 default range. Employer NI sits at 15% on earnings above £5,000 (frozen until 2030–31), material but equally applied to EOR fees. The 10-employee (native) / 14-employee (non-native) threshold applies a commitment and operational-readiness buffer on top of the pure economic crossover (~6–8 employees). Post-2027 risk note: the Employment Rights Act 2025 drops the unfair-dismissal qualifying period from 2 years to 6 months from 1 January 2027, and removes the compensatory award cap entirely on the same date. Hires made after ~1 July 2026 will clear the qualifying threshold by 1 January 2027, so each becomes a tribunal exposure from month 7 with no statutory ceiling on compensation (currently capped at £118,223 or 52 weeks\' pay, whichever is lower; rising to £123,543 from 6 April 2026 before abolition). EOR providers absorb this exposure; entities do not. Expect the effective Crossover threshold to drift upward by 2–3 employees post-2027 as entities price in both the wider claim pool and the removal of the cap.',
+    upcomingChanges: [
+      {
+        effectiveDate: '2027-01-01',
+        title: 'Employment Rights Act 2025: qualifying period drop + cap abolition',
+        summary:
+          'Unfair-dismissal qualifying period drops from 2 years to 6 months and the compensatory award cap (currently £118,223 / £123,543 from 6 April 2026, or 52 weeks\' pay if lower) is removed entirely. Materially raises risk-adjusted exit cost for any employee past month 6 of tenure for entities; EOR providers absorb the exposure. Expect the effective Crossover threshold to drift upward by 2–3 employees as entities price in both the wider claim pool and the removed cap.',
+        impact: 'raises_threshold',
+        source: 'https://www.gov.uk/government/publications/employment-rights-bill',
+      },
+    ],
   },
   DE: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 10000,
     setupCostHigh: 20000,
     terminationCostPerEmployee: 18000,
@@ -76,6 +98,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   FR: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 8000,
     setupCostHigh: 18000,
     terminationCostPerEmployee: 15000,
@@ -86,6 +109,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   ES: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 6000,
     setupCostHigh: 14000,
     terminationCostPerEmployee: 12000,
@@ -96,6 +120,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   NL: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 5000,
     setupCostHigh: 12000,
     terminationCostPerEmployee: 9000,
@@ -103,9 +128,20 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'Transitievergoeding (statutory transition payment) is 1/3 of monthly salary per year of service from day one of employment, including 8% vakantiegeld and averaged variable pay. Figure based on a ~€5,000/month mid-level role at ~3 years tenure: statutory transition payment (~€5,000) + notice period pay (1 month at 0–5 years tenure, minus 1 week if the UWV route is used) + accrued holiday allowance. Most Dutch exits settle via vaststellingsovereenkomst (mutual termination agreement) which typically lands 1.5–2× the statutory minimum to secure a clean release. Dismissals for business-economic reasons or long-term illness require prior UWV permit (4-week validity once granted); performance-based dismissals go via the kantonrechter (subdistrict court). Confirm with local counsel before any decision.',
     thresholdJustification:
       'Tier 1 default (10 native / 14 non-native) applies. BV formation is fast and cheap for a Tier 1 market: notary €500–€1,500 + KVK registration €85.15 + articles-of-association drafting, with total end-to-end setup (accountant, payroll, banking, tax authority registration) landing €5k–€12k — below the Tier 1 default range. Minimum share capital is €0.01, so no meaningful capital lockup. Employer social security at ~23.59% of gross (WIA/WAO 6.27–7.63%, WHK 0.38–6.08%, ZVW, WW-Awf) is capped at a €79,409 annual salary — a harder ceiling than most EU markets — and applies equally to EOR margins, so does not shift break-even. Compliance trigger to watch: at 10+ employees a Personeelsvertegenwoordiging (PVT) representation body becomes required, and at 50+ a full Ondernemingsraad (works council) is mandatory under the Works Councils Act. The 10-employee PVT requirement coincides exactly with the Tier 1 threshold — entity-track teams hit that compliance layer at the same moment the economic case converges. 2026 risk note: a government proposal would restrict UWV compensation for transitievergoedingen to employers with fewer than 25 employees from 1 July 2026 — once an entity crosses 25 heads, the transition-payment cost is no longer recoverable from UWV, effectively raising the true exit cost for mid-sized entities. Post-July-2026 expect the effective threshold to drift upward by 1–2 employees.',
+    upcomingChanges: [
+      {
+        effectiveDate: '2026-07-01',
+        title: 'UWV transitievergoeding compensation restricted to <25 employees',
+        summary:
+          'Government proposal would limit UWV compensation for transitievergoedingen (statutory transition payments) to employers with fewer than 25 employees. Once an entity crosses 25 heads, the transition-payment cost is no longer recoverable from UWV — materially raising true exit cost for mid-sized entities. Expect the effective Crossover threshold to drift upward by 1–2 employees post-July-2026.',
+        impact: 'raises_threshold',
+        source: 'https://www.uwv.nl/werkgevers',
+      },
+    ],
   },
   IN: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     thresholdNative: 22,
     thresholdNonNative: 28,
     setupCostLow: 300000,
@@ -118,6 +154,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   PL: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 5000,
     setupCostHigh: 20000,
     terminationCostPerEmployee: 30000,
@@ -128,6 +165,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   MX: {
     verified: false,
+    lastReviewedDate: '2026-04-27',
     setupCostLow: 70000,
     setupCostHigh: 160000,
     terminationCostPerEmployee: 200000,

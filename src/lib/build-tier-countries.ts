@@ -160,6 +160,8 @@ function seedFromTierRow(displayName: string, tier: 1 | 2 | 3): CountrySeed {
     terminationBasisNote: override?.terminationBasisNote,
     fxToUsd,
     dataConfidence,
+    lastReviewedDate: override?.lastReviewedDate,
+    upcomingChanges: override?.upcomingChanges,
   }
 }
 

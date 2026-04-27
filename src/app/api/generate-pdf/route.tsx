@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
 import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer'
 import type { UserInputs, CalculationResult, LeadData } from '@/lib/types'
+import {
+  changesInWindow,
+  formatReviewedDate,
+  isStale,
+} from '@/lib/freshness'
 
 const styles = StyleSheet.create({
   page: {
@@ -196,6 +201,43 @@ const styles = StyleSheet.create({
     width: '60%',
     color: '#121213',
   },
+  reviewedDate: {
+    fontSize: 8,
+    color: '#6b7280',
+    marginTop: -8,
+    marginBottom: 12,
+  },
+  planningWindowWarning: {
+    backgroundColor: '#FFFBEB',
+    borderLeftWidth: 3,
+    borderLeftColor: '#D97706',
+    padding: 8,
+    marginBottom: 16,
+    fontSize: 9,
+    color: '#92400E',
+  },
+  upcomingChangeRow: {
+    marginBottom: 8,
+    paddingLeft: 6,
+    borderLeftWidth: 2,
+    borderLeftColor: '#D97706',
+  },
+  upcomingChangeTitle: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#121213',
+    marginBottom: 2,
+  },
+  upcomingChangeDate: {
+    fontSize: 8,
+    color: '#6b7280',
+    marginBottom: 2,
+  },
+  upcomingChangeSummary: {
+    fontSize: 9,
+    color: '#374151',
+    lineHeight: 1.4,
+  },
 })
 
 function getCurrencySymbol(currency: string): string {
@@ -264,6 +306,9 @@ function CrossoverMemoDoc({
 }) {
   const country = inputs.country!
   const currency = country.currency
+  const stale = isStale(country.lastReviewedDate)
+  const upcoming = changesInWindow(country.upcomingChanges, 36)
+  const materialUpcoming = upcoming.filter((c) => c.impact !== 'informational')
 
   const crossoverText = result.crossoverMonth
     ? `Month ${result.crossoverMonth}`
@@ -304,21 +349,40 @@ function CrossoverMemoDoc({
         <Text
           style={[
             styles.confidenceBadge,
-            country.dataConfidence === 'verified'
+            country.dataConfidence === 'verified' && !stale
               ? styles.confidenceVerified
-              : country.dataConfidence === 'baseline'
+              : stale || country.dataConfidence === 'baseline'
                 ? styles.confidenceBaseline
                 : styles.confidenceTierDefault,
           ]}
         >
-          {confidenceBadgeLabel(country.dataConfidence)} — {country.name}
+          {country.dataConfidence === 'verified' && stale
+            ? `Advisor-verified — refresh due — ${country.name}`
+            : country.dataConfidence === 'baseline' && stale
+              ? `Baseline estimates — refresh due — ${country.name}`
+              : `${confidenceBadgeLabel(country.dataConfidence)} — ${country.name}`}
         </Text>
+
+        {country.lastReviewedDate && (
+          <Text style={styles.reviewedDate}>
+            Last reviewed {formatReviewedDate(country.lastReviewedDate)}
+          </Text>
+        )}
 
         {result.marginFlag && (
           <Text style={styles.marginWarning}>
             The cost range straddles the decision point. Low and high setup-cost scenarios give
             opposite recommendations. Treat this memo as directional, not determinative — refine
             with a local advisor before committing.
+          </Text>
+        )}
+
+        {materialUpcoming.length > 0 && (
+          <Text style={styles.planningWindowWarning}>
+            Heads-up: {materialUpcoming.length === 1 ? 'a regulatory change' : `${materialUpcoming.length} regulatory changes`} land
+            inside your 3-year planning window (earliest:{' '}
+            {formatReviewedDate(materialUpcoming[0].effectiveDate)}). See &quot;What&apos;s changing
+            ahead&quot; below for the impact on your Crossover Point.
           </Text>
         )}
 
@@ -424,6 +488,24 @@ function CrossoverMemoDoc({
             • {f}
           </Text>
         ))}
+
+        {upcoming.length > 0 && (
+          <View>
+            <Text style={styles.sectionTitle}>What&apos;s changing ahead</Text>
+            {upcoming.map((change, i) => (
+              <View key={i} style={styles.upcomingChangeRow}>
+                <Text style={styles.upcomingChangeDate}>
+                  Effective {formatReviewedDate(change.effectiveDate)}
+                </Text>
+                <Text style={styles.upcomingChangeTitle}>{change.title}</Text>
+                <Text style={styles.upcomingChangeSummary}>{change.summary}</Text>
+                {change.source && (
+                  <Text style={styles.upcomingChangeDate}>Source: {change.source}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
 
         <Text style={styles.sectionTitle}>Your transition readiness</Text>
         {result.readinessItems.map((item, i) => (

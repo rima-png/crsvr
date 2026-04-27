@@ -7,6 +7,7 @@ import { CountryIntelPanel } from '@/components/results/CountryIntelPanel'
 import { ReadinessChecklist } from '@/components/results/ReadinessChecklist'
 import { NextSteps } from '@/components/results/NextSteps'
 import { trackEvent } from '@/lib/analytics'
+import { changesInWindow, formatReviewedDate } from '@/lib/freshness'
 import type { UserInputs, CalculationResult, LeadData } from '@/lib/types'
 
 const CrossoverChartDynamic = dynamic(
@@ -30,6 +31,12 @@ export function Step3Results({
   onReset,
 }: Step3ResultsProps) {
   const country = inputs.country!
+
+  // Material upcoming changes (those that move the threshold or cost) within the
+  // 36-month planning horizon. Pure-informational items don't trigger the banner.
+  const materialUpcoming = changesInWindow(country.upcomingChanges, 36).filter(
+    (c) => c.impact !== 'informational'
+  )
 
   useEffect(() => {
     trackEvent('step_3_view')
@@ -65,6 +72,29 @@ export function Step3Results({
             <span className="font-bold">Recommendation is directional only.</span> The setup-cost
             range straddles the decision point — the low and high scenarios give opposite answers.
             Refine with a local advisor before committing to a path.
+          </p>
+        </div>
+      )}
+
+      {/* Planning-window warning when a material regulatory change lands inside the 3-year horizon */}
+      {materialUpcoming.length > 0 && (
+        <div className="bg-yellow-50 border-l-4 border-amber-500 rounded-card p-4">
+          <p className="font-sans text-sm text-amber-900">
+            <span className="font-bold">Heads-up: regulatory change inside your planning window.</span>{' '}
+            {materialUpcoming.length === 1 ? (
+              <>
+                {materialUpcoming[0].title} takes effect{' '}
+                {formatReviewedDate(materialUpcoming[0].effectiveDate)}. See &quot;What&apos;s
+                changing ahead&quot; below for the impact on your Crossover Point.
+              </>
+            ) : (
+              <>
+                {materialUpcoming.length} legislated changes take effect inside the next 3 years
+                (earliest:{' '}
+                {formatReviewedDate(materialUpcoming[0].effectiveDate)}). See &quot;What&apos;s
+                changing ahead&quot; below.
+              </>
+            )}
           </p>
         </div>
       )}

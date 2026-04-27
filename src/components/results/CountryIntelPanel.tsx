@@ -2,6 +2,11 @@
 
 import { useState } from 'react'
 import type { Country } from '@/lib/types'
+import {
+  changesInWindow,
+  formatReviewedDate,
+  isStale,
+} from '@/lib/freshness'
 
 interface CountryIntelPanelProps {
   country: Country
@@ -18,18 +23,30 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
         ? 'bg-yellow-400/20 text-amber-700'
         : 'bg-teamed-red/10 text-teamed-red'
 
+  const stale = isStale(country.lastReviewedDate)
+
+  // Stale verified data drops to amber so the badge tells the truth.
   const confidenceBadge =
     country.dataConfidence === 'verified'
-      ? { label: 'Advisor-verified figures', classes: 'bg-forest/10 text-forest' }
+      ? stale
+        ? {
+            label: 'Advisor-verified — refresh due',
+            classes: 'bg-yellow-400/20 text-amber-700',
+          }
+        : { label: 'Advisor-verified figures', classes: 'bg-forest/10 text-forest' }
       : country.dataConfidence === 'baseline'
         ? {
-            label: 'Baseline estimates — contact Teamed to verify',
+            label: stale
+              ? 'Baseline estimates — refresh due'
+              : 'Baseline estimates — contact Teamed to verify',
             classes: 'bg-yellow-400/20 text-amber-700',
           }
         : {
             label: 'Regional tier averages — contact Teamed for country-specific figures',
             classes: 'bg-grey-light text-gray-600',
           }
+
+  const upcoming = changesInWindow(country.upcomingChanges, 36)
 
   return (
     <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm">
@@ -38,12 +55,17 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
       </h3>
 
       <div className="space-y-4">
-        <div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <span
             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${confidenceBadge.classes}`}
           >
             {confidenceBadge.label}
           </span>
+          {country.lastReviewedDate && (
+            <span className="font-sans text-xs text-gray-500">
+              Last reviewed {formatReviewedDate(country.lastReviewedDate)}
+            </span>
+          )}
         </div>
 
         <div>
@@ -83,6 +105,37 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
             ))}
           </ul>
         </div>
+
+        {upcoming.length > 0 && (
+          <div className="border-t border-grey-mid pt-4">
+            <p className="font-sans font-medium text-black mb-2">
+              What&apos;s changing ahead
+            </p>
+            <ul className="space-y-3">
+              {upcoming.map((change, i) => (
+                <li key={i} className="font-sans text-sm">
+                  <p className="font-medium text-black">
+                    <span className="text-gray-500 font-normal">
+                      {formatReviewedDate(change.effectiveDate)} —{' '}
+                    </span>
+                    {change.title}
+                  </p>
+                  <p className="text-gray-600 mt-1">{change.summary}</p>
+                  {change.source && (
+                    <a
+                      href={change.source}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-forest hover:underline mt-1 inline-block"
+                    >
+                      Source
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div>
           <button
