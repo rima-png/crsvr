@@ -7,6 +7,7 @@ import {
   formatReviewedDate,
   isStale,
 } from '@/lib/freshness'
+import { convertCurrency } from '@/lib/fx'
 
 // Brand fonts (General Sans / Instrument Sans) loaded from /public/fonts.
 // Registration must run once per cold start; idempotent calls are fine.
@@ -628,6 +629,14 @@ function CrossoverMemoDoc({
             <Text style={styles.assumptionsLabel}>EOR fee per employee / month</Text>
             <Text style={styles.assumptionsValue}>
               {formatCurrencyPdf(inputs.eorFeePerMonth, currency)}
+              {inputs.eorFeeCurrency && inputs.eorFeeCurrency !== currency
+                ? ` (entered as ${formatCurrencyPdf(
+                    Math.round(
+                      convertCurrency(inputs.eorFeePerMonth, currency, inputs.eorFeeCurrency)
+                    ),
+                    inputs.eorFeeCurrency
+                  )})`
+                : ''}
             </Text>
           </View>
           <View style={styles.assumptionsRow}>

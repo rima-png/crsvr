@@ -5,9 +5,15 @@ import { useState, useRef, useEffect, useMemo, useLayoutEffect } from 'react'
 import { COUNTRIES } from '@/lib/countries'
 import { calculateCrossover } from '@/lib/calculate'
 import { getCurrencySymbol } from '@/lib/format'
+import { convertCurrency } from '@/lib/fx'
 import { trackEvent } from '@/lib/analytics'
 import { MACRO_REGION_OPTIONS } from '@/lib/macro-region'
 import type { UserInputs, Country, CountryMacroRegion } from '@/lib/types'
+
+/** EOR-fee currency picker: country's local currency (when not already one
+ *  of USD/GBP/EUR), then the three reserve currencies. Order is intentional —
+ *  local first so the default option is the most-correct one. */
+const RESERVE_CURRENCIES = ['USD', 'GBP', 'EUR'] as const
 
 interface Step1SituationProps {
   inputs: UserInputs
@@ -65,6 +71,9 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
       ...inputs,
       country,
       eorFeePerMonth: country.eorMarketRateMonthly,
+      // Reset display currency to the new country's local — predictable default.
+      // User can switch to USD/GBP/EUR via the picker afterwards.
+      eorFeeCurrency: country.currency,
     })
     setCountrySearch('')
     setMacroFilter('all')
@@ -73,6 +82,36 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
       country_name: country.name,
       complexity_label: country.complexityLabel,
     })
+  }
+
+  /** Currencies offered in the EOR-fee picker for the current country.
+   *  Local currency first (deduped against the reserves) then USD / GBP / EUR. */
+  const eorCurrencyOptions = useMemo(() => {
+    const local = inputs.country?.currency
+    if (!local) return [...RESERVE_CURRENCIES]
+    if ((RESERVE_CURRENCIES as readonly string[]).includes(local)) return [...RESERVE_CURRENCIES]
+    return [local, ...RESERVE_CURRENCIES]
+  }, [inputs.country?.currency])
+
+  /** Value shown in the EOR-fee input — the canonical local-currency value
+   *  converted into whatever currency the user has selected to type in. */
+  const displayedEorFee = inputs.country
+    ? Math.round(
+        convertCurrency(inputs.eorFeePerMonth, inputs.country.currency, inputs.eorFeeCurrency)
+      )
+    : 0
+
+  const handleEorFeeChange = (raw: string) => {
+    if (!inputs.country) return
+    const typed = parseFloat(raw) || 0
+    const localValue = Math.round(
+      convertCurrency(typed, inputs.eorFeeCurrency, inputs.country.currency)
+    )
+    setInputs({ ...inputs, eorFeePerMonth: localValue })
+  }
+
+  const handleEorCurrencyChange = (newCurrency: string) => {
+    setInputs({ ...inputs, eorFeeCurrency: newCurrency })
   }
 
   const handleShowCrossover = () => {
@@ -312,30 +351,54 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                 )}
               </div>
 
-              {/* Input 5 — EOR fee */}
+              {/* Input 5 — EOR fee with currency picker */}
               <div>
                 <label className="block font-sans font-medium text-black mb-2">
                   Your current EOR fee per employee / month
                 </label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-sans text-gray-500">
-                    {getCurrencySymbol(inputs.country.currency)}
-                  </span>
-                  <input
-                    type="number"
-                    value={inputs.eorFeePerMonth}
-                    onChange={(e) =>
-                      setInputs({
-                        ...inputs,
-                        eorFeePerMonth: parseInt(e.target.value, 10) || 0,
-                      })
-                    }
-                    className="w-full border border-gray-200 rounded-input pl-12 pr-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
-                  />
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-sans text-gray-500">
+                      {getCurrencySymbol(inputs.eorFeeCurrency)}
+                    </span>
+                    <input
+                      type="number"
+                      value={displayedEorFee}
+                      onChange={(e) => handleEorFeeChange(e.target.value)}
+                      className="w-full border border-gray-200 rounded-input pl-12 pr-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
+                    />
+                  </div>
+                  <select
+                    value={inputs.eorFeeCurrency}
+                    onChange={(e) => handleEorCurrencyChange(e.target.value)}
+                    className="border border-gray-200 rounded-input px-3 py-3 font-sans font-medium text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white cursor-pointer"
+                    aria-label="EOR fee currency"
+                  >
+                    {eorCurrencyOptions.map((code) => (
+                      <option key={code} value={code}>
+                        {code}
+                        {code === inputs.country!.currency ? ' (local)' : ''}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <p className="mt-1 text-sm text-gray-500 font-sans">
-                  Pre-filled with the market average for {inputs.country.name}. Update if you know
-                  your actual rate.
+                  {inputs.eorFeeCurrency === inputs.country.currency ? (
+                    <>
+                      Pre-filled with the market average for {inputs.country.name}. Update if you
+                      know your actual rate.
+                    </>
+                  ) : (
+                    <>
+                      Used in calculations as{' '}
+                      <span className="font-medium text-black">
+                        {getCurrencySymbol(inputs.country.currency)}
+                        {inputs.eorFeePerMonth.toLocaleString()}
+                      </span>{' '}
+                      per employee / month ({inputs.country.currency}). Type in any of the
+                      currencies in the dropdown — we&apos;ll convert.
+                    </>
+                  )}
                 </p>
               </div>
             </>

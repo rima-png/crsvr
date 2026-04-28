@@ -14,6 +14,7 @@ const DEFAULT_INPUTS: UserInputs = {
   plannedHeadcount: 15,
   operatesInLocalLanguage: true,
   eorFeePerMonth: 599,
+  eorFeeCurrency: 'USD',
 }
 
 export function CalculatorShell() {

@@ -81,7 +81,14 @@ export interface UserInputs {
   currentHeadcount: number
   plannedHeadcount: number
   operatesInLocalLanguage: boolean
+  /** EOR fee per employee per month, stored in the country's **local** currency.
+   *  The user may enter the value in a different currency via `eorFeeCurrency`;
+   *  we convert at input time so this field is always canonical-local. */
   eorFeePerMonth: number
+  /** Currency the user is typing the EOR fee in. Defaults to country.currency
+   *  on country select; the user can override to USD / GBP / EUR via the picker.
+   *  Display-only — calculations always use eorFeePerMonth in local currency. */
+  eorFeeCurrency: string
 }
 
 export interface MonthlyDataPoint {
