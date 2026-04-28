@@ -238,6 +238,24 @@ const styles = StyleSheet.create({
     color: '#374151',
     lineHeight: 1.4,
   },
+  justificationSummary: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#121213',
+    marginTop: 4,
+    marginBottom: 6,
+    lineHeight: 1.4,
+  },
+  justificationSection: {
+    fontSize: 9,
+    color: '#374151',
+    marginBottom: 4,
+    lineHeight: 1.4,
+  },
+  justificationSectionHeading: {
+    fontWeight: 'bold',
+    color: '#121213',
+  },
 })
 
 function getCurrencySymbol(currency: string): string {
@@ -470,9 +488,22 @@ function CrossoverMemoDoc({
         <Text style={styles.bulletList}>
           Teamed recommends considering an entity from {result.threshold} employees
         </Text>
-        {country.thresholdJustification && (
-          <Text style={styles.footnote}>{country.thresholdJustification}</Text>
-        )}
+        {country.thresholdJustification &&
+          (typeof country.thresholdJustification === 'string' ? (
+            <Text style={styles.footnote}>{country.thresholdJustification}</Text>
+          ) : (
+            <View>
+              <Text style={styles.justificationSummary}>
+                {country.thresholdJustification.summary}
+              </Text>
+              {country.thresholdJustification.sections?.map((section, i) => (
+                <Text key={i} style={styles.justificationSection}>
+                  <Text style={styles.justificationSectionHeading}>{section.heading} — </Text>
+                  {section.body}
+                </Text>
+              ))}
+            </View>
+          ))}
         <Text style={styles.bulletList}>
           {country.setupMonthsLow}–{country.setupMonthsHigh} months to establish a legal entity
         </Text>

@@ -22,7 +22,7 @@
  * Wave 3 will flip Wave-2 entries to `verified: true` as advisors sign off, country by country.
  */
 
-import type { UpcomingChange } from '@/lib/types'
+import type { ThresholdJustification, UpcomingChange } from '@/lib/types'
 
 export interface CountryOverride {
   verified: boolean
@@ -36,7 +36,8 @@ export interface CountryOverride {
   ongoingCostPerEmployeePerYear?: number
   terminationCostPerEmployee?: number
   terminationBasisNote?: string
-  thresholdJustification?: string
+  /** Plain string for short notes, or structured shape (summary + sections) for rich breakdowns. */
+  thresholdJustification?: string | ThresholdJustification
   /** Legislated-or-confirmed regulatory changes that have not yet taken effect.
    *  Past-effective items belong in the prose above, not here. */
   upcomingChanges?: UpcomingChange[]
@@ -93,8 +94,28 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     terminationCostPerEmployee: 18000,
     terminationBasisNote:
       'Customary settlement severance ~0.5 months\' gross salary per year of service at ~3 years tenure (higher in contested Kündigungsschutzgesetz claims — courts often award up to 1 month per year) + notice period pay (1 month end-of-month at 2+ years tenure, rising to 2 months at 5+ years) + accrued holiday. Based on a mid-level role at ~€5.5k monthly gross. No statutory severance for ordinary dismissal if due process is followed, but KSchG protection applies after 6 months tenure once the establishment exceeds 10 FTE-weighted employees (part-timers count 0.5/0.75/1.0 at ≤20/20–30/>30 hrs) — so contested terminations almost always settle. Confirm with local counsel before any decision.',
-    thresholdJustification:
-      'Tier 2 default (18 native / 25 non-native) applies. GmbH formation is notary-led and reliable (4–8 weeks, notary €800–1,500 + commercial register €150 + trade licence €15–65); end-to-end setup including accountant, payroll registration, banking, and handbook typically lands €10k–€20k, below the Tier 2 default range. The €25,000 minimum share capital is a refundable capital deposit (not a sunk expense), though it does tie up working capital. The larger consideration is employment-law density: Kündigungsschutzgesetz (KSchG) protection kicks in after 6 months of tenure once a business exceeds 10 regular employees (FTE-weighted), and Betriebsrat (works council) formation can be triggered by employees in any workplace with 5+ permanent staff — meaning a material compliance burden arrives well before the pure-economic crossover. Employer social security at ~21% of gross (pension 9.3%, health 7.3% + ~1.45% avg supplemental, long-term care 1.8%, unemployment 1.3%, statutory accident 1.2–3%) applies equally to EOR margins, so does not shift break-even — though new 2026 ceilings (€5,812.50/mo health, €8,450/mo pension) raise the cap on senior hires. The 18/25 threshold reflects the operational readiness needed to run a German entity compliantly, not a pure cost crossover.',
+    thresholdJustification: {
+      summary:
+        'Tier 2 default (18 native / 25 non-native) applies — the threshold reflects the operational readiness needed to run a German entity compliantly, not a pure economic crossover.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'GmbH formation is notary-led and reliable (4–8 weeks, notary €800–1,500 + commercial register €150 + trade licence €15–65). End-to-end setup including accountant, payroll registration, banking, and handbook typically lands €10k–€20k — below the Tier 2 default range.',
+        },
+        {
+          heading: 'Capital',
+          body: '€25,000 minimum share capital is a refundable deposit (not a sunk expense), but it does tie up working capital.',
+        },
+        {
+          heading: 'Employment-law density',
+          body: 'Kündigungsschutzgesetz (KSchG) protection kicks in after 6 months of tenure once a business exceeds 10 regular employees (FTE-weighted), and Betriebsrat (works council) formation can be triggered in any workplace with 5+ permanent staff — meaning a material compliance burden arrives well before the pure-economic crossover.',
+        },
+        {
+          heading: 'Social security',
+          body: 'Employer contributions ~21% of gross (pension 9.3%, health 7.3% + ~1.45% avg supplemental, long-term care 1.8%, unemployment 1.3%, statutory accident 1.2–3%) apply equally to EOR margins, so do not shift break-even. New 2026 ceilings (€5,812.50/mo health, €8,450/mo pension) raise the cap on senior hires.',
+        },
+      ],
+    },
   },
   FR: {
     verified: false,

@@ -84,11 +84,32 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
           {country.tier}, accounting for your language selection).
         </p>
 
-        {country.thresholdJustification && (
-          <p className="font-sans text-gray-600 text-sm italic border-l-2 border-forest/40 pl-3">
-            {country.thresholdJustification}
-          </p>
-        )}
+        {country.thresholdJustification &&
+          (typeof country.thresholdJustification === 'string' ? (
+            <p className="font-sans text-gray-700 text-sm leading-relaxed">
+              {country.thresholdJustification}
+            </p>
+          ) : (
+            <div className="space-y-3">
+              <p className="font-sans text-black text-sm leading-relaxed font-medium">
+                {country.thresholdJustification.summary}
+              </p>
+              {country.thresholdJustification.sections &&
+                country.thresholdJustification.sections.length > 0 && (
+                  <dl className="space-y-2">
+                    {country.thresholdJustification.sections.map((section, i) => (
+                      <div key={i} className="font-sans text-sm leading-relaxed">
+                        <dt className="inline font-semibold text-black">
+                          {section.heading}
+                          <span className="font-normal text-gray-400"> — </span>
+                        </dt>
+                        <dd className="inline text-gray-700">{section.body}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+            </div>
+          ))}
 
         <p className="font-sans text-black">
           <span className="font-bold">

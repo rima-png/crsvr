@@ -16,6 +16,15 @@ export type ChangeImpact =
   | 'lowers_cost'
   | 'informational'
 
+/** Structured form of the threshold-justification block.
+ *  Plain strings still work — both shapes are accepted. */
+export interface ThresholdJustification {
+  /** 1-sentence punchline rendered prominently as the lead. */
+  summary: string
+  /** Optional structured breakdown — short heading + body per topic. */
+  sections?: { heading: string; body: string }[]
+}
+
 /** A legislated-or-confirmed regulatory change that has not yet taken effect. */
 export interface UpcomingChange {
   /** ISO date (YYYY-MM-DD) when the change becomes effective. */
@@ -49,8 +58,10 @@ export interface Country {
   complexityFactors: string[]
   redFlags: string[]
   languageBufferApplies: boolean
-  /** One-sentence reason the threshold is what it is for this market. Shown as footnote in PDF + results UI. */
-  thresholdJustification?: string
+  /** Reason the threshold is what it is for this market. Plain string for short notes,
+   *  or structured ThresholdJustification (summary + sections) for richer breakdowns.
+   *  Shown in the country-intel panel + PDF memo. */
+  thresholdJustification?: string | ThresholdJustification
   /** Estimated cost per employee to wind down the entity at ~3-year tenure (in local currency). */
   terminationCostPerEmployee?: number
   /** Short note describing what's included in the termination estimate. */
