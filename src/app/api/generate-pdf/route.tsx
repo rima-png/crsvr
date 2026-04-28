@@ -1,5 +1,6 @@
+import path from 'path'
 import { NextResponse } from 'next/server'
-import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer'
+import { Document, Font, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer'
 import type { UserInputs, CalculationResult, LeadData } from '@/lib/types'
 import {
   changesInWindow,
@@ -7,10 +8,37 @@ import {
   isStale,
 } from '@/lib/freshness'
 
+// Brand fonts (General Sans / Instrument Sans) loaded from /public/fonts.
+// Registration must run once per cold start; idempotent calls are fine.
+const fontsDir = path.join(process.cwd(), 'public', 'fonts')
+
+Font.register({
+  family: 'General Sans',
+  fonts: [
+    { src: path.join(fontsDir, 'GeneralSans-Regular.ttf'), fontWeight: 400 },
+    { src: path.join(fontsDir, 'GeneralSans-Medium.ttf'), fontWeight: 500 },
+    { src: path.join(fontsDir, 'GeneralSans-Semibold.ttf'), fontWeight: 600 },
+    { src: path.join(fontsDir, 'GeneralSans-Bold.ttf'), fontWeight: 700 },
+  ],
+})
+
+Font.register({
+  family: 'Instrument Sans',
+  fonts: [
+    { src: path.join(fontsDir, 'InstrumentSans-Regular.ttf'), fontWeight: 400 },
+    { src: path.join(fontsDir, 'InstrumentSans-Medium.ttf'), fontWeight: 500 },
+    { src: path.join(fontsDir, 'InstrumentSans-Semibold.ttf'), fontWeight: 600 },
+    { src: path.join(fontsDir, 'InstrumentSans-Bold.ttf'), fontWeight: 700 },
+  ],
+})
+
 const styles = StyleSheet.create({
   page: {
     padding: 40,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Instrument Sans',
+    fontSize: 10,
+    color: '#121213',
+    lineHeight: 1.5,
   },
   header: {
     flexDirection: 'row',
@@ -19,8 +47,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   logo: {
+    fontFamily: 'General Sans',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 700,
     color: '#4B8E82',
   },
   memoLabel: {
@@ -28,8 +57,9 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   title: {
+    fontFamily: 'General Sans',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 700,
     marginBottom: 16,
   },
   preparedFor: {
@@ -56,8 +86,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   statValue: {
+    fontFamily: 'General Sans',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: 700,
     color: '#121213',
   },
   summary: {
@@ -75,8 +106,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
+    fontFamily: 'General Sans',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: 700,
     marginTop: 16,
     marginBottom: 8,
     color: '#121213',
@@ -135,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 4,
     fontSize: 8,
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: 12,
   },
   confidenceVerified: {
@@ -223,8 +255,9 @@ const styles = StyleSheet.create({
     borderLeftColor: '#D97706',
   },
   upcomingChangeTitle: {
+    fontFamily: 'General Sans',
     fontSize: 10,
-    fontWeight: 'bold',
+    fontWeight: 700,
     color: '#121213',
     marginBottom: 2,
   },
@@ -239,8 +272,9 @@ const styles = StyleSheet.create({
     lineHeight: 1.4,
   },
   justificationSummary: {
+    fontFamily: 'General Sans',
     fontSize: 10,
-    fontWeight: 'bold',
+    fontWeight: 700,
     color: '#121213',
     marginTop: 4,
     marginBottom: 6,
@@ -253,7 +287,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.4,
   },
   justificationSectionHeading: {
-    fontWeight: 'bold',
+    fontWeight: 700,
     color: '#121213',
   },
 })
@@ -449,7 +483,7 @@ function CrossoverMemoDoc({
 
         {country.terminationCostPerEmployee != null && (
           <View style={styles.terminationBlock}>
-            <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#991B1B', marginBottom: 4 }}>
+            <Text style={{ fontFamily: 'General Sans', fontSize: 11, fontWeight: 700, color: '#991B1B', marginBottom: 4 }}>
               If you wind the entity down at month 36
             </Text>
             <Text style={{ fontSize: 10, color: '#374151', marginBottom: 4 }}>
@@ -551,7 +585,7 @@ function CrossoverMemoDoc({
               ]}
             />
             <View>
-              <Text style={{ fontSize: 9, fontWeight: 'bold' }}>{item.criterion}</Text>
+              <Text style={{ fontSize: 9, fontWeight: 600 }}>{item.criterion}</Text>
               <Text style={styles.bulletList}>{item.question}</Text>
               <Text style={styles.bulletList}>{item.detail}</Text>
             </View>

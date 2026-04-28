@@ -1,17 +1,31 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk, Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import Script from 'next/script'
 import './globals.css'
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
+// Brand fonts — General Sans (headings) + Instrument Sans (body) per
+// https://teamed-website-platform.vercel.app/brand-kit. Files self-hosted from
+// /public/fonts so we control delivery and they ship in the same edge cache.
+const generalSans = localFont({
+  src: [
+    { path: '../../public/fonts/GeneralSans-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/GeneralSans-Medium.ttf', weight: '500', style: 'normal' },
+    { path: '../../public/fonts/GeneralSans-Semibold.ttf', weight: '600', style: 'normal' },
+    { path: '../../public/fonts/GeneralSans-Bold.ttf', weight: '700', style: 'normal' },
+  ],
   variable: '--font-heading',
-  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 })
 
-const inter = Inter({
-  subsets: ['latin'],
+const instrumentSans = localFont({
+  src: [
+    { path: '../../public/fonts/InstrumentSans-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/InstrumentSans-Medium.ttf', weight: '500', style: 'normal' },
+    { path: '../../public/fonts/InstrumentSans-Semibold.ttf', weight: '600', style: 'normal' },
+    { path: '../../public/fonts/InstrumentSans-Bold.ttf', weight: '700', style: 'normal' },
+  ],
   variable: '--font-sans',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -27,7 +41,7 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID
 
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+    <html lang="en" className={`${generalSans.variable} ${instrumentSans.variable}`}>
       <body className="bg-grey-light min-h-screen font-sans antialiased">
         {gaId && (
           <>
