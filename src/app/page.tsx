@@ -129,66 +129,40 @@ export default function Home() {
               <span className="text-sienna-700">do this for real.</span>
             </h2>
             <p className="font-sans text-parchment-700 max-w-2xl mx-auto mb-12">
-              From F1 paddocks in Grove to recruitment groups in Dublin, from Top-15 UK
-              accountancy to marketplaces across the US and Europe. Finance, people and legal
-              teams trust Teamed to run their global hiring.
+              From F1 paddocks in Grove to fintechs in Stockholm, from Big-Four challengers in
+              the UK to design unicorns in San Francisco. Finance, people and legal teams trust
+              Teamed to run their global hiring.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
               {[
-                {
-                  slug: 'globant',
-                  name: 'Globant',
-                  tagline: 'IT & engineering',
-                  scale: 'Argentina · 33,000 emp',
-                },
-                {
-                  slug: 'eventbrite',
-                  name: 'Eventbrite',
-                  tagline: 'Events & ticketing',
-                  scale: 'United States · Listed NYSE',
-                },
-                {
-                  slug: 'williams-racing',
-                  name: 'Williams Racing',
-                  tagline: 'Formula 1 · Grove HQ',
-                  scale: 'United Kingdom',
-                },
-                {
-                  slug: 'cooper-parry',
-                  name: 'Cooper Parry',
-                  tagline: 'Top-15 UK accountancy',
-                  scale: 'United Kingdom · 1,000 team',
-                },
-                {
-                  slug: 'cpl',
-                  name: 'CPL',
-                  tagline: 'Future of work group',
-                  scale: 'Ireland · 14,000 placements',
-                },
-                {
-                  slug: 'goat',
-                  name: 'GOAT',
-                  tagline: 'Sneaker & fashion marketplace',
-                  scale: 'United States & Europe',
-                },
+                { file: 'klarna.png', name: 'Klarna', tagline: 'Buy-now-pay-later · fintech', scale: 'Sweden · ~5,000 emp' },
+                { file: 'wise.png', name: 'Wise', tagline: 'Cross-border payments', scale: 'United Kingdom · ~5,500 emp' },
+                { file: 'notion.png', name: 'Notion', tagline: 'Connected workspace · SaaS', scale: 'United States · ~800 emp' },
+                { file: 'biontech.png', name: 'BioNTech', tagline: 'Immunotherapy · pharma', scale: 'Germany · ~6,000 emp' },
+                { file: 'eventbrite.webp', name: 'Eventbrite', tagline: 'Events & ticketing', scale: 'United States · ~700 emp' },
+                { file: 'williams-racing.webp', name: 'Williams Racing', tagline: 'Formula 1 · Grove HQ', scale: 'United Kingdom · ~1,000 emp' },
+                { file: 'bdo.png', name: 'BDO', tagline: 'Top-5 audit & advisory', scale: 'UK / EU / Global · ~115,000 emp' },
+                { file: 'personio.png', name: 'Personio', tagline: 'HR platform · DACH', scale: 'Germany · ~2,200 emp' },
+                { file: 'goat.webp', name: 'GOAT', tagline: 'Sneaker & fashion marketplace', scale: 'US & Europe · ~1,800 emp' },
+                { file: 'globant.webp', name: 'Globant', tagline: 'IT & engineering', scale: 'Argentina · ~33,000 emp' },
               ].map((c) => (
                 <div
-                  key={c.slug}
-                  className="bg-parchment-100 border border-parchment-300 rounded-2xl p-6 sm:p-7 flex flex-col items-center text-center"
+                  key={c.file}
+                  className="bg-parchment-100 border border-parchment-300 rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center"
                 >
-                  <div className="h-14 sm:h-16 w-full flex items-center justify-center mb-4">
+                  <div className="h-10 sm:h-12 w-full flex items-center justify-center mb-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`/customers/${c.slug}.webp`}
+                      src={`/customers/${c.file}`}
                       alt={`${c.name} logo`}
-                      className="max-h-full max-w-[160px] object-contain"
+                      className="max-h-full max-w-[120px] object-contain"
                       loading="lazy"
                     />
                   </div>
-                  <p className="font-script text-sienna-900 text-xl leading-none mb-2">
+                  <p className="font-script text-sienna-900 text-base sm:text-lg leading-tight mb-2">
                     {c.tagline}
                   </p>
-                  <p className="font-sans text-parchment-700 text-xs uppercase tracking-wider">
+                  <p className="font-sans text-parchment-700 text-[10px] sm:text-[11px] uppercase tracking-wider leading-tight">
                     {c.scale}
                   </p>
                 </div>
