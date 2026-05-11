@@ -20,6 +20,12 @@
  * Wave 1 (verified): BR, US.
  * Wave 2 (baseline): GB, DE, FR, ES, NL, IN, PL, MX.
  * Wave 3 will flip Wave-2 entries to `verified: true` as advisors sign off, country by country.
+ *
+ * Copy voice: plain English, no legal-jargon walls. Keep dates, percentages, amounts,
+ * and statute names intact, but pair them with concrete consequences a buyer can
+ * read in one pass. Local-language terms (Kündigungsschutzgesetz, rupture
+ * conventionnelle, etc.) stay because they're searchable, but every one is
+ * introduced via its English meaning first.
  */
 
 import type { ThresholdJustification, UpcomingChange } from '@/lib/types'
@@ -53,9 +59,9 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 120000,
     terminationCostPerEmployee: 50000,
     terminationBasisNote:
-      'FGTS 40% fine + accrued vacation (1/3) + 13th salary + notice period at ~3 years tenure. Advisor estimate in BRL — confirm with local counsel before any decision.',
+      'A typical 3-year exit blends an FGTS 40% penalty, accrued holiday plus the one-third holiday bonus, the proportional 13th-month salary, and notice pay. Advisor estimate in BRL. Confirm with local counsel before any decision.',
     thresholdJustification:
-      'Tier 3 default is 30; Brazil lowered to 18 (native) / 25 (non-native) because payroll tax load (FGTS + INSS + 13th salary, ~70% on gross) front-loads the ongoing entity cost, bringing crossover forward by roughly 6–9 months vs the tier template.',
+      'The Tier 3 default is 30 employees. We pitch Brazil at 18 (local language) and 25 (other languages) because the payroll tax load is heavy. FGTS, INSS, and the 13th-month salary add up to roughly 70% on top of gross pay, so the ongoing entity cost lands earlier than the tier template assumes. The crossover comes forward by 6 to 9 months.',
   },
   US: {
     verified: true,
@@ -63,7 +69,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     thresholdNative: 25,
     thresholdNonNative: 35,
     thresholdJustification:
-      'US thresholds are state-dependent. 25 assumes concentration in a single state with straightforward payroll setup. Distributed hiring across multiple states (e.g. California + Texas + New York) adds per-state registration, tax, and compliance overhead and typically pushes break-even to 40–50+ employees.',
+      'US thresholds depend on how concentrated your hiring is. The 25 figure assumes you are hiring inside a single state with a straightforward payroll setup. Spread the team across multiple states (say California, Texas, and New York) and each state adds its own registration, tax filings, and compliance overhead. In that case break-even typically lands at 40 to 50+ employees.',
   },
   GB: {
     verified: false,
@@ -113,26 +119,26 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 20000,
     terminationCostPerEmployee: 18000,
     terminationBasisNote:
-      'Customary settlement severance ~0.5 months\' gross salary per year of service at ~3 years tenure (higher in contested Kündigungsschutzgesetz claims — courts often award up to 1 month per year) + notice period pay (1 month end-of-month at 2+ years tenure, rising to 2 months at 5+ years) + accrued holiday. Based on a mid-level role at ~€5.5k monthly gross. No statutory severance for ordinary dismissal if due process is followed, but KSchG protection applies after 6 months tenure once the establishment exceeds 10 FTE-weighted employees (part-timers count 0.5/0.75/1.0 at ≤20/20–30/>30 hrs) — so contested terminations almost always settle. Confirm with local counsel before any decision.',
+      'A typical 3-year exit settles around 0.5 months of gross salary per year of service, rising to about 1 month per year if the dismissal is contested under unfair-dismissal protection (Kündigungsschutzgesetz, "KSchG"). On top of that you pay statutory notice (1 month at 2+ years of service, 2 months at 5+) and accrued holiday. Based on a mid-level role at around €5,500 per month gross. There is no automatic severance for an ordinary dismissal if you follow due process, but KSchG protection kicks in after 6 months of tenure once the workplace has more than 10 FTE-weighted employees (part-timers count as 0.5, 0.75 or 1.0 at up to 20 hours, 20 to 30 hours, and over 30 hours). In practice almost every contested termination settles. Confirm with local counsel before any decision.',
     thresholdJustification: {
       summary:
-        'Tier 2 default (18 native / 25 non-native) applies — the threshold reflects the operational readiness needed to run a German entity compliantly, not a pure economic crossover.',
+        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). The threshold reflects what it actually takes to run a German entity cleanly, not just the cost crossover.',
       sections: [
         {
           heading: 'Setup',
-          body: 'GmbH formation is notary-led and reliable (4–8 weeks, notary €800–1,500 + commercial register €150 + trade licence €15–65). End-to-end setup including accountant, payroll registration, banking, and handbook typically lands €10k–€20k — below the Tier 2 default range.',
+          body: 'GmbH formation runs through a notary and is reliable. Expect 4 to 8 weeks. Notary €800 to €1,500, commercial register €150, trade licence €15 to €65. End-to-end setup with an accountant, payroll registration, banking, and a handbook typically lands €10k to €20k. That sits below the Tier 2 default range.',
         },
         {
           heading: 'Capital',
-          body: '€25,000 minimum share capital is a refundable deposit (not a sunk expense), but it does tie up working capital.',
+          body: 'GmbH requires €25,000 minimum share capital. It is a refundable deposit, not a sunk cost, but it does tie up working capital.',
         },
         {
-          heading: 'Employment-law density',
-          body: 'Kündigungsschutzgesetz (KSchG) protection kicks in after 6 months of tenure once a business exceeds 10 regular employees (FTE-weighted), and Betriebsrat (works council) formation can be triggered in any workplace with 5+ permanent staff — meaning a material compliance burden arrives well before the pure-economic crossover.',
+          heading: 'Employment-law triggers',
+          body: 'Unfair-dismissal protection (Kündigungsschutzgesetz, "KSchG") kicks in after 6 months of service once you have more than 10 regular employees (FTE-weighted). A works council (Betriebsrat) can be triggered in any workplace with 5 or more permanent staff. So a real compliance burden arrives well before the cost crossover.',
         },
         {
-          heading: 'Social security',
-          body: 'Employer contributions ~21% of gross (pension 9.3%, health 7.3% + ~1.45% avg supplemental, long-term care 1.8%, unemployment 1.3%, statutory accident 1.2–3%) apply equally to EOR margins, so do not shift break-even. New 2026 ceilings (€5,812.50/mo health, €8,450/mo pension) raise the cap on senior hires.',
+          heading: 'Ongoing cost',
+          body: 'Employer social-security contributions run around 21% of gross pay (pension 9.3%, health 7.3% plus around 1.45% supplemental, long-term care 1.8%, unemployment 1.3%, accident insurance 1.2% to 3%). The same load sits inside EOR fees, so does not shift the break-even. The 2026 contribution ceilings rise to €5,812.50 per month for health and €8,450 per month for pension, which raises the cost cap on senior hires.',
         },
       ],
     },
@@ -144,9 +150,29 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 18000,
     terminationCostPerEmployee: 15000,
     terminationBasisNote:
-      'Rupture conventionnelle (mutual termination) is the dominant exit path. Statutory indemnity is 0.25 months\' gross salary per year of service for the first 10 years (0.33 thereafter) — a 3-year tenure yields ~0.75 months as a floor, but settlements for managerial staff commonly land at 1–3 months\' salary plus negotiated uplifts. The 2026 Social Security Financing Act (LFSS) raised the employer contribution on rupture conventionnelle indemnities from 30% to 40%, materially lifting the true exit cost. Figure based on a ~€5.5k/month mid-level role at ~3 years tenure: base indemnity + negotiated uplift + 40% employer contribution + accrued congés payés. Confirm with local counsel before any decision.',
-    thresholdJustification:
-      'Tier 2 default (18 native / 25 non-native) applies. SAS/SASU formation is cheap on paper (~€260 in mandatory admin fees, no minimum share capital — €1 symbolic is permissible) but end-to-end setup with accountant, URSSAF registration, banking, convention collective identification, and handbook typically lands €8k–€18k — below the Tier 2 default range. The heavier factor is ongoing: employer social charges run ~42–45% of gross (health 13%, old-age 8.55% up to €3,666/mo, family allowances ~5.25%, unemployment, work accident 0.77%+), applied equally to EOR margins so not shifting break-even. Compliance trigger to watch: Comité Social et Économique (CSE) becomes mandatory at 11 FTE sustained for 12 consecutive months — which lands before the 18/25 recommendation, so entity-track teams crossing 11 heads take on a CSE election and consultation obligation well before the economic crossover. 2026 risk note: LFSS raised the employer contribution on rupture conventionnelle from 30% to 40%, quietly pushing up the cost of post-probation terminations for entity-holders; EOR providers centralise and price this in. Expect the effective threshold to drift upward by 1–2 employees as entities price in the new exit cost.',
+      'Most French exits go through a mutual-termination agreement (rupture conventionnelle). The minimum legal indemnity is 0.25 months of gross salary per year of service for the first 10 years, then 0.33 thereafter. For a 3-year tenure that floor lands at around 0.75 months. In practice, settlements for managerial staff commonly run 1 to 3 months of salary plus negotiated uplifts. The 2026 Social Security Financing Act (LFSS) raised the employer charge on rupture conventionnelle payouts from 30% to 40%, so the true cost is now higher. Figure based on a mid-level role at around €5,500 per month gross: base indemnity, negotiated uplift, 40% employer contribution, and accrued paid holiday (congés payés). Confirm with local counsel before any decision.',
+    thresholdJustification: {
+      summary:
+        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Setup is cheap on paper but lands at €8k to €18k all-in. The heavier factor is the 42% to 45% employer social load, and the 11-employee works-council trigger arrives before the threshold.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'SAS or SASU formation is cheap on paper (around €260 in mandatory admin fees, no real minimum share capital, €1 is enough). The honest end-to-end cost with an accountant, URSSAF registration, banking, identifying your collective bargaining agreement (convention collective), and a handbook typically lands €8k to €18k. That is below the Tier 2 default range.',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Employer social charges run 42% to 45% of gross pay (health 13%, old-age pension 8.55% up to €3,666 per month, family allowances around 5.25%, plus unemployment and work-accident contributions of 0.77%+). The same load sits inside EOR fees, so it does not shift the break-even, it just makes France expensive to hire in either way.',
+        },
+        {
+          heading: 'Compliance trigger to watch',
+          body: 'A Social and Economic Committee (Comité Social et Économique, "CSE") becomes mandatory once you sustain 11 FTE for 12 consecutive months. That lands before the 18-employee recommendation, so any entity that crosses 11 heads picks up CSE election and consultation obligations well before the economic crossover.',
+        },
+        {
+          heading: 'Post-2026 risk',
+          body: 'The 2026 Social Security Financing Act (LFSS) raised the employer charge on rupture conventionnelle payouts from 30% to 40%, quietly pushing up the cost of post-probation exits for entities. EOR providers centralise and price this in. Expect the effective threshold to drift up by 1 to 2 employees as entities price the new exit cost in.',
+        },
+      ],
+    },
   },
   ES: {
     verified: false,
@@ -155,9 +181,29 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 14000,
     terminationCostPerEmployee: 12000,
     terminationBasisNote:
-      'Spanish dismissals split into despido procedente (fair objective dismissal — 20 days\' salary per year of service, capped 12 months) and despido improcedente (unfair — 33 days per year for post-12-February-2012 seniority, capped 24 months; 45 days per year for pre-2012 tenure). A high share of terminations are challenged and reclassified as improcedente at conciliation, so the practical planning figure sits closer to the 33-day rate. Figure based on a ~€3,500/month mid-level role at ~3 years tenure: blended indemnity across procedente/improcedente outcomes + 15 days\' notice pay (objective dismissal) + accrued holiday. Confirm with local counsel before any decision.',
-    thresholdJustification:
-      'Tier 2 default (18 native / 25 non-native) applies. Sociedad Limitada (SL) formation is mid-weight: notary + commercial registry + name certificate total ~€380 in mandatory fees, with legal/formation services typically adding €3k–€5k. Since Law 18/2022 the legal minimum share capital is €1 (previously €3,000), though €3,000 remains the recommended practical level. End-to-end setup with accountant, payroll, Social Security registration, and handbook lands €6k–€14k — below the Tier 2 default range. The heavier factor is ongoing: employer Social Security contributions run ~30–36% of gross (general rate 30.57% + FOGASA 0.20% + training 0.10% + 1.5%+ occupational accident, varying by risk class), applied equally to EOR margins so not shifting break-even. Compliance trigger to watch: elected employee delegates (delegados de personal) become mandatory in workplaces of 11+ employees (1 delegate at 11–30, 3 at 31–49); the formal comité de empresa only arrives at 50+. So the 11-employee delegate-election obligation lands before the 18/25 recommendation, and entity-track teams need an election protocol well before the economic crossover. 2026 risk note: the Additional Solidarity Contribution (ASC) now applies to employer contributions on earnings above the maximum Social Security base (bases rising ~4% in 2026), raising the cost of senior hires for entities and EOR providers alike — roughly neutral to the threshold but worth flagging for high-salary hiring plans.',
+      'Spanish dismissals split into two paths. A fair objective dismissal (despido procedente) pays 20 days of salary per year of service, capped at 12 months. An unfair dismissal (despido improcedente) pays 33 days per year for service since 12 February 2012, capped at 24 months, plus 45 days per year for any tenure before then. In practice, a large share of dismissals get challenged and reclassified as improcedente at conciliation, so plan around the 33-day rate. Figure based on a mid-level role at around €3,500 per month gross at 3 years of service: a blended indemnity, 15 days of notice pay (objective dismissal), and accrued holiday. Confirm with local counsel before any decision.',
+    thresholdJustification: {
+      summary:
+        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Setup is mid-weight; the ongoing social-security load is the heavier factor and sits equally inside EOR fees. The 11-employee delegate-election obligation lands before the threshold.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'Sociedad Limitada (SL) formation is mid-weight. Notary plus commercial registry plus name certificate total around €380 in mandatory fees. Legal and formation services typically add €3k to €5k. Since Law 18/2022 the legal minimum share capital is €1 (down from €3,000), though €3,000 is still the recommended practical level. End-to-end setup with an accountant, payroll, Social Security registration, and a handbook lands €6k to €14k. That is below the Tier 2 default range.',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Employer Social Security contributions run 30% to 36% of gross pay (general rate 30.57% plus FOGASA 0.20%, training 0.10%, and a 1.5%+ occupational-accident contribution that varies by risk class). The same load sits inside EOR fees, so does not shift the break-even.',
+        },
+        {
+          heading: 'Compliance trigger to watch',
+          body: 'Elected employee delegates (delegados de personal) become mandatory in workplaces of 11 or more employees (1 delegate at 11 to 30, 3 at 31 to 49). A full works committee (comité de empresa) only arrives at 50+. So the 11-employee delegate-election obligation lands before the 18-employee recommendation, and entity-track teams need an election protocol well before the economic crossover.',
+        },
+        {
+          heading: 'Post-2026 risk',
+          body: 'The Additional Solidarity Contribution (ASC) now applies to employer contributions on earnings above the maximum Social Security base (bases are rising around 4% in 2026). This raises the cost of senior hires for entities and EOR providers alike, so it is roughly neutral to the threshold, but worth flagging for high-salary hiring plans.',
+        },
+      ],
+    },
   },
   NL: {
     verified: false,
@@ -166,15 +212,35 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 12000,
     terminationCostPerEmployee: 9000,
     terminationBasisNote:
-      'Transitievergoeding (statutory transition payment) is 1/3 of monthly salary per year of service from day one of employment, including 8% vakantiegeld and averaged variable pay. Figure based on a ~€5,000/month mid-level role at ~3 years tenure: statutory transition payment (~€5,000) + notice period pay (1 month at 0–5 years tenure, minus 1 week if the UWV route is used) + accrued holiday allowance. Most Dutch exits settle via vaststellingsovereenkomst (mutual termination agreement) which typically lands 1.5–2× the statutory minimum to secure a clean release. Dismissals for business-economic reasons or long-term illness require prior UWV permit (4-week validity once granted); performance-based dismissals go via the kantonrechter (subdistrict court). Confirm with local counsel before any decision.',
-    thresholdJustification:
-      'Tier 1 default (10 native / 14 non-native) applies. BV formation is fast and cheap for a Tier 1 market: notary €500–€1,500 + KVK registration €85.15 + articles-of-association drafting, with total end-to-end setup (accountant, payroll, banking, tax authority registration) landing €5k–€12k — below the Tier 1 default range. Minimum share capital is €0.01, so no meaningful capital lockup. Employer social security at ~23.59% of gross (WIA/WAO 6.27–7.63%, WHK 0.38–6.08%, ZVW, WW-Awf) is capped at a €79,409 annual salary — a harder ceiling than most EU markets — and applies equally to EOR margins, so does not shift break-even. Compliance trigger to watch: at 10+ employees a Personeelsvertegenwoordiging (PVT) representation body becomes required, and at 50+ a full Ondernemingsraad (works council) is mandatory under the Works Councils Act. The 10-employee PVT requirement coincides exactly with the Tier 1 threshold — entity-track teams hit that compliance layer at the same moment the economic case converges. 2026 risk note: a government proposal would restrict UWV compensation for transitievergoedingen to employers with fewer than 25 employees from 1 July 2026 — once an entity crosses 25 heads, the transition-payment cost is no longer recoverable from UWV, effectively raising the true exit cost for mid-sized entities. Post-July-2026 expect the effective threshold to drift upward by 1–2 employees.',
+      'The statutory transition payment (transitievergoeding) is one-third of monthly salary per year of service, counted from day one of employment, and includes the 8% holiday allowance (vakantiegeld) plus any averaged variable pay. Figure based on a mid-level role at around €5,000 per month gross at 3 years of service: a statutory transition payment of roughly €5,000, 1 month of notice pay (the standard at 0 to 5 years of service, minus 1 week if you go via the UWV permit route), and accrued holiday allowance. Most Dutch exits settle through a mutual-termination agreement (vaststellingsovereenkomst) at 1.5 to 2 times the statutory minimum, in exchange for a clean release. Dismissals for business or economic reasons or long-term illness need a prior UWV permit (valid for 4 weeks once granted). Performance-based dismissals go through the subdistrict court (kantonrechter). Confirm with local counsel before any decision.',
+    thresholdJustification: {
+      summary:
+        'We apply the Tier 1 default of 10 (local language) and 14 (other languages). Setup is fast and cheap, and ongoing social security is capped at a hard ceiling. A representation body becomes mandatory at exactly 10 employees, and the 2026 UWV change raises exit costs for entities crossing 25 heads.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'BV formation is fast and cheap by Tier 1 standards. Notary €500 to €1,500, KVK registration €85.15, plus articles-of-association drafting. End-to-end setup with an accountant, payroll, banking, and tax-authority registration usually lands €5k to €12k, below the Tier 1 default range. Minimum share capital is €0.01, so no meaningful capital lockup.',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Employer social-security contributions run around 23.59% of gross pay (WIA and WAO 6.27% to 7.63%, WHK 0.38% to 6.08%, plus ZVW and WW-Awf). The load is capped at an annual salary of €79,409, a harder ceiling than most EU markets. The same costs sit inside EOR fees, so do not shift the break-even.',
+        },
+        {
+          heading: 'Compliance trigger to watch',
+          body: 'At 10 or more employees, a personnel representation body (Personeelsvertegenwoordiging, "PVT") becomes required. At 50+, a full works council (Ondernemingsraad) is mandatory under the Works Councils Act. The 10-employee PVT trigger lands exactly at the Tier 1 threshold, so the compliance layer arrives at the same moment the economic case converges.',
+        },
+        {
+          heading: 'Post-July-2026 risk',
+          body: 'A government proposal would restrict UWV reimbursement of transition payments (transitievergoeding) to employers with fewer than 25 employees from 1 July 2026. Once an entity crosses 25 heads, that exit cost is no longer recoverable from UWV, raising the true cost of dismissals for mid-sized entities. Expect the effective threshold to drift up by 1 to 2 employees from July 2026.',
+        },
+      ],
+    },
     upcomingChanges: [
       {
         effectiveDate: '2026-07-01',
-        title: 'UWV transitievergoeding compensation restricted to <25 employees',
+        title: 'UWV transition-payment reimbursement restricted to under 25 employees',
         summary:
-          'Government proposal would limit UWV compensation for transitievergoedingen (statutory transition payments) to employers with fewer than 25 employees. Once an entity crosses 25 heads, the transition-payment cost is no longer recoverable from UWV — materially raising true exit cost for mid-sized entities. Expect the effective Crossover threshold to drift upward by 1–2 employees post-July-2026.',
+          'From 1 July 2026, a government proposal would restrict UWV reimbursement of statutory transition payments (transitievergoeding) to employers with fewer than 25 employees. Once an entity crosses 25 heads, that exit cost is no longer recoverable from UWV, raising the true cost of dismissals for mid-sized entities. Expect the threshold for the Netherlands to drift 1 to 2 employees higher from July 2026.',
         impact: 'raises_threshold',
         source: 'https://www.uwv.nl/werkgevers',
       },
@@ -189,9 +255,37 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 700000,
     terminationCostPerEmployee: 350000,
     terminationBasisNote:
-      'Retrenchment compensation (15 days\' average pay per completed year, Industrial Disputes Act / Industrial Relations Code 2020) + gratuity + notice pay + leave encashment. Gratuity eligibility is in flux: the Payment of Gratuity Act 1972 requires 5 years\' continuous service in establishments of 10+ employees; the Code on Social Security 2020 (implemented 21 November 2025; Central Rules still in draft comment as of Q1 2026) entitles employees to gratuity after 1 year. Figure based on a mid-level role at ~₹75,000/month gross at ~3 years tenure assuming the Code\'s 1-year gratuity rule applies: retrenchment ~₹1.3 lakh + gratuity ~₹1.3 lakh + 1 month notice + leave encashment. Multi-state hires add state-level settlement variability (Maharashtra, Karnataka, Tamil Nadu and Delhi each have distinct regimes). Confirm with local counsel before any decision.',
-    thresholdJustification:
-      'Tier 3 default is 30 (native) / 43 (non-native); India lowered to 22 / 28 because the EOR-fee-to-salary ratio is materially higher than in European Tier 3 markets — a $599/month EOR fee sits at ~60–70% of a mid-level Indian gross salary (vs ~10% in UK), so the monthly EOR-vs-entity arithmetic converges at smaller headcount. Private Limited Company formation is cheap by government fee (MCA filing ₹0 up to ₹15 lakh authorised capital, name reservation ₹1,000, DSC ~₹1,500/director, DIN ₹500) but realistic end-to-end setup with Chartered Accountant, legal, company secretary, state-level Shops & Establishments registration, Professional Tax, and Labour Welfare Fund typically lands ₹3–7 lakh (~$3,600–$8,400). Employer statutory load is ~13–14% of gross (EPF 12% of basic+DA with 8.33% employer share directed to EPS capped at ₹1,250/month; ESIC 3.25% employer only applies below ₹21,000/month wages so rarely for white-collar; state PT and LWF), materially lighter than EU markets. Works committee only becomes mandatory at 100+ workers under the Industrial Relations Code, so internal-rep burden lands well above the threshold. 2026 regulatory note: the four Labour Codes (Wages, Industrial Relations, Social Security, OSH) were implemented 21 November 2025; draft Central Rules issued 30 December 2025 with 30–45 day comment windows, so procedural detail is still settling. State variation is the real caveat: distributed hiring across 2+ states typically pushes the effective threshold back toward the Tier 3 default — the 22/28 recommendation assumes concentration in a single state (most commonly Karnataka, Maharashtra or Telangana for tech hiring).',
+      'A typical exit blends retrenchment compensation, gratuity, notice pay, and leave encashment. Retrenchment is 15 days of average pay per completed year of service under the Industrial Disputes Act or the new Industrial Relations Code 2020. Gratuity eligibility is in flux. The Payment of Gratuity Act 1972 required 5 years of continuous service in workplaces with 10+ employees. The new Code on Social Security 2020 (in force from 21 November 2025, with the Central Rules still in draft consultation as of Q1 2026) entitles workers to gratuity after just 1 year. Figure based on a mid-level role at around ₹75,000 per month gross at 3 years of service, assuming the new 1-year gratuity rule applies: retrenchment around ₹1.3 lakh, gratuity around ₹1.3 lakh, 1 month notice, and accrued leave. Hiring across multiple states adds settlement variability (Maharashtra, Karnataka, Tamil Nadu, and Delhi each run distinct regimes). Confirm with local counsel before any decision.',
+    thresholdJustification: {
+      summary:
+        'The Tier 3 default is 30 (local language) and 43 (other languages). We pitch India at 22 and 28 because the EOR-fee-to-salary ratio is much higher than in European Tier 3 markets, so the cost crossover lands at smaller headcount. Single-state hiring assumed.',
+      sections: [
+        {
+          heading: 'Why lower than the tier default',
+          body: 'A $599 EOR fee sits at roughly 60% to 70% of a mid-level Indian gross salary, compared to around 10% in the UK. So the per-month EOR-versus-entity arithmetic converges at smaller headcount than the European Tier 3 template assumes.',
+        },
+        {
+          heading: 'Setup',
+          body: 'Private Limited Company formation is cheap on paper (MCA filing free up to ₹15 lakh authorised capital, name reservation ₹1,000, digital signature around ₹1,500 per director, DIN ₹500). A realistic end-to-end cost with a Chartered Accountant, legal, company secretary, state-level Shops and Establishments registration, Professional Tax, and Labour Welfare Fund typically lands ₹3 to ₹7 lakh (around $3,600 to $8,400).',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Employer statutory load is around 13% to 14% of gross pay. EPF is 12% of basic plus dearness allowance, with 8.33% of the employer share routed to EPS and capped at ₹1,250 per month. ESIC at 3.25% (employer only) applies below ₹21,000 per month, which rarely covers white-collar roles. Plus state Professional Tax and Labour Welfare Fund. Materially lighter than European markets.',
+        },
+        {
+          heading: 'Compliance trigger to watch',
+          body: 'A works committee only becomes mandatory at 100+ workers under the Industrial Relations Code, so internal-representation burden lands well above the threshold.',
+        },
+        {
+          heading: 'Regulatory context',
+          body: 'The four Labour Codes (Wages, Industrial Relations, Social Security, OSH) came into force on 21 November 2025. Draft Central Rules were issued on 30 December 2025 with 30 to 45 day comment windows. Procedural detail is still settling.',
+        },
+        {
+          heading: 'State variation',
+          body: 'Hiring across two or more states usually pushes the effective threshold back toward the Tier 3 default. The 22 and 28 recommendation assumes concentration in a single state, most commonly Karnataka, Maharashtra, or Telangana for tech hiring.',
+        },
+      ],
+    },
   },
   PL: {
     verified: false,
@@ -200,9 +294,29 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 20000,
     terminationCostPerEmployee: 30000,
     terminationBasisNote:
-      'Typical exit for a mid-level role at ~3 years tenure: 3 months\' statutory notice (Kodeks pracy, for tenure >3 years) plus a negotiated settlement. Statutory severance (odprawa) under the Act on Special Rules of Terminating Employment only applies to employers with 20+ employees and only on economic / redundancy grounds — 2 months\' salary at 2–8 years tenure, capped at 15× the minimum monthly wage (PLN 69,990 from January 2025, ~€16,400). Performance-based dismissals carry no statutory odprawa but usually settle with an agreed payout to avoid a labour-court claim (appeals to the sąd pracy within 21 days). Figure assumes a mid-level salary of ~PLN 12,000/month gross: ~PLN 36k notice pay + typical settlement top-up or modest odprawa at 20+ headcount. Polish labour courts skew employee-favourable on dismissal justification, which tends to push negotiated exits higher than the statutory floor.',
-    thresholdJustification:
-      'Tier 2 default (18 native / 25 non-native) applies. Poland is among the cheapest EU Tier 2 markets to form an entity: Sp. z o.o. via the S24 online registry lets you incorporate in 24 hours for ~PLN 350 court fee + PLN 5k minimum share capital (retained in the company), and end-to-end setup with a Polish accountant, bank account, JPK/ZUS registration and legal handholding typically lands PLN 5k–20k (~€1,200–€4,700) — well under the Tier 2 default range. The KRS Court Monitor fee (PLN 100) was abolished on 29 November 2025, a small additional cost reduction. Employer ZUS load at ~19–22% of gross (pension 9.76% employer share of 19.52%, disability 6.5%, accident ~1.67% typical, Labour Fund 2.45%, FGŚP 0.1%) is materially lighter than Germany or France, so ongoing entity cost per employee is lower than the Tier 2 average — pulling the economic break-even very slightly forward vs template, but not enough to override the 18/25 default. Compliance triggers cluster above the threshold: the Rada pracowników (works council) only becomes mandatory at 50+ employees, statutory odprawa (severance) only applies to employers with 20+ employees, and mandatory work regulations (regulamin pracy, regulamin wynagradzania) kick in at 50+. Distributed hires across multiple Polish voivodeships do not change the regulatory picture — Polish labour law is national, not regional — so the threshold holds whether you concentrate in Warsaw/Kraków/Wrocław or spread across the country.',
+      'A typical 3-year exit pays 3 months of statutory notice (Kodeks pracy, for tenure over 3 years) plus a negotiated settlement. Statutory severance (odprawa) only kicks in for employers with 20 or more employees, and only on economic or redundancy grounds. The base is 2 months of salary at 2 to 8 years of service, capped at 15 times the minimum monthly wage (PLN 69,990 from January 2025, around €16,400). Performance-based dismissals carry no statutory odprawa, but they usually settle with an agreed payout to avoid a labour-court claim (workers have 21 days to appeal to the labour court, sąd pracy). Figure based on a mid-level salary at around PLN 12,000 per month gross: around PLN 36k notice pay, plus a typical settlement top-up or a modest odprawa once you cross 20 heads. Polish labour courts tend to side with workers on whether a dismissal was justified, which pushes negotiated exits higher than the statutory floor.',
+    thresholdJustification: {
+      summary:
+        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Poland is among the cheapest EU Tier 2 markets to incorporate, and the employer social load is lighter than France or Germany. Statutory severance only kicks in at 20+ employees, after the threshold.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'Sp. z o.o. via the online S24 registry incorporates in 24 hours for around PLN 350 in court fees, plus PLN 5,000 minimum share capital that stays with the company. End-to-end setup with a Polish accountant, bank account, JPK and ZUS registration, and legal handholding typically lands PLN 5k to PLN 20k (around €1,200 to €4,700). Well under the Tier 2 default range. The KRS Court Monitor fee (PLN 100) was abolished on 29 November 2025, a small additional saving.',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Employer ZUS contributions run around 19% to 22% of gross pay (pension employer share 9.76%, disability 6.5%, accident around 1.67% typical, Labour Fund 2.45%, FGSP 0.1%). Materially lighter than Germany or France, which pulls the economic break-even very slightly forward versus the template. Not enough to override the 18 and 25 default.',
+        },
+        {
+          heading: 'Compliance triggers',
+          body: 'Compliance obligations cluster above the threshold. A workplace council (rada pracowników) only becomes mandatory at 50+ employees. Statutory severance (odprawa) only applies to employers with 20+ employees. Mandatory work regulations (regulamin pracy, regulamin wynagradzania) kick in at 50+.',
+        },
+        {
+          heading: 'State variation',
+          body: 'Polish labour law is national, not regional. Spreading hires across Warsaw, Kraków, or Wrocław does not change the regulatory picture or the threshold.',
+        },
+      ],
+    },
   },
   MX: {
     verified: false,
@@ -211,8 +325,28 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 160000,
     terminationCostPerEmployee: 200000,
     terminationBasisNote:
-      'Unjustified-dismissal exposure under Ley Federal del Trabajo (LFT) Art. 48: indemnización constitucional of 3 months\' integrated daily salary (SDI) + 20 días por año de servicio (the 20-day-per-year figure was re-affirmed in the 24 December 2024 LFT reform for indefinite-term contracts) + prima de antigüedad of 12 days\' salary per year of service (capped at 2× the UMA/minimum wage per day) + proportional aguinaldo (15-day minimum annual bonus) + proportional vacaciones + prima vacacional (25% on vacation days). Figure assumes mid-level at ~MXN 40,000/month gross at ~3 years tenure: ~MXN 120k constitutional + ~MXN 80k for the 20-day accrual + ~MXN 5k seniority premium + accruals. Most Mexican exits settle via renuncia with a negotiated finiquito or a Junta-de-Conciliación-registered mutual termination to avoid the new Tribunal Laboral procedure (Reforma Laboral 2019 rolled out state-by-state through 2022). Pre-2022 Junta de Conciliación cases are still being wound down; the new conciliation-first requirement adds 45 days before any labour court filing.',
-    thresholdJustification:
-      'Tier 2 default (18 native / 25 non-native) applies. Setup overridden upward to reflect real SA de CV / S. de R.L. de C.V. formation costs: notary MXN 17k–20k, public-registry fees MXN 1.5k–5k (varies by state), legal counsel MXN 5k–20k, plus RFC/IMSS/INFONAVIT/SAT registrations and first-year accountant retainer — typical end-to-end landing MXN 70k–160k (~$3.5k–$8k). Ongoing per-employee admin overhead inherits the FX-converted Tier 2 default (~MXN 76k/year ≈ $4.5k) which is in the right ballpark for SA de CV with monthly contador retainer + IMSS/SAT filings + quarterly provisional taxes — refine with advisor in Wave 3. Employer statutory load is among the heaviest in LatAm at ~30–40% of integrated base salary (SBC): IMSS ~20–25%, INFONAVIT 5%, SAR retirement 2%, state payroll tax (ISN) 1–3% varying by state, plus mandatory aguinaldo (15 days min), prima vacacional (25% on vacation days), and PTU profit-sharing capped at 3 months\' salary or the 3-year average per the 2021 outsourcing reform (Mexican Supreme Court upheld the cap as constitutional in April 2024, Amparo en revisión 633/2023). Compliance triggers cluster well above the threshold: union-contract / Contrato Colectivo obligations become a live question at 20+ employees post-Reforma Laboral 2019, and internal-committee requirements (Comisión Mixta de Seguridad e Higiene, Comisión Mixta de Capacitación) apply from 1 employee but scale in complexity at 50+. Mexican labour law is federal not state-based, so distributed hiring across CDMX / Nuevo León / Jalisco does not fragment the core regulatory picture — only the state payroll tax rate (ISN, 1–3%) varies meaningfully by location.',
+      'An unjustified dismissal under Article 48 of the Federal Labour Act (Ley Federal del Trabajo, "LFT") costs the constitutional indemnity of 3 months of integrated daily salary (SDI), plus 20 days per year of service (re-affirmed in the 24 December 2024 LFT reform for indefinite-term contracts), plus a seniority premium of 12 days per year (capped at twice the UMA or minimum wage per day), plus a proportional 15-day Christmas bonus (aguinaldo), plus proportional holiday and the 25% holiday bonus (prima vacacional). Figure based on a mid-level role at around MXN 40,000 per month gross at 3 years of service: around MXN 120k constitutional indemnity, MXN 80k for the 20-day accrual, MXN 5k seniority premium, plus accruals. Most Mexican exits settle with a resignation plus a negotiated finiquito, or a mutual termination registered with the Junta de Conciliación, to avoid the new Tribunal Laboral procedure (the 2019 labour reform rolled out state by state through 2022). Pre-2022 Junta de Conciliación cases are still being wound down, and the new conciliation-first rule adds 45 days before any labour-court filing.',
+    thresholdJustification: {
+      summary:
+        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Setup costs sit above the tier template because notary fees and registrations are real, the employer load is among the heaviest in Latin America, and union-contract obligations land just above the threshold.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'SA de CV or S. de R.L. de C.V. formation costs more than the tier template. Notary MXN 17k to 20k, public-registry fees MXN 1.5k to 5k (varies by state), legal counsel MXN 5k to 20k, plus RFC, IMSS, INFONAVIT, and SAT registrations and the first-year accountant retainer. End-to-end usually lands MXN 70k to 160k (around $3.5k to $8k).',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Per-employee admin overhead inherits the Tier 2 default of around MXN 76k per year (around $4.5k), which fits SA de CV with a monthly accountant retainer, IMSS and SAT filings, and quarterly provisional taxes. Employer statutory load is among the heaviest in Latin America at 30% to 40% of integrated base salary (SBC): IMSS around 20% to 25%, INFONAVIT 5%, SAR retirement 2%, state payroll tax (ISN) 1% to 3% varying by state. Plus the mandatory Christmas bonus (aguinaldo, 15-day minimum), holiday bonus (prima vacacional, 25% on holiday), and profit-sharing (PTU), the last capped at 3 months\' salary or the 3-year average under the 2021 outsourcing reform (the Supreme Court upheld the cap as constitutional in April 2024).',
+        },
+        {
+          heading: 'Compliance triggers',
+          body: 'Compliance obligations cluster above the threshold. Union-contract (Contrato Colectivo) obligations become a live question at 20+ employees post the 2019 reform. Internal committees (Comisión Mixta de Seguridad e Higiene, Comisión Mixta de Capacitación) apply from 1 employee but scale in complexity at 50+.',
+        },
+        {
+          heading: 'State variation',
+          body: 'Mexican labour law is federal, not state-based. Spreading hiring across CDMX, Nuevo León, or Jalisco does not fragment the core regulatory picture. Only the state payroll tax rate (ISN, 1% to 3%) varies meaningfully by location.',
+        },
+      ],
+    },
   },
 }
