@@ -311,8 +311,10 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                     className="w-20 border border-parchment-300 rounded-input px-4 py-3 font-sans text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white"
                   />
                 </div>
-                <p className="mt-1 text-sm text-parchment-600 font-sans">
-                  Extra hires on top of your current {inputs.currentHeadcount} in{' '}
+                <p className="mt-2 text-base font-sans text-forest-700">
+                  <span className="font-semibold text-sienna-700">Extra hires</span> on top of
+                  your current{' '}
+                  <span className="font-semibold">{inputs.currentHeadcount}</span> in{' '}
                   {inputs.country.name}.
                 </p>
               </div>

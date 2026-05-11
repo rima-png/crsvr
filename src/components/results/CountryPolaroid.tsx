@@ -3,13 +3,13 @@
 /**
  * CountryPolaroid — the one editorial signature on the calculator.
  *
- * Echoes the Polaroid-with-hand-written-caption visual signature from the new
- * Teamed site (https://teamed-website-platform.vercel.app/). Sits above the
- * Recommendation on step 3 as a warm anchor before the analytical content.
+ * Echoes the Polaroid signature from the new Teamed brand kit
+ * (https://teamed-website-platform.vercel.app/brand-kit): a real-looking
+ * Polaroid with a "Classic Film" fade on the photo, 4% film grain overlay,
+ * and a Sharpie-feel hand-written caption in sienna-900 deep sepia on the
+ * white border below the photo, slightly tilted to feel hand-scrawled.
  *
- * Presentation-only: takes country, status, and crossover month, renders a
- * tilted white card with washi tape, a landmark photo for the country, and a
- * Permanent Marker caption underneath. No data fetching, no state.
+ * Presentation-only.
  */
 
 import type { Country, CalculationStatus } from '@/lib/types'
@@ -37,13 +37,17 @@ function subCaption(status: CalculationStatus, crossoverMonth: number | null): s
   return crossoverMonth ? `crossover at month ${crossoverMonth}` : 'no crossover in 3 years'
 }
 
+// Subtle film treatment — approximates the brand kit "Classic Film" preset.
+// Slight sepia, reduced saturation and contrast for a faded vintage feel.
+const PHOTO_FILTER = 'sepia(0.18) saturate(0.82) contrast(0.94) brightness(0.98)'
+
 export function CountryPolaroid({ country, status, crossoverMonth }: CountryPolaroidProps) {
   const landmark = getLandmark(country.code)
 
   return (
     <div className="flex justify-center">
       <div
-        className="relative bg-white border border-parchment-300 shadow-card px-4 pt-10 pb-5 w-[260px] sm:w-[280px]"
+        className="relative bg-white border border-parchment-300 shadow-card px-4 pt-10 pb-7 w-[260px] sm:w-[280px]"
         style={{ transform: 'rotate(-1.5deg)' }}
       >
         {/* Washi tape */}
@@ -53,7 +57,7 @@ export function CountryPolaroid({ country, status, crossoverMonth }: CountryPola
           style={{ transform: 'translate(-50%, 0) rotate(-3deg)' }}
         />
 
-        {/* Landmark photo — square crop, parchment fallback if missing */}
+        {/* Photo area — faded film treatment, grain overlay */}
         <div className="relative w-full aspect-square overflow-hidden bg-parchment-100">
           {landmark.src ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -63,6 +67,7 @@ export function CountryPolaroid({ country, status, crossoverMonth }: CountryPola
               className="w-full h-full object-cover"
               loading="lazy"
               draggable={false}
+              style={{ filter: PHOTO_FILTER }}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -71,22 +76,27 @@ export function CountryPolaroid({ country, status, crossoverMonth }: CountryPola
               </span>
             </div>
           )}
+          {/* 4% film-grain overlay per the brand kit */}
+          <div aria-hidden className="grain absolute inset-0 pointer-events-none" />
         </div>
 
-        {/* Country name + secondary detail */}
-        <p className="font-heading font-bold text-forest-700 text-center mt-4 text-base">
-          {country.flag} {country.name}
-        </p>
-        <p className="font-sans text-parchment-600 text-center text-xs mt-1">
-          {subCaption(status, crossoverMonth)}
-        </p>
-
-        {/* Hand-written caption */}
+        {/* Hand-written annotations on the white bottom border.
+            Slight tilts make it feel scrawled, not typeset. */}
         <p
-          className="font-marker text-sienna-900 text-center mt-3 text-3xl leading-none"
+          className="font-marker text-sienna-900 text-center mt-4 text-xl leading-tight"
+          style={{ transform: 'rotate(-0.8deg)' }}
+        >
+          {country.name}
+        </p>
+        <p
+          className="font-marker text-sienna-900 text-center mt-2 text-5xl leading-none"
+          style={{ transform: 'rotate(1.2deg)' }}
           aria-label={`Recommendation: ${CAPTIONS[status]}`}
         >
           {CAPTIONS[status]}
+        </p>
+        <p className="font-sans text-parchment-600 text-center text-[11px] uppercase tracking-wider mt-3">
+          {subCaption(status, crossoverMonth)}
         </p>
       </div>
     </div>
