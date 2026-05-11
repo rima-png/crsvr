@@ -50,30 +50,97 @@ export interface CountryOverride {
 }
 
 export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
+  AR: {
+    verified: false,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
+    thresholdJustification:
+      'We pitch Argentina at 12 (local language) and 18 (other languages). The LATAM mid-market rarely scales beyond 10 to 15 employees inside a single country, so the conversation about EOR-versus-entity needs to start there, not at the academic 30 ceiling. Sales experience puts useful conversations as low as 7. Tier 3 economics still apply (heavy payroll tax load, FX exposure, complex termination regime), so a planning conversation matters more than a hard switch.',
+  },
   BR: {
     verified: true,
-    lastReviewedDate: '2026-04-27',
-    thresholdNative: 18,
-    thresholdNonNative: 25,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupCostLow: 50000,
     setupCostHigh: 120000,
     terminationCostPerEmployee: 50000,
     terminationBasisNote:
       'A typical 3-year exit blends an FGTS 40% penalty, accrued holiday plus the one-third holiday bonus, the proportional 13th-month salary, and notice pay. Advisor estimate in BRL. Confirm with local counsel before any decision.',
     thresholdJustification:
-      'The Tier 3 default is 30 employees. We pitch Brazil at 18 (local language) and 25 (other languages) because the payroll tax load is heavy. FGTS, INSS, and the 13th-month salary add up to roughly 70% on top of gross pay, so the ongoing entity cost lands earlier than the tier template assumes. The crossover comes forward by 6 to 9 months.',
+      'We pitch Brazil at 12 (local language) and 18 (other languages). The payroll tax load is heavy: FGTS, INSS, and the 13th-month salary add up to roughly 70% on top of gross pay, so the ongoing entity cost lands earlier than a generic Tier 3 template assumes. The crossover comes forward by 6 to 9 months, which is part of why the conversation is worth opening at smaller headcount than the old academic ceiling.',
+  },
+  CO: {
+    verified: false,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
+    thresholdJustification:
+      'We pitch Colombia at 12 (local language) and 18 (other languages). Like the rest of LATAM, growth-stage teams typically operate with 8 to 15 employees inside a single country, so opening the conversation at 12 catches the buyers EOR economics are actually starting to bite for. Tier 3 economics apply: meaningful payroll load, multi-state complexity is absent, and the academic 30-employee ceiling sat well above where most mid-market buyers ever hit.',
+  },
+  MX: {
+    verified: false,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
+    setupCostLow: 70000,
+    setupCostHigh: 160000,
+    terminationCostPerEmployee: 200000,
+    terminationBasisNote:
+      'An unjustified dismissal under Article 48 of the Federal Labour Act (Ley Federal del Trabajo, "LFT") costs the constitutional indemnity of 3 months of integrated daily salary (SDI), plus 20 days per year of service (re-affirmed in the 24 December 2024 LFT reform for indefinite-term contracts), plus a seniority premium of 12 days per year (capped at twice the UMA or minimum wage per day), plus a proportional 15-day Christmas bonus (aguinaldo), plus proportional holiday and the 25% holiday bonus (prima vacacional). Figure based on a mid-level role at around MXN 40,000 per month gross at 3 years of service: around MXN 120k constitutional indemnity, MXN 80k for the 20-day accrual, MXN 5k seniority premium, plus accruals. Most Mexican exits settle with a resignation plus a negotiated finiquito, or a mutual termination registered with the Junta de Conciliación, to avoid the new Tribunal Laboral procedure (the 2019 labour reform rolled out state by state through 2022). Pre-2022 Junta de Conciliación cases are still being wound down, and the new conciliation-first rule adds 45 days before any labour-court filing.',
+    thresholdJustification: {
+      summary:
+        'We pitch Mexico at 12 (local language) and 18 (other languages). Setup costs sit above the tier template because notary fees and registrations are real, the employer load is among the heaviest in Latin America, and union-contract obligations land just above the threshold.',
+      sections: [
+        {
+          heading: 'Setup',
+          body: 'SA de CV or S. de R.L. de C.V. formation costs more than the tier template. Notary MXN 17k to 20k, public-registry fees MXN 1.5k to 5k (varies by state), legal counsel MXN 5k to 20k, plus RFC, IMSS, INFONAVIT, and SAT registrations and the first-year accountant retainer. End-to-end usually lands MXN 70k to 160k (around $3.5k to $8k).',
+        },
+        {
+          heading: 'Ongoing cost',
+          body: 'Per-employee admin overhead inherits the Tier 2 default of around MXN 76k per year (around $4.5k), which fits SA de CV with a monthly accountant retainer, IMSS and SAT filings, and quarterly provisional taxes. Employer statutory load is among the heaviest in Latin America at 30% to 40% of integrated base salary (SBC): IMSS around 20% to 25%, INFONAVIT 5%, SAR retirement 2%, state payroll tax (ISN) 1% to 3% varying by state. Plus the mandatory Christmas bonus (aguinaldo, 15-day minimum), holiday bonus (prima vacacional, 25% on holiday), and profit-sharing (PTU), the last capped at 3 months\' salary or the 3-year average under the 2021 outsourcing reform (the Supreme Court upheld the cap as constitutional in April 2024).',
+        },
+        {
+          heading: 'Compliance triggers',
+          body: 'Compliance obligations cluster above the threshold. Union-contract (Contrato Colectivo) obligations become a live question at 20+ employees post the 2019 reform. Internal committees (Comisión Mixta de Seguridad e Higiene, Comisión Mixta de Capacitación) apply from 1 employee but scale in complexity at 50+.',
+        },
+        {
+          heading: 'State variation',
+          body: 'Mexican labour law is federal, not state-based. Spreading hiring across CDMX, Nuevo León, or Jalisco does not fragment the core regulatory picture. Only the state payroll tax rate (ISN, 1% to 3%) varies meaningfully by location.',
+        },
+      ],
+    },
+  },
+  TR: {
+    verified: false,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
+    thresholdJustification:
+      'We pitch Turkey at 12 (local language) and 18 (other languages). Like the rest of the Tier 3 group, the old 30 / 43 ceiling sat above where the conversation actually starts to matter for tech and services hiring concentrated in a single country. Tier 3 economics still apply: meaningful employer social-security load, FX exposure, and a complex severance regime. Confirm with local counsel before any decision.',
   },
   US: {
     verified: true,
-    lastReviewedDate: '2026-04-27',
-    thresholdNative: 25,
-    thresholdNonNative: 35,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 10,
+    thresholdNonNative: 14,
     thresholdJustification:
-      'US thresholds depend on how concentrated your hiring is. The 25 figure assumes you are hiring inside a single state with a straightforward payroll setup. Spread the team across multiple states (say California, Texas, and New York) and each state adds its own registration, tax filings, and compliance overhead. In that case break-even typically lands at 40 to 50+ employees.',
+      'We pitch the US at the Tier 1 default of 10 (local language) and 14 (other languages). The earlier 25 / 35 figure was correct for the academic operational-readiness ceiling assuming hiring spread across multiple states, but it gated the largest lead pool against the calculator. State complexity is real (each state adds registration, tax filings, and compliance overhead) but it should sit as a flag on the result, not as a threshold raiser. If you are hiring across multiple states, expect operational complexity and cost to land closer to 40 to 50 employees before the entity case fully closes.',
+  },
+  AU: {
+    verified: false,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 6,
+    thresholdNonNative: 10,
+    thresholdJustification:
+      'We pitch Australia at 6 (local language) and 10 (other languages). The pure cost crossover for a Tier 1 market sits around 6 to 8 employees. The number isn\'t "switch today", it\'s "start the conversation now while the maths is calm and you have time to plan the move properly."',
   },
   GB: {
     verified: false,
-    lastReviewedDate: '2026-04-27',
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 6,
+    thresholdNonNative: 10,
     setupCostLow: 5000,
     setupCostHigh: 15000,
     terminationCostPerEmployee: 6000,
@@ -81,7 +148,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'Redundancy pay (capped at £751 per week from 6 April 2026, up to £22,530 after 20 years of service), notice pay, and any unused holiday. Senior contracts with payment-in-lieu-of-notice or longer notice periods cost more. From 1 January 2027 the rules tighten. Workers will be able to claim unfair dismissal after 6 months of service instead of 2 years, and the legal cap on tribunal payouts (£118,223 today, going to £123,543 in April 2026) is removed entirely. Any disputed exit after a worker\'s first 6 months becomes uncapped risk. Based on GOV.UK and ACAS guidance; confirm with local counsel.',
     thresholdJustification: {
       summary:
-        'The UK is a Tier 1 market: fast, cheap to set up, and the pure cost crossover lands at around 6 to 8 employees. We pitch the recommended threshold at 10 (local language) and 14 (other languages) to add a commitment buffer on top of the maths. From 2027, new dismissal rules push the threshold 2 to 3 employees higher.',
+        'The UK is a Tier 1 market: fast, cheap to set up, and the pure cost crossover lands at around 6 to 8 employees. We recommend opening the planning conversation at 6 (local language) and 10 (other languages), at or just below the cost crossover. From 2027, new dismissal rules push that conversation 2 to 3 employees higher.',
       sections: [
         {
           heading: 'Setup',
@@ -92,8 +159,8 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
           body: 'Employer National Insurance sits at 15% on earnings above £5,000, frozen until the 2030 to 2031 tax year. Material, but the same load applies inside EOR fees, so it does not shift the break-even.',
         },
         {
-          heading: 'Why 10 or 14, not 6 to 8',
-          body: 'The pure cost crossover sits at 6 to 8 employees. The recommended threshold steps above that to absorb the time it takes to hire and the operational readiness needed to run UK employment cleanly. Below 10, EOR is still the safer call even when the maths is close.',
+          heading: 'Why 6 or 10',
+          body: 'The pure cost crossover sits at 6 to 8 employees. We pitch the threshold at 6 (local language) and 10 (other languages), at or just below the cost crossover. The number isn\'t "switch today", it\'s "start mapping the move now, while the maths is still calm". A planned transition costs less than a reactive one.',
         },
         {
           heading: 'Post-2027 risk',
@@ -114,7 +181,9 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   DE: {
     verified: false,
-    lastReviewedDate: '2026-04-27',
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupCostLow: 10000,
     setupCostHigh: 20000,
     terminationCostPerEmployee: 18000,
@@ -122,7 +191,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'A typical 3-year exit settles around 0.5 months of gross salary per year of service, rising to about 1 month per year if the dismissal is contested under unfair-dismissal protection (Kündigungsschutzgesetz, "KSchG"). On top of that you pay statutory notice (1 month at 2+ years of service, 2 months at 5+) and accrued holiday. Based on a mid-level role at around €5,500 per month gross. There is no automatic severance for an ordinary dismissal if you follow due process, but KSchG protection kicks in after 6 months of tenure once the workplace has more than 10 FTE-weighted employees (part-timers count as 0.5, 0.75 or 1.0 at up to 20 hours, 20 to 30 hours, and over 30 hours). In practice almost every contested termination settles. Confirm with local counsel before any decision.',
     thresholdJustification: {
       summary:
-        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). The threshold reflects what it actually takes to run a German entity cleanly, not just the cost crossover.',
+        'We pitch Germany at 12 (local language) and 18 (other languages). Setup is mid-weight; the heavier factor is German employment-law density, which arrives well before the cost crossover.',
       sections: [
         {
           heading: 'Setup',
@@ -145,7 +214,9 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   FR: {
     verified: false,
-    lastReviewedDate: '2026-04-27',
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupCostLow: 8000,
     setupCostHigh: 18000,
     terminationCostPerEmployee: 15000,
@@ -153,7 +224,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'Most French exits go through a mutual-termination agreement (rupture conventionnelle). The minimum legal indemnity is 0.25 months of gross salary per year of service for the first 10 years, then 0.33 thereafter. For a 3-year tenure that floor lands at around 0.75 months. In practice, settlements for managerial staff commonly run 1 to 3 months of salary plus negotiated uplifts. The 2026 Social Security Financing Act (LFSS) raised the employer charge on rupture conventionnelle payouts from 30% to 40%, so the true cost is now higher. Figure based on a mid-level role at around €5,500 per month gross: base indemnity, negotiated uplift, 40% employer contribution, and accrued paid holiday (congés payés). Confirm with local counsel before any decision.',
     thresholdJustification: {
       summary:
-        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Setup is cheap on paper but lands at €8k to €18k all-in. The heavier factor is the 42% to 45% employer social load, and the 11-employee works-council trigger arrives before the threshold.',
+        'We pitch France at 12 (local language) and 18 (other languages). Setup is cheap on paper but lands at €8k to €18k all-in. The heavier factor is the 42% to 45% employer social load, and the 11-employee works-council trigger arrives just below the threshold.',
       sections: [
         {
           heading: 'Setup',
@@ -176,7 +247,9 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   ES: {
     verified: false,
-    lastReviewedDate: '2026-04-27',
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupCostLow: 6000,
     setupCostHigh: 14000,
     terminationCostPerEmployee: 12000,
@@ -184,7 +257,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'Spanish dismissals split into two paths. A fair objective dismissal (despido procedente) pays 20 days of salary per year of service, capped at 12 months. An unfair dismissal (despido improcedente) pays 33 days per year for service since 12 February 2012, capped at 24 months, plus 45 days per year for any tenure before then. In practice, a large share of dismissals get challenged and reclassified as improcedente at conciliation, so plan around the 33-day rate. Figure based on a mid-level role at around €3,500 per month gross at 3 years of service: a blended indemnity, 15 days of notice pay (objective dismissal), and accrued holiday. Confirm with local counsel before any decision.',
     thresholdJustification: {
       summary:
-        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Setup is mid-weight; the ongoing social-security load is the heavier factor and sits equally inside EOR fees. The 11-employee delegate-election obligation lands before the threshold.',
+        'We pitch Spain at 12 (local language) and 18 (other languages). Setup is mid-weight; the ongoing social-security load is the heavier factor and sits equally inside EOR fees. The 11-employee delegate-election obligation lands just below the threshold.',
       sections: [
         {
           heading: 'Setup',
@@ -205,9 +278,19 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       ],
     },
   },
+  IE: {
+    verified: false,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 6,
+    thresholdNonNative: 10,
+    thresholdJustification:
+      'We pitch Ireland at 6 (local language) and 10 (other languages). Tier 1 economics: pure cost crossover sits around 6 to 8 employees, and the conversation is worth opening at or just below that. The 6 / 10 number isn\'t "switch today", it\'s "start mapping the move now". A planned transition costs less than a reactive one.',
+  },
   NL: {
     verified: false,
-    lastReviewedDate: '2026-04-27',
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupCostLow: 5000,
     setupCostHigh: 12000,
     terminationCostPerEmployee: 9000,
@@ -215,7 +298,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'The statutory transition payment (transitievergoeding) is one-third of monthly salary per year of service, counted from day one of employment, and includes the 8% holiday allowance (vakantiegeld) plus any averaged variable pay. Figure based on a mid-level role at around €5,000 per month gross at 3 years of service: a statutory transition payment of roughly €5,000, 1 month of notice pay (the standard at 0 to 5 years of service, minus 1 week if you go via the UWV permit route), and accrued holiday allowance. Most Dutch exits settle through a mutual-termination agreement (vaststellingsovereenkomst) at 1.5 to 2 times the statutory minimum, in exchange for a clean release. Dismissals for business or economic reasons or long-term illness need a prior UWV permit (valid for 4 weeks once granted). Performance-based dismissals go through the subdistrict court (kantonrechter). Confirm with local counsel before any decision.',
     thresholdJustification: {
       summary:
-        'We apply the Tier 1 default of 10 (local language) and 14 (other languages). Setup is fast and cheap, and ongoing social security is capped at a hard ceiling. A representation body becomes mandatory at exactly 10 employees, and the 2026 UWV change raises exit costs for entities crossing 25 heads.',
+        'We pitch the Netherlands at 12 (local language) and 18 (other languages). Setup is fast and cheap, but Dutch employment-law density (a representation body becomes mandatory at 10 employees) and the 2026 UWV change for entities crossing 25 heads mean the planning conversation belongs above the Tier 1 default.',
       sections: [
         {
           heading: 'Setup',
@@ -248,9 +331,9 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
   },
   IN: {
     verified: false,
-    lastReviewedDate: '2026-04-27',
-    thresholdNative: 22,
-    thresholdNonNative: 28,
+    lastReviewedDate: '2026-05-11',
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupCostLow: 300000,
     setupCostHigh: 700000,
     terminationCostPerEmployee: 350000,
@@ -258,7 +341,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'A typical exit blends retrenchment compensation, gratuity, notice pay, and leave encashment. Retrenchment is 15 days of average pay per completed year of service under the Industrial Disputes Act or the new Industrial Relations Code 2020. Gratuity eligibility is in flux. The Payment of Gratuity Act 1972 required 5 years of continuous service in workplaces with 10+ employees. The new Code on Social Security 2020 (in force from 21 November 2025, with the Central Rules still in draft consultation as of Q1 2026) entitles workers to gratuity after just 1 year. Figure based on a mid-level role at around ₹75,000 per month gross at 3 years of service, assuming the new 1-year gratuity rule applies: retrenchment around ₹1.3 lakh, gratuity around ₹1.3 lakh, 1 month notice, and accrued leave. Hiring across multiple states adds settlement variability (Maharashtra, Karnataka, Tamil Nadu, and Delhi each run distinct regimes). Confirm with local counsel before any decision.',
     thresholdJustification: {
       summary:
-        'The Tier 3 default is 30 (local language) and 43 (other languages). We pitch India at 22 and 28 because the EOR-fee-to-salary ratio is much higher than in European Tier 3 markets, so the cost crossover lands at smaller headcount. Single-state hiring assumed.',
+        'We pitch India at 12 (local language) and 18 (other languages). The EOR-fee-to-salary ratio is much higher than in European Tier 3 markets, so the cost crossover lands at smaller headcount. Sales experience puts useful conversations even lower. Single-state hiring assumed.',
       sections: [
         {
           heading: 'Why lower than the tier default',
@@ -282,7 +365,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
         },
         {
           heading: 'State variation',
-          body: 'Hiring across two or more states usually pushes the effective threshold back toward the Tier 3 default. The 22 and 28 recommendation assumes concentration in a single state, most commonly Karnataka, Maharashtra, or Telangana for tech hiring.',
+          body: 'Hiring across two or more states usually pushes the effective complexity higher. The 12 and 18 recommendation assumes concentration in a single state, most commonly Karnataka, Maharashtra, or Telangana for tech hiring.',
         },
       ],
     },
@@ -314,37 +397,6 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
         {
           heading: 'State variation',
           body: 'Polish labour law is national, not regional. Spreading hires across Warsaw, Kraków, or Wrocław does not change the regulatory picture or the threshold.',
-        },
-      ],
-    },
-  },
-  MX: {
-    verified: false,
-    lastReviewedDate: '2026-04-27',
-    setupCostLow: 70000,
-    setupCostHigh: 160000,
-    terminationCostPerEmployee: 200000,
-    terminationBasisNote:
-      'An unjustified dismissal under Article 48 of the Federal Labour Act (Ley Federal del Trabajo, "LFT") costs the constitutional indemnity of 3 months of integrated daily salary (SDI), plus 20 days per year of service (re-affirmed in the 24 December 2024 LFT reform for indefinite-term contracts), plus a seniority premium of 12 days per year (capped at twice the UMA or minimum wage per day), plus a proportional 15-day Christmas bonus (aguinaldo), plus proportional holiday and the 25% holiday bonus (prima vacacional). Figure based on a mid-level role at around MXN 40,000 per month gross at 3 years of service: around MXN 120k constitutional indemnity, MXN 80k for the 20-day accrual, MXN 5k seniority premium, plus accruals. Most Mexican exits settle with a resignation plus a negotiated finiquito, or a mutual termination registered with the Junta de Conciliación, to avoid the new Tribunal Laboral procedure (the 2019 labour reform rolled out state by state through 2022). Pre-2022 Junta de Conciliación cases are still being wound down, and the new conciliation-first rule adds 45 days before any labour-court filing.',
-    thresholdJustification: {
-      summary:
-        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Setup costs sit above the tier template because notary fees and registrations are real, the employer load is among the heaviest in Latin America, and union-contract obligations land just above the threshold.',
-      sections: [
-        {
-          heading: 'Setup',
-          body: 'SA de CV or S. de R.L. de C.V. formation costs more than the tier template. Notary MXN 17k to 20k, public-registry fees MXN 1.5k to 5k (varies by state), legal counsel MXN 5k to 20k, plus RFC, IMSS, INFONAVIT, and SAT registrations and the first-year accountant retainer. End-to-end usually lands MXN 70k to 160k (around $3.5k to $8k).',
-        },
-        {
-          heading: 'Ongoing cost',
-          body: 'Per-employee admin overhead inherits the Tier 2 default of around MXN 76k per year (around $4.5k), which fits SA de CV with a monthly accountant retainer, IMSS and SAT filings, and quarterly provisional taxes. Employer statutory load is among the heaviest in Latin America at 30% to 40% of integrated base salary (SBC): IMSS around 20% to 25%, INFONAVIT 5%, SAR retirement 2%, state payroll tax (ISN) 1% to 3% varying by state. Plus the mandatory Christmas bonus (aguinaldo, 15-day minimum), holiday bonus (prima vacacional, 25% on holiday), and profit-sharing (PTU), the last capped at 3 months\' salary or the 3-year average under the 2021 outsourcing reform (the Supreme Court upheld the cap as constitutional in April 2024).',
-        },
-        {
-          heading: 'Compliance triggers',
-          body: 'Compliance obligations cluster above the threshold. Union-contract (Contrato Colectivo) obligations become a live question at 20+ employees post the 2019 reform. Internal committees (Comisión Mixta de Seguridad e Higiene, Comisión Mixta de Capacitación) apply from 1 employee but scale in complexity at 50+.',
-        },
-        {
-          heading: 'State variation',
-          body: 'Mexican labour law is federal, not state-based. Spreading hiring across CDMX, Nuevo León, or Jalisco does not fragment the core regulatory picture. Only the state payroll tax rate (ISN, 1% to 3%) varies meaningfully by location.',
         },
       ],
     },

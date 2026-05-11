@@ -11,9 +11,14 @@ import {
 interface CountryIntelPanelProps {
   country: Country
   threshold: number
+  operatesInLocalLanguage: boolean
 }
 
-export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps) {
+export function CountryIntelPanel({
+  country,
+  threshold,
+  operatesInLocalLanguage,
+}: CountryIntelPanelProps) {
   const [redFlagsOpen, setRedFlagsOpen] = useState(false)
 
   const complexityColor =
@@ -80,10 +85,8 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
         <p className="font-sans text-forest-700">
           Under the <span className="font-medium">Graduation Model</span>, Teamed recommends
           considering an entity from <span className="font-bold">{threshold}</span> employees
-          in {country.name} (a {country.complexityLabel.toLowerCase()} market, accounting for
-          your language selection).
+          in {country.name} (a {country.complexityLabel.toLowerCase()} market).
         </p>
-
 
         <p className="font-sans text-forest-700">
           <span className="font-bold">
@@ -91,6 +94,16 @@ export function CountryIntelPanel({ country, threshold }: CountryIntelPanelProps
           </span>{' '}
           to establish a legal entity.
         </p>
+
+        <div className="rounded-input border border-parchment-300 bg-parchment-100/60 p-3">
+          <p className="font-sans text-sm text-forest-700">
+            <span className="font-medium">Operating language</span> is a planning consideration
+            here, not a threshold driver. You said your team operates{' '}
+            {operatesInLocalLanguage
+              ? `in ${country.name}'s local language, which eases compliance day-to-day.`
+              : `in English or another non-local language. Expect employment paperwork and authority engagement to land closer to ${country.thresholdNonNative}-employee complexity. Treat as a soft signal.`}
+          </p>
+        </div>
 
         <div>
           <p className="font-sans font-medium text-forest-700 mb-2">Key factors</p>

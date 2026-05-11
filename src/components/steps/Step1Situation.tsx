@@ -125,11 +125,9 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
     onComplete(inputs, result)
   }
 
-  const threshold = inputs.country
-    ? inputs.operatesInLocalLanguage
-      ? inputs.country.thresholdNative
-      : inputs.country.thresholdNonNative
-    : 0
+  // Threshold is always the native figure now. Language is captured as a soft
+  // consideration on the results page but does not move the dial here.
+  const threshold = inputs.country?.thresholdNative ?? 0
 
   const plannedValid = inputs.plannedHeadcount >= inputs.currentHeadcount
 
@@ -352,20 +350,18 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                   {inputs.operatesInLocalLanguage ? (
                     <>
                       Working in the local language{' '}
-                      <span className="font-semibold text-sienna-700">
-                        reduces compliance complexity
-                      </span>
-                      . Your team can read employment docs and engage authorities directly,
-                      which <span className="font-semibold">lowers the entity threshold</span>.
+                      <span className="font-semibold text-sienna-700">eases compliance</span>:
+                      your team can read employment docs and engage authorities directly. We
+                      capture this for context, but it does not change the threshold.
                     </>
                   ) : (
                     <>
                       Working in another language{' '}
                       <span className="font-semibold text-sienna-700">
-                        adds compliance complexity
+                        adds a planning consideration
                       </span>
-                      . You&apos;ll need translation or advisory support, which{' '}
-                      <span className="font-semibold">pushes the entity threshold up</span>.
+                      , translation or advisory support around employment paperwork. We capture
+                      it for context but treat it as a soft signal, not a threshold driver.
                     </>
                   )}
                 </p>

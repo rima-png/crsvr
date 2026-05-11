@@ -23,8 +23,12 @@ export const GEMO_TIER_THRESHOLDS = {
     complexityLabel: 'Moderate' as const,
   },
   3: {
-    thresholdNative: 30,
-    thresholdNonNative: 43,
+    // May 2026 recalibration: halved from the old 30 / 43 academic
+    // operational-readiness ceiling to ~15 / 22, the headcount at which
+    // a planning conversation is actually worth having for LATAM / India
+    // / Turkey mid-market hiring (per Steen + Antony's sales experience).
+    thresholdNative: 15,
+    thresholdNonNative: 22,
     setupMonthsLow: 6,
     setupMonthsHigh: 12,
     complexityLabel: 'Complex' as const,

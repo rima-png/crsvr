@@ -185,7 +185,11 @@ export function Step3Results({
 
       {/* Section C — CountryIntelPanel (anchor target for "Learn more about why" CTA) */}
       <div id="why" className="scroll-mt-8">
-        <CountryIntelPanel country={country} threshold={result.threshold} />
+        <CountryIntelPanel
+          country={country}
+          threshold={result.threshold}
+          operatesInLocalLanguage={inputs.operatesInLocalLanguage}
+        />
       </div>
 
       {/* Section D — ReadinessChecklist */}

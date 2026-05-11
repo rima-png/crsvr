@@ -55,7 +55,12 @@ function runScenario(inputs: UserInputs, country: Country, setupCost: number): S
 }
 
 export function calculateCrossover(inputs: UserInputs, country: Country): CalculationResult {
-  const threshold = inputs.operatesInLocalLanguage ? country.thresholdNative : country.thresholdNonNative
+  // The threshold no longer pivots on language. Operating in a non-local
+  // language is now treated as a soft consideration shown on the results
+  // page rather than a number that drives the dots or the status. We always
+  // use thresholdNative for the model; thresholdNonNative is kept on the
+  // Country shape as informational metadata.
+  const threshold = country.thresholdNative
   const setupCostMidpoint = (country.setupCostLow + country.setupCostHigh) / 2
 
   const midRun = runScenario(inputs, country, setupCostMidpoint)
@@ -170,7 +175,7 @@ function buildReadinessItems(
   return [
     {
       criterion: 'Employee concentration',
-      question: `Have you reached or exceeded the ${threshold}-employee threshold for ${country.name}, accounting for local-language operation?`,
+      question: `Have you reached or exceeded the ${threshold}-employee threshold for ${country.name}?`,
       status: concentrationStatus,
       detail:
         concentrationStatus === 'green'
