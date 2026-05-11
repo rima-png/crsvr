@@ -71,55 +71,133 @@ export default function Home() {
 
         {/* How it works */}
         <section id="how-it-works" className="py-20 bg-parchment-100 border-y border-parchment-300">
-          <div className="max-w-4xl mx-auto px-6">
+          <div className="max-w-5xl mx-auto px-6">
             <h2 className="font-heading font-bold text-forest-700 text-2xl sm:text-3xl text-center mb-14">
               How it works
             </h2>
-            <div className="grid sm:grid-cols-3 gap-6">
-              <div className="relative flex flex-col items-center text-center p-7 rounded-card bg-parchment-50 border border-parchment-300">
-                <div className="w-14 h-14 rounded-full bg-sienna-500 flex items-center justify-center mb-5 text-white shadow-cta">
-                  <span className="font-heading font-bold text-xl">1</span>
+            <div className="grid sm:grid-cols-3 gap-5 sm:gap-6">
+              <div className="rounded-2xl overflow-hidden bg-parchment-50 border border-parchment-300 shadow-card">
+                <div className="h-3 bg-amber-500" />
+                <div className="p-7">
+                  <p className="font-script text-sienna-700 text-2xl leading-none mb-3">Step 1.</p>
+                  <h3 className="font-heading font-bold text-forest-700 text-lg mb-3">
+                    Tell us where you&apos;re hiring
+                  </h3>
+                  <p className="font-sans text-parchment-700 text-sm leading-relaxed">
+                    Select your country and enter your current and planned headcount.
+                  </p>
                 </div>
-                <h3 className="font-heading font-bold text-forest-700 mb-2">
-                  Tell us where you&apos;re hiring
-                </h3>
-                <p className="font-sans text-parchment-700 text-sm leading-relaxed">
-                  Select your country and enter your current and planned headcount.
-                </p>
-                <div
-                  className="hidden sm:block absolute top-14 -right-3 w-6 h-0.5 bg-parchment-400"
-                  aria-hidden
-                />
               </div>
-              <div className="relative flex flex-col items-center text-center p-7 rounded-card bg-parchment-50 border border-parchment-300">
-                <div className="w-14 h-14 rounded-full bg-amber-500 flex items-center justify-center mb-5 text-forest-700 shadow-card">
-                  <span className="font-heading font-bold text-xl">2</span>
+              <div className="rounded-2xl overflow-hidden bg-parchment-50 border border-parchment-300 shadow-card">
+                <div className="h-3 bg-sienna-500" />
+                <div className="p-7">
+                  <p className="font-script text-sienna-700 text-2xl leading-none mb-3">Step 2.</p>
+                  <h3 className="font-heading font-bold text-forest-700 text-lg mb-3">
+                    We model the Crossover Economics
+                  </h3>
+                  <p className="font-sans text-parchment-700 text-sm leading-relaxed">
+                    EOR cost against entity cost over 36 months, using real setup and ongoing
+                    costs by country.
+                  </p>
                 </div>
-                <h3 className="font-heading font-bold text-forest-700 mb-2">
-                  We model the Crossover Economics
-                </h3>
-                <p className="font-sans text-parchment-700 text-sm leading-relaxed">
-                  EOR cost against entity cost over 36 months, using real setup and ongoing costs
-                  by country.
-                </p>
-                <div
-                  className="hidden sm:block absolute top-14 -right-3 w-6 h-0.5 bg-parchment-400"
-                  aria-hidden
-                />
               </div>
-              <div className="flex flex-col items-center text-center p-7 rounded-card bg-parchment-50 border border-parchment-300">
-                <div className="w-14 h-14 rounded-full bg-sage-500 flex items-center justify-center mb-5 text-white shadow-card">
-                  <span className="font-heading font-bold text-xl">3</span>
+              <div className="rounded-2xl overflow-hidden bg-parchment-50 border border-parchment-300 shadow-card">
+                <div className="h-3 bg-sage-500" />
+                <div className="p-7">
+                  <p className="font-script text-sienna-700 text-2xl leading-none mb-3">Step 3.</p>
+                  <h3 className="font-heading font-bold text-forest-700 text-lg mb-3">
+                    See your Crossover Point
+                  </h3>
+                  <p className="font-sans text-parchment-700 text-sm leading-relaxed">
+                    The exact month, the three-year economics, and a Crossover Memo you can take
+                    to your board.
+                  </p>
                 </div>
-                <h3 className="font-heading font-bold text-forest-700 mb-2">
-                  See your Crossover Point
-                </h3>
-                <p className="font-sans text-parchment-700 text-sm leading-relaxed">
-                  The exact month, the three-year economics, and a Crossover Memo you can take to
-                  your board.
-                </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Trust strip — who already chose this way */}
+        <section className="py-20 bg-parchment-50">
+          <div className="max-w-5xl mx-auto px-6 text-center">
+            <p className="font-script text-sienna-900 text-xl sm:text-2xl mb-3">
+              ↓ and here&apos;s who already chose this way
+            </p>
+            <h2 className="font-heading font-bold text-forest-700 text-3xl sm:text-4xl leading-tight mb-5">
+              Built for the teams that{' '}
+              <span className="text-sienna-700">do this for real.</span>
+            </h2>
+            <p className="font-sans text-parchment-700 max-w-2xl mx-auto mb-12">
+              From F1 paddocks in Grove to recruitment groups in Dublin, from Top-15 UK
+              accountancy to marketplaces across the US and Europe. Finance, people and legal
+              teams trust Teamed to run their global hiring.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
+              {[
+                {
+                  slug: 'globant',
+                  name: 'Globant',
+                  tagline: 'IT & engineering',
+                  scale: 'Argentina · 33,000 emp',
+                },
+                {
+                  slug: 'eventbrite',
+                  name: 'Eventbrite',
+                  tagline: 'Events & ticketing',
+                  scale: 'United States · Listed NYSE',
+                },
+                {
+                  slug: 'williams-racing',
+                  name: 'Williams Racing',
+                  tagline: 'Formula 1 · Grove HQ',
+                  scale: 'United Kingdom',
+                },
+                {
+                  slug: 'cooper-parry',
+                  name: 'Cooper Parry',
+                  tagline: 'Top-15 UK accountancy',
+                  scale: 'United Kingdom · 1,000 team',
+                },
+                {
+                  slug: 'cpl',
+                  name: 'CPL',
+                  tagline: 'Future of work group',
+                  scale: 'Ireland · 14,000 placements',
+                },
+                {
+                  slug: 'goat',
+                  name: 'GOAT',
+                  tagline: 'Sneaker & fashion marketplace',
+                  scale: 'United States & Europe',
+                },
+              ].map((c) => (
+                <div
+                  key={c.slug}
+                  className="bg-parchment-100 border border-parchment-300 rounded-2xl p-6 sm:p-7 flex flex-col items-center text-center"
+                >
+                  <div className="h-14 sm:h-16 w-full flex items-center justify-center mb-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/customers/${c.slug}.webp`}
+                      alt={`${c.name} logo`}
+                      className="max-h-full max-w-[160px] object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p className="font-script text-sienna-900 text-xl leading-none mb-2">
+                    {c.tagline}
+                  </p>
+                  <p className="font-sans text-parchment-700 text-xs uppercase tracking-wider">
+                    {c.scale}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="font-script text-sienna-900 text-xl sm:text-2xl mt-12">
+              + dozens more across <span className="text-sienna-700">UK · EU · US</span>, picked
+              Teamed for the same Crossover Economics.
+            </p>
           </div>
         </section>
 
