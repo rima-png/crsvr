@@ -73,12 +73,18 @@ export function Recommendation({
         <>
           <div>
             <h2 className="font-heading font-bold text-forest-700 text-xl mb-2">
-              The model says wait. Your growth says talk.
+              Stay on EOR, for now.
             </h2>
             <p className="font-sans text-forest-700">
-              At {inputs.currentHeadcount} in {country.name}, EOR still wins. But growing to{' '}
-              {inputs.plannedHeadcount} in 12 months is the kind of trajectory worth a 15-minute
-              call. We&apos;ll show you the triggers to watch.
+              At {inputs.currentHeadcount} in {country.name}, EOR still wins on the maths.{' '}
+              {inputs.plannedHeadcount > inputs.currentHeadcount ? (
+                <>
+                  Your trajectory to {inputs.plannedHeadcount} in 12 months is worth watching.{' '}
+                </>
+              ) : (
+                <>Keep an eye on headcount, the entity threshold sits at {result.threshold}.{' '}</>
+              )}
+              When you want to talk it through, we&apos;re here. No rush.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -86,17 +92,10 @@ export function Recommendation({
               href="https://www.teamed.global/contact-teamed"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleCtaClick('Book a call with our global employment team')}
+              onClick={() => handleCtaClick('Have a 15-min call when ready')}
               className="inline-block bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all"
             >
-              Book a call with our global employment team
-            </a>
-            <a
-              href="#why"
-              onClick={() => handleCtaClick('Results')}
-              className="inline-block border border-sienna-500 text-sienna-700 rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-100 transition-colors"
-            >
-              Results
+              Have a 15-min call when ready
             </a>
             <button
               type="button"
@@ -104,10 +103,17 @@ export function Recommendation({
                 setShowDatePicker(!showDatePicker)
                 handleCtaClick('Set a growth reminder')
               }}
-              className="border border-parchment-300 text-parchment-700 rounded-btn px-6 py-3 font-heading font-medium hover:bg-parchment-100 transition-colors"
+              className="inline-block border border-sienna-500 text-sienna-700 rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-100 transition-colors"
             >
               Set a growth reminder
             </button>
+            <a
+              href="#why"
+              onClick={() => handleCtaClick('Results')}
+              className="inline-block border border-parchment-300 text-parchment-700 rounded-btn px-6 py-3 font-heading font-medium hover:bg-parchment-100 transition-colors"
+            >
+              Results
+            </a>
           </div>
           {showDatePicker && (
             <div className="border border-parchment-300 rounded-card p-4">
@@ -150,12 +156,13 @@ export function Recommendation({
         <>
           <div>
             <h2 className="font-heading font-bold text-forest-700 text-xl mb-2">
-              You&apos;re close to your crossover.
+              Time to plan, not act.
             </h2>
             <p className="font-sans text-forest-700">
-              At {inputs.currentHeadcount} in {country.name},{' '}
-              {country.complexityLabel.toLowerCase()} setup. The right call depends on your
-              priorities, not just the maths. Book a free review.
+              At {inputs.currentHeadcount} in {country.name}, you&apos;re approaching the
+              crossover. {country.complexityLabel} setup means {country.setupMonthsLow} to{' '}
+              {country.setupMonthsHigh} months from go to running. Start mapping the move now,
+              before the maths forces it.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -163,15 +170,15 @@ export function Recommendation({
               href="https://www.teamed.global/contact-teamed"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleCtaClick('Book a free crossover review')}
+              onClick={() => handleCtaClick('Book a planning call')}
               className="inline-block bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all"
             >
-              Book a free crossover review
+              Book a planning call
             </a>
             <a
               href="#why"
               onClick={() => handleCtaClick('Results')}
-              className="inline-block border border-sienna-500 text-sienna-700 rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-100 transition-colors"
+              className="inline-block border border-parchment-300 text-parchment-700 rounded-btn px-6 py-3 font-heading font-medium hover:bg-parchment-100 transition-colors"
             >
               Results
             </a>
@@ -183,15 +190,15 @@ export function Recommendation({
         <>
           <div>
             <h2 className="font-heading font-bold text-forest-700 text-xl mb-2">
-              The numbers say it&apos;s time.
+              The maths says act.
             </h2>
             <p className="font-sans text-forest-700">
               At {inputs.currentHeadcount} in {country.name}, you&apos;re past both thresholds.
-              You&apos;re spending{' '}
+              Every month on EOR is costing you{' '}
               <span className="font-bold">
                 {formatCurrency(monthlyDifference, displayCurrency)}
               </span>{' '}
-              more per month than the alternative. Book a priority review.
+              more than running your own entity.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -199,15 +206,15 @@ export function Recommendation({
               href="https://www.teamed.global/contact-teamed"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleCtaClick('Book a priority transition review')}
+              onClick={() => handleCtaClick('Book a priority transition call')}
               className="inline-block bg-sienna-700 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-900 shadow-cta hover:shadow-cta-hover transition-all"
             >
-              Book a priority transition review
+              Book a priority transition call
             </a>
             <a
               href="#why"
               onClick={() => handleCtaClick('Results')}
-              className="inline-block border border-sienna-500 text-sienna-700 rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-100 transition-colors"
+              className="inline-block border border-parchment-300 text-parchment-700 rounded-btn px-6 py-3 font-heading font-medium hover:bg-parchment-100 transition-colors"
             >
               Results
             </a>

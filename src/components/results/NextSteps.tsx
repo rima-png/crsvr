@@ -78,6 +78,17 @@ export function NextSteps({
     }
   }
 
+  // Match the Recommendation block's state-aware CTA so the two calls-to-action
+  // on the results page agree with each other (no "wait" Polaroid + "book a
+  // call now" mismatch).
+  const callLabel =
+    result.status === 'BELOW_THRESHOLD'
+      ? 'Have a 15-min call when ready'
+      : result.status === 'NEAR_THRESHOLD'
+        ? 'Book a planning call'
+        : 'Book a priority transition call'
+  const callIsUrgent = result.status === 'ABOVE_THRESHOLD'
+
   return (
     <div className="bg-white rounded-card border border-parchment-300 p-6 shadow-card space-y-4">
       <div className="flex flex-wrap gap-3">
@@ -87,13 +98,17 @@ export function NextSteps({
           rel="noopener noreferrer"
           onClick={() =>
             trackEvent('cta_clicked', {
-              cta_label: 'Book a call with our global employment team',
+              cta_label: callLabel,
               status: result.status,
             })
           }
-          className="inline-block bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all"
+          className={`inline-block text-white rounded-btn px-6 py-3 font-heading font-bold shadow-cta hover:shadow-cta-hover transition-all ${
+            callIsUrgent
+              ? 'bg-sienna-700 hover:bg-sienna-900'
+              : 'bg-sienna-500 hover:bg-sienna-700'
+          }`}
         >
-          Book a call with our global employment team
+          {callLabel}
         </a>
         <button
           type="button"
