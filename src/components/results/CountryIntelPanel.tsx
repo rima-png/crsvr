@@ -12,12 +12,16 @@ interface CountryIntelPanelProps {
   country: Country
   threshold: number
   operatesInLocalLanguage: boolean
+  /** US-only context: false means the team is distributed across multiple
+   *  states, which surfaces a state-complexity flag in the panel. */
+  singleStateConcentration?: boolean
 }
 
 export function CountryIntelPanel({
   country,
   threshold,
   operatesInLocalLanguage,
+  singleStateConcentration,
 }: CountryIntelPanelProps) {
   const [redFlagsOpen, setRedFlagsOpen] = useState(false)
 
@@ -104,6 +108,19 @@ export function CountryIntelPanel({
               : `in English or another non-local language. Expect employment paperwork and authority engagement to land closer to ${country.thresholdNonNative}-employee complexity. Treat as a soft signal.`}
           </p>
         </div>
+
+        {country.code === 'US' && singleStateConcentration === false && (
+          <div className="rounded-input border border-warning/40 bg-amber-100/60 p-3">
+            <p className="font-sans text-sm text-forest-700">
+              <span className="font-semibold text-warning">Multi-state flag.</span>{' '}
+              You&apos;re hiring across more than one US state. Each state adds its own
+              registration, tax filings, and compliance overhead. The {threshold}-employee
+              threshold still triggers the planning conversation, but expect operational
+              break-even to land closer to 40 to 50 employees once the team is properly
+              spread.
+            </p>
+          </div>
+        )}
 
         <div>
           <p className="font-sans font-medium text-forest-700 mb-2">Key factors</p>

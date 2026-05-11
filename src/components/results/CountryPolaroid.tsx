@@ -23,6 +23,7 @@ interface CountryPolaroidProps {
 
 const CAPTIONS: Record<CalculationStatus, string> = {
   BELOW_THRESHOLD: 'wait.',
+  WORTH_CONVERSATION: 'chat.',
   NEAR_THRESHOLD: 'plan.',
   ABOVE_THRESHOLD: 'act.',
 }
@@ -33,6 +34,9 @@ function subCaption(status: CalculationStatus, crossoverMonth: number | null): s
   }
   if (status === 'NEAR_THRESHOLD') {
     return crossoverMonth ? `crossover at month ${crossoverMonth}` : 'crossover within reach'
+  }
+  if (status === 'WORTH_CONVERSATION') {
+    return crossoverMonth ? `crossover at month ${crossoverMonth}` : 'crossover on the horizon'
   }
   return crossoverMonth ? `crossover at month ${crossoverMonth}` : 'no crossover in 3 years'
 }

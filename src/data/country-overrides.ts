@@ -145,7 +145,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
     setupCostHigh: 15000,
     terminationCostPerEmployee: 6000,
     terminationBasisNote:
-      'Redundancy pay (capped at £751 per week from 6 April 2026, up to £22,530 after 20 years of service), notice pay, and any unused holiday. Senior contracts with payment-in-lieu-of-notice or longer notice periods cost more. From 1 January 2027 the rules tighten. Workers will be able to claim unfair dismissal after 6 months of service instead of 2 years, and the legal cap on tribunal payouts (£118,223 today, going to £123,543 in April 2026) is removed entirely. Any disputed exit after a worker\'s first 6 months becomes uncapped risk. Based on GOV.UK and ACAS guidance; confirm with local counsel.',
+      'Redundancy pay (capped at £751 per week from 6 April 2026, up to £22,530 after 20 years), notice pay, and any unused holiday. PILON and longer notice cost more on senior contracts. From 1 January 2027 the qualifying period for unfair-dismissal claims drops from 2 years to 6 months, and the £118,223 tribunal payout cap (£123,543 from April 2026) is removed. Any disputed exit after month 6 becomes uncapped risk. Based on GOV.UK and ACAS; confirm with local counsel.',
     thresholdJustification: {
       summary:
         'The UK is a Tier 1 market: fast, cheap to set up, and the pure cost crossover lands at around 6 to 8 employees. We recommend opening the planning conversation at 6 (local language) and 10 (other languages), at or just below the cost crossover. From 2027, new dismissal rules push that conversation 2 to 3 employees higher.',
@@ -164,7 +164,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
         },
         {
           heading: 'Post-2027 risk',
-          body: 'From 1 January 2027, workers can claim unfair dismissal after 6 months of service, not 2 years, and the legal cap on tribunal payouts is removed. Anyone hired from around July 2026 onwards will clear the new 6-month bar by January 2027, so from month 7 each one becomes an uncapped tribunal risk. EOR providers absorb that risk for you. If you run your own entity, you carry it. Expect the threshold to drift 2 to 3 employees higher as entities price the new risk in.',
+          body: 'From 1 January 2027, the unfair-dismissal qualifying period drops to 6 months and the £118,223 tribunal payout cap (£123,543 from April 2026) disappears. Hires from around July 2026 onwards clear the new bar by January 2027, making each one uncapped tribunal risk from month 7. EOR carries that exposure. Expect the threshold to drift 2 to 3 employees higher.',
         },
       ],
     },
@@ -173,7 +173,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
         effectiveDate: '2027-01-01',
         title: 'Employment Rights Act 2025: shorter qualifying period, no payout cap',
         summary:
-          'From 1 January 2027, two big UK rules change together. Workers can claim unfair dismissal after 6 months of service instead of 2 years. And the legal cap on tribunal payouts is removed (today £118,223, rising to £123,543 in April 2026, or 52 weeks\' pay if lower). For an entity, every disputed exit after a worker\'s first 6 months becomes uncapped risk. EOR providers carry this exposure for you. If you run your own entity, you carry it yourself. Expect the UK threshold to drift 2 to 3 employees higher as the new risk gets priced in.',
+          'From 1 January 2027, workers can claim unfair dismissal after 6 months instead of 2 years, and the £118,223 cap on tribunal payouts (£123,543 from April 2026) disappears. Disputed exits after month 6 become uncapped risk for entity owners. EOR carries that risk. Expect the UK threshold to drift 2 to 3 employees higher.',
         impact: 'raises_threshold',
         source: 'https://www.gov.uk/government/publications/employment-rights-bill',
       },
@@ -380,7 +380,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
       'A typical 3-year exit pays 3 months of statutory notice (Kodeks pracy, for tenure over 3 years) plus a negotiated settlement. Statutory severance (odprawa) only kicks in for employers with 20 or more employees, and only on economic or redundancy grounds. The base is 2 months of salary at 2 to 8 years of service, capped at 15 times the minimum monthly wage (PLN 69,990 from January 2025, around €16,400). Performance-based dismissals carry no statutory odprawa, but they usually settle with an agreed payout to avoid a labour-court claim (workers have 21 days to appeal to the labour court, sąd pracy). Figure based on a mid-level salary at around PLN 12,000 per month gross: around PLN 36k notice pay, plus a typical settlement top-up or a modest odprawa once you cross 20 heads. Polish labour courts tend to side with workers on whether a dismissal was justified, which pushes negotiated exits higher than the statutory floor.',
     thresholdJustification: {
       summary:
-        'We apply the Tier 2 default of 18 (local language) and 25 (other languages). Poland is among the cheapest EU Tier 2 markets to incorporate, and the employer social load is lighter than France or Germany. Statutory severance only kicks in at 20+ employees, after the threshold.',
+        'Poland inherits the new Tier 2 default of 12 (local language) and 18 (other languages). It is among the cheapest EU Tier 2 markets to incorporate, the employer social load is lighter than France or Germany, and statutory severance only kicks in at 20+ employees, after the threshold.',
       sections: [
         {
           heading: 'Setup',
@@ -388,7 +388,7 @@ export const COUNTRY_OVERRIDES: Record<string, CountryOverride> = {
         },
         {
           heading: 'Ongoing cost',
-          body: 'Employer ZUS contributions run around 19% to 22% of gross pay (pension employer share 9.76%, disability 6.5%, accident around 1.67% typical, Labour Fund 2.45%, FGSP 0.1%). Materially lighter than Germany or France, which pulls the economic break-even very slightly forward versus the template. Not enough to override the 18 and 25 default.',
+          body: 'Employer ZUS contributions run around 19% to 22% of gross pay (pension employer share 9.76%, disability 6.5%, accident around 1.67% typical, Labour Fund 2.45%, FGSP 0.1%). Materially lighter than Germany or France, which pulls the economic break-even very slightly forward versus the template, but not enough to deviate from the Tier 2 default.',
         },
         {
           heading: 'Compliance triggers',

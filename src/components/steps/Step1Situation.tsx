@@ -367,6 +367,60 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                 </p>
               </div>
 
+              {/* Input 4.5 — US-only state concentration */}
+              {inputs.country.code === 'US' && (
+                <div>
+                  <label className="block font-sans font-medium text-forest-700 mb-2">
+                    Concentrating in one US state, or spread across several?
+                  </label>
+                  <div className="flex rounded-input border border-parchment-300 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setInputs({ ...inputs, singleStateConcentration: true })
+                      }
+                      className={`flex-1 px-4 py-3 font-sans font-medium transition-colors ${
+                        inputs.singleStateConcentration !== false
+                          ? 'bg-sienna-500 text-white'
+                          : 'bg-white text-forest-700 hover:bg-parchment-100'
+                      }`}
+                    >
+                      Single state
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setInputs({ ...inputs, singleStateConcentration: false })
+                      }
+                      className={`flex-1 px-4 py-3 font-sans font-medium transition-colors ${
+                        inputs.singleStateConcentration === false
+                          ? 'bg-sienna-500 text-white'
+                          : 'bg-white text-forest-700 hover:bg-parchment-100'
+                      }`}
+                    >
+                      Multiple states
+                    </button>
+                  </div>
+                  <p className="mt-2 text-base font-sans text-forest-700">
+                    {inputs.singleStateConcentration !== false ? (
+                      <>
+                        Single-state hiring keeps payroll and compliance{' '}
+                        <span className="font-semibold text-sienna-700">straightforward</span>.
+                        The 10 / 14 threshold applies cleanly.
+                      </>
+                    ) : (
+                      <>
+                        Multiple states means{' '}
+                        <span className="font-semibold text-sienna-700">
+                          per-state registrations, tax filings, and compliance
+                        </span>
+                        . We treat this as a flag on your results, not a threshold change.
+                      </>
+                    )}
+                  </p>
+                </div>
+              )}
+
               {/* Input 5 — EOR fee with currency picker */}
               <div>
                 <label className="block font-sans font-medium text-forest-700 mb-2">

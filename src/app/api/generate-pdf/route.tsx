@@ -416,6 +416,8 @@ function CrossoverMemoDoc({
     summaryText = `Based on your inputs, ${lead.companyName} is currently past the economic crossover point in ${country.name}. At ${inputs.currentHeadcount} employees, an entity would save approximately ${formatCurrencyPdf(result.totalSavings, currency)} over the next 3 years compared to your current EOR arrangement.`
   } else if (result.status === 'NEAR_THRESHOLD') {
     summaryText = `Based on your inputs, ${lead.companyName} is approaching the crossover point in ${country.name}. Now is the time to begin transition planning.`
+  } else if (result.status === 'WORTH_CONVERSATION') {
+    summaryText = `Based on your inputs, ${lead.companyName} is inside the band where a transition conversation pays off in ${country.name}. The maths still favours EOR at ${inputs.currentHeadcount} employees, but the ${result.threshold}-employee threshold is close enough that planning conversations are worth the time.`
   } else {
     summaryText = `Based on your inputs, ${lead.companyName} is currently best served by EOR in ${country.name}. Review when headcount reaches ${result.threshold}.`
   }

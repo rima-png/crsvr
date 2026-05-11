@@ -15,6 +15,7 @@ const DEFAULT_INPUTS: UserInputs = {
   operatesInLocalLanguage: true,
   eorFeePerMonth: 599,
   eorFeeCurrency: 'USD',
+  singleStateConcentration: true,
 }
 
 export function CalculatorShell() {

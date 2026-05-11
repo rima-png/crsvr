@@ -22,6 +22,12 @@ const STATUS_STYLES = {
     dot: 'bg-sage-500',
     text: 'text-sage-700',
   },
+  WORTH_CONVERSATION: {
+    label: 'Worth a conversation',
+    container: 'border-amber-500/30 bg-amber-100/50',
+    dot: 'bg-amber-500',
+    text: 'text-amber-700',
+  },
   NEAR_THRESHOLD: {
     label: 'Approaching your crossover',
     container: 'border-warning/30 bg-amber-100',

@@ -84,9 +84,11 @@ export function NextSteps({
   const callLabel =
     result.status === 'BELOW_THRESHOLD'
       ? 'Plan ahead with us'
-      : result.status === 'NEAR_THRESHOLD'
-        ? 'Book a planning call'
-        : 'Book a priority transition call'
+      : result.status === 'WORTH_CONVERSATION'
+        ? 'Book a 15-min chat'
+        : result.status === 'NEAR_THRESHOLD'
+          ? 'Book a planning call'
+          : 'Book a priority transition call'
   const callIsUrgent = result.status === 'ABOVE_THRESHOLD'
 
   return (

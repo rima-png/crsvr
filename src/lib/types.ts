@@ -89,6 +89,11 @@ export interface UserInputs {
    *  on country select; the user can override to USD / GBP / EUR via the picker.
    *  Display-only — calculations always use eorFeePerMonth in local currency. */
   eorFeeCurrency: string
+  /** US-only: are you hiring inside a single state, or distributed across
+   *  several? Surfaces a state-complexity flag on the results page when set
+   *  to false. Does not change the threshold (per the May 2026 calibration:
+   *  state complexity is a flag, not a threshold raiser). */
+  singleStateConcentration?: boolean
 }
 
 export interface MonthlyDataPoint {
@@ -100,7 +105,22 @@ export interface MonthlyDataPoint {
   headcount: number
 }
 
-export type CalculationStatus = 'BELOW_THRESHOLD' | 'NEAR_THRESHOLD' | 'ABOVE_THRESHOLD'
+/**
+ * Result-band the calculator emits. Four bands, keyed on currentHeadcount vs
+ * threshold:
+ *  - BELOW_THRESHOLD       < 50% of threshold   →  "wait." Polaroid
+ *  - WORTH_CONVERSATION    50% to <80%          →  "chat." Polaroid
+ *  - NEAR_THRESHOLD        80% to <100%         →  "plan." Polaroid
+ *  - ABOVE_THRESHOLD       >= threshold         →  "act."  Polaroid
+ *
+ * WORTH_CONVERSATION was added in May 2026 to catch the mid-band leads the
+ * old three-state machine was rejecting with a passive "stay on EOR" message.
+ */
+export type CalculationStatus =
+  | 'BELOW_THRESHOLD'
+  | 'WORTH_CONVERSATION'
+  | 'NEAR_THRESHOLD'
+  | 'ABOVE_THRESHOLD'
 
 export interface CalculationResult {
   dataPoints: MonthlyDataPoint[]

@@ -154,6 +154,40 @@ export function Recommendation({
         </>
       )}
 
+      {result.status === 'WORTH_CONVERSATION' && (
+        <>
+          <div>
+            <h2 className="font-heading font-bold text-forest-700 text-xl mb-2">
+              Worth a conversation now.
+            </h2>
+            <p className="font-sans text-forest-700">
+              At {inputs.currentHeadcount} in {country.name}, you&apos;re a few hires off the{' '}
+              {result.threshold}-employee threshold. The maths still favours EOR today, but
+              this is the band where a 15-minute chat earns its keep. We&apos;ll show you the
+              triggers and your runway.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="https://www.teamed.global/contact-teamed"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => handleCtaClick('Book a 15-min chat')}
+              className="inline-block bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all"
+            >
+              Book a 15-min chat
+            </a>
+            <a
+              href="#why"
+              onClick={() => handleCtaClick('Results')}
+              className="inline-block border border-parchment-300 text-parchment-700 rounded-btn px-6 py-3 font-heading font-medium hover:bg-parchment-100 transition-colors"
+            >
+              Results
+            </a>
+          </div>
+        </>
+      )}
+
       {result.status === 'NEAR_THRESHOLD' && (
         <>
           <div>

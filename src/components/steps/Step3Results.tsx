@@ -189,6 +189,7 @@ export function Step3Results({
           country={country}
           threshold={result.threshold}
           operatesInLocalLanguage={inputs.operatesInLocalLanguage}
+          singleStateConcentration={inputs.singleStateConcentration}
         />
       </div>
 

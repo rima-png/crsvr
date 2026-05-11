@@ -92,6 +92,8 @@ export function calculateCrossover(inputs: UserInputs, country: Country): Calcul
     status = 'ABOVE_THRESHOLD'
   } else if (inputs.currentHeadcount >= threshold * 0.8) {
     status = 'NEAR_THRESHOLD'
+  } else if (inputs.currentHeadcount >= threshold * 0.5) {
+    status = 'WORTH_CONVERSATION'
   } else {
     status = 'BELOW_THRESHOLD'
   }

@@ -6,27 +6,29 @@ export const GEMO_FRAMEWORK_NAME =
 
 export const GEMO_FULL_NAME = 'Global Entity Management Operations (GEMO)'
 
-/** Tier thresholds: native vs non-native (Language Buffer Rule: +30–50% on thresholds when non-native). */
+/**
+ * Tier thresholds. May 2026 recalibration: every default lowered so the
+ * calculator triggers a planning conversation at the headcount where it is
+ * actually worth having, rather than the academic operational-readiness
+ * ceiling. Per-country overrides in src/data/country-overrides.ts can pin a
+ * specific number for an individual market.
+ */
 export const GEMO_TIER_THRESHOLDS = {
   1: {
-    thresholdNative: 10,
-    thresholdNonNative: 14,
+    thresholdNative: 6,
+    thresholdNonNative: 10,
     setupMonthsLow: 2,
     setupMonthsHigh: 4,
     complexityLabel: 'Straightforward' as const,
   },
   2: {
-    thresholdNative: 18,
-    thresholdNonNative: 25,
+    thresholdNative: 12,
+    thresholdNonNative: 18,
     setupMonthsLow: 4,
     setupMonthsHigh: 6,
     complexityLabel: 'Moderate' as const,
   },
   3: {
-    // May 2026 recalibration: halved from the old 30 / 43 academic
-    // operational-readiness ceiling to ~15 / 22, the headcount at which
-    // a planning conversation is actually worth having for LATAM / India
-    // / Turkey mid-market hiring (per Steen + Antony's sales experience).
     thresholdNative: 15,
     thresholdNonNative: 22,
     setupMonthsLow: 6,
