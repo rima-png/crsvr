@@ -8,8 +8,8 @@ interface ReadinessChecklistProps {
 
 export function ReadinessChecklist({ items }: ReadinessChecklistProps) {
   return (
-    <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm">
-      <h3 className="font-heading font-bold text-black text-lg mb-4">
+    <div className="bg-white rounded-card border border-parchment-300 p-6 shadow-card">
+      <h3 className="font-heading font-bold text-forest-700 text-lg mb-4">
         Your transition readiness
       </h3>
 
@@ -19,16 +19,16 @@ export function ReadinessChecklist({ items }: ReadinessChecklistProps) {
             <span
               className={`w-2.5 h-2.5 rounded-full shrink-0 mt-1.5 ${
                 item.status === 'green'
-                  ? 'bg-forest'
+                  ? 'bg-sage-500'
                   : item.status === 'amber'
-                    ? 'bg-yellow-400'
-                    : 'bg-teamed-red'
+                    ? 'bg-warning'
+                    : 'bg-sienna-700'
               }`}
             />
             <div>
-              <p className="font-heading font-bold text-black">{item.criterion}</p>
-              <p className="font-sans text-gray-500 text-sm">{item.question}</p>
-              <p className="font-sans text-black text-sm mt-1">{item.detail}</p>
+              <p className="font-heading font-bold text-forest-700">{item.criterion}</p>
+              <p className="font-sans text-parchment-600 text-sm">{item.question}</p>
+              <p className="font-sans text-forest-700 text-sm mt-1">{item.detail}</p>
             </div>
           </div>
         ))}

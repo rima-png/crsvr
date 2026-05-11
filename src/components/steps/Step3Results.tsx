@@ -7,6 +7,7 @@ import { CountryIntelPanel } from '@/components/results/CountryIntelPanel'
 import { ReadinessChecklist } from '@/components/results/ReadinessChecklist'
 import { Recommendation } from '@/components/results/Recommendation'
 import { NextSteps } from '@/components/results/NextSteps'
+import { CountryPolaroid } from '@/components/results/CountryPolaroid'
 import { trackEvent } from '@/lib/analytics'
 import { convertCurrency } from '@/lib/fx'
 import { changesInWindow, formatReviewedDate } from '@/lib/freshness'
@@ -81,11 +82,11 @@ export function Step3Results({
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-10">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <p className="font-sans text-gray-500 text-sm mb-1">Your EOR vs Entity Analysis</p>
-          <h1 className="font-heading font-bold text-black text-2xl">
+          <p className="font-sans text-parchment-600 text-sm mb-1">Your EOR vs Entity Analysis</p>
+          <h1 className="font-heading font-bold text-forest-700 text-2xl">
             Here&apos;s your crossover model, {lead?.firstName || 'there'}
           </h1>
-          <p className="font-sans text-gray-500 mt-2">
+          <p className="font-sans text-parchment-600 mt-2">
             {country.flag} {country.name} · {inputs.currentHeadcount} employees today ·{' '}
             {inputs.plannedHeadcount} planned in 12 months
           </p>
@@ -93,7 +94,7 @@ export function Step3Results({
         <div className="flex items-center gap-2 shrink-0">
           <label
             htmlFor="display-currency"
-            className="font-sans text-sm text-gray-500 whitespace-nowrap"
+            className="font-sans text-sm text-parchment-600 whitespace-nowrap"
           >
             Display in
           </label>
@@ -101,7 +102,7 @@ export function Step3Results({
             id="display-currency"
             value={displayCurrency}
             onChange={(e) => setDisplayCurrency(e.target.value)}
-            className="border border-gray-200 rounded-input px-3 py-2 font-sans font-medium text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white cursor-pointer"
+            className="border border-parchment-300 rounded-input px-3 py-2 font-sans font-medium text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white cursor-pointer"
             aria-label="Display currency"
           >
             {currencyOptions.map((code) => (
@@ -114,6 +115,13 @@ export function Step3Results({
         </div>
       </div>
 
+      {/* Polaroid signature — warm anchor before the analytical content */}
+      <CountryPolaroid
+        country={country}
+        status={result.status}
+        crossoverMonth={result.crossoverMonth}
+      />
+
       {/* Recommendation — moved to top so the headline answer leads */}
       <Recommendation
         inputs={inputs}
@@ -124,7 +132,7 @@ export function Step3Results({
       />
 
       {/* Section A — CrossoverChart */}
-      <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm">
+      <div className="bg-white rounded-card border border-parchment-300 p-6 shadow-card">
         <CrossoverChartDynamic
           dataPoints={displayResult.dataPoints}
           crossoverMonth={displayResult.crossoverMonth}
@@ -136,10 +144,10 @@ export function Step3Results({
 
       {/* Margin-of-error warning when low/high variants flip the recommendation */}
       {result.marginFlag && (
-        <div className="bg-red-50 border-l-4 border-teamed-red rounded-card p-4">
-          <p className="font-sans text-sm text-red-900">
+        <div className="bg-sienna-100 border-l-4 border-sienna-700 rounded-card p-4">
+          <p className="font-sans text-sm text-sienna-900">
             <span className="font-bold">Recommendation is directional only.</span> The setup-cost
-            range straddles the decision point — the low and high scenarios give opposite answers.
+            range straddles the decision point. The low and high scenarios give opposite answers.
             Refine with a local advisor before committing to a path.
           </p>
         </div>
@@ -147,7 +155,7 @@ export function Step3Results({
 
       {/* Planning-window warning when a material regulatory change lands inside the 3-year horizon */}
       {materialUpcoming.length > 0 && (
-        <div className="bg-yellow-50 border-l-4 border-amber-500 rounded-card p-4">
+        <div className="bg-amber-100 border-l-4 border-warning rounded-card p-4">
           <p className="font-sans text-sm text-amber-900">
             <span className="font-bold">Heads-up: regulatory change inside your planning window.</span>{' '}
             {materialUpcoming.length === 1 ? (

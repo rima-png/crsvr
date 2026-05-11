@@ -135,18 +135,18 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm">
-        <h1 className="font-heading font-bold text-black text-2xl mb-2">
+      <div className="bg-white rounded-card border border-parchment-300 p-6 sm:p-8 shadow-card">
+        <h1 className="font-heading font-bold text-forest-700 text-2xl mb-2">
           Where are you hiring, and how many?
         </h1>
-        <p className="font-sans text-gray-500 mb-8">
+        <p className="font-sans text-parchment-600 mb-8">
           Tell us your situation. 60 seconds. We&apos;ll show you the economics.
         </p>
 
         <div className="space-y-6">
           {/* Input 1 — Country */}
           <div>
-            <label className="block font-sans font-medium text-black mb-2">Country</label>
+            <label className="block font-sans font-medium text-forest-700 mb-2">Country</label>
             <div ref={dropdownRef} className="relative">
               <input
                 type="text"
@@ -157,11 +157,11 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                 }}
                 onFocus={() => setDropdownOpen(true)}
                 placeholder="Search countries..."
-                className="w-full border border-gray-200 rounded-input px-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
+                className="w-full border border-parchment-300 rounded-input px-4 py-3 font-sans text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white"
               />
               {dropdownOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-grey-mid rounded-input shadow-lg overflow-hidden">
-                  <div className="flex flex-wrap gap-1.5 px-2 pt-2 pb-2 border-b border-gray-100">
+                <div className="absolute z-10 mt-1 w-full bg-white border border-parchment-300 rounded-input shadow-lg overflow-hidden">
+                  <div className="flex flex-wrap gap-1.5 px-2 pt-2 pb-2 border-b border-parchment-200">
                     {MACRO_REGION_OPTIONS.map((opt) => {
                       const active =
                         opt.id === 'all' ? macroFilter === 'all' : macroFilter === opt.id
@@ -173,8 +173,8 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                           onClick={() => setMacroFilter(opt.id)}
                           className={`rounded-full px-2.5 py-1 text-xs font-sans font-medium transition-colors ${
                             active
-                              ? 'bg-forest text-white'
-                              : 'bg-grey-mid/60 text-black hover:bg-grey-mid'
+                              ? 'bg-sienna-500 text-white'
+                              : 'bg-parchment-200 text-forest-700 hover:bg-parchment-100'
                           }`}
                         >
                           {opt.label}
@@ -184,7 +184,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                   </div>
                   <div ref={listParentRef} className="h-60 overflow-y-auto">
                     {filteredCountries.length === 0 ? (
-                      <div className="px-4 py-3 font-sans text-gray-500">No countries found</div>
+                      <div className="px-4 py-3 font-sans text-parchment-600">No countries found</div>
                     ) : (
                       <div
                         className="relative w-full"
@@ -204,11 +204,11 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                               <button
                                 type="button"
                                 onClick={() => handleCountrySelect(country)}
-                                className="w-full h-full px-4 text-left font-sans text-black hover:bg-grey-mid flex items-center gap-2 border-b border-transparent hover:border-gray-100"
+                                className="w-full h-full px-4 text-left font-sans text-forest-700 hover:bg-parchment-100 flex items-center gap-2 border-b border-transparent hover:border-parchment-200"
                               >
                                 <span className="shrink-0">{country.flag}</span>
                                 <span className="truncate">{country.name}</span>
-                                <span className="ml-auto shrink-0 text-xs text-gray-400 font-medium">
+                                <span className="ml-auto shrink-0 text-xs text-parchment-500 font-medium">
                                   {country.code}
                                 </span>
                               </button>
@@ -223,7 +223,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
             </div>
             {inputs.country && (
               <div className="mt-2">
-                <span className="inline-flex items-center gap-1.5 bg-forest/10 text-forest text-sm font-medium px-3 py-1 rounded-full">
+                <span className="inline-flex items-center gap-1.5 bg-sienna-100 text-sienna-700 text-sm font-medium px-3 py-1 rounded-full">
                   {inputs.country.flag} {inputs.country.name} · {inputs.country.complexityLabel} to
                   set up · Entity threshold: ~{threshold} employees
                 </span>
@@ -235,7 +235,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
           {inputs.country && (
             <>
               <div>
-                <label className="block font-sans font-medium text-black mb-2">
+                <label className="block font-sans font-medium text-forest-700 mb-2">
                   Current headcount in {inputs.country.name}
                 </label>
                 <div className="flex gap-4 items-center">
@@ -252,7 +252,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                         plannedHeadcount: Math.max(inputs.plannedHeadcount, v),
                       })
                     }}
-                    className="flex-1 accent-forest"
+                    className="flex-1 accent-sienna-500"
                   />
                   <input
                     type="number"
@@ -267,14 +267,14 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                         plannedHeadcount: Math.max(inputs.plannedHeadcount, v),
                       })
                     }}
-                    className="w-20 border border-gray-200 rounded-input px-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
+                    className="w-20 border border-parchment-300 rounded-input px-4 py-3 font-sans text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white"
                   />
                 </div>
               </div>
 
               {/* Input 3 — Planned growth */}
               <div>
-                <label className="block font-sans font-medium text-black mb-2">
+                <label className="block font-sans font-medium text-forest-700 mb-2">
                   Planned growth over next 12 months
                 </label>
                 <div className="flex gap-4 items-center">
@@ -290,7 +290,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                         plannedHeadcount: inputs.currentHeadcount + growth,
                       })
                     }}
-                    className="flex-1 accent-forest"
+                    className="flex-1 accent-sienna-500"
                   />
                   <input
                     type="number"
@@ -308,10 +308,10 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                         plannedHeadcount: inputs.currentHeadcount + growth,
                       })
                     }}
-                    className="w-20 border border-gray-200 rounded-input px-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
+                    className="w-20 border border-parchment-300 rounded-input px-4 py-3 font-sans text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white"
                   />
                 </div>
-                <p className="mt-1 text-sm text-gray-500 font-sans">
+                <p className="mt-1 text-sm text-parchment-600 font-sans">
                   Extra hires on top of your current {inputs.currentHeadcount} in{' '}
                   {inputs.country.name}.
                 </p>
@@ -319,17 +319,17 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
 
               {/* Input 4 — Operating language */}
               <div>
-                <label className="block font-sans font-medium text-black mb-2">
+                <label className="block font-sans font-medium text-forest-700 mb-2">
                   What language does your team operate in?
                 </label>
-                <div className="flex rounded-input border border-gray-200 overflow-hidden">
+                <div className="flex rounded-input border border-parchment-300 overflow-hidden">
                   <button
                     type="button"
                     onClick={() => setInputs({ ...inputs, operatesInLocalLanguage: true })}
                     className={`flex-1 px-4 py-3 font-sans font-medium transition-colors ${
                       inputs.operatesInLocalLanguage
-                        ? 'bg-forest text-white'
-                        : 'bg-white text-black hover:bg-grey-mid'
+                        ? 'bg-sienna-500 text-white'
+                        : 'bg-white text-forest-700 hover:bg-parchment-100'
                     }`}
                   >
                     Local language
@@ -339,14 +339,14 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                     onClick={() => setInputs({ ...inputs, operatesInLocalLanguage: false })}
                     className={`flex-1 px-4 py-3 font-sans font-medium transition-colors ${
                       !inputs.operatesInLocalLanguage
-                        ? 'bg-forest text-white'
-                        : 'bg-white text-black hover:bg-grey-mid'
+                        ? 'bg-sienna-500 text-white'
+                        : 'bg-white text-forest-700 hover:bg-parchment-100'
                     }`}
                   >
                     English or another language
                   </button>
                 </div>
-                <p className="mt-2 text-sm text-gray-500 font-sans">
+                <p className="mt-2 text-sm text-parchment-600 font-sans">
                   {inputs.operatesInLocalLanguage
                     ? 'Working in the local language reduces compliance complexity. Your team can read employment docs and engage authorities directly, which lowers the entity threshold.'
                     : "Working in another language adds compliance complexity. You'll need translation or advisory support, which pushes the entity threshold up."}
@@ -355,25 +355,25 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
 
               {/* Input 5 — EOR fee with currency picker */}
               <div>
-                <label className="block font-sans font-medium text-black mb-2">
+                <label className="block font-sans font-medium text-forest-700 mb-2">
                   Your current EOR fee per employee / month
                 </label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-sans text-gray-500">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-sans text-parchment-600">
                       {getCurrencySymbol(inputs.eorFeeCurrency)}
                     </span>
                     <input
                       type="number"
                       value={displayedEorFee}
                       onChange={(e) => handleEorFeeChange(e.target.value)}
-                      className="w-full border border-gray-200 rounded-input pl-12 pr-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
+                      className="w-full border border-parchment-300 rounded-input pl-12 pr-4 py-3 font-sans text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white"
                     />
                   </div>
                   <select
                     value={inputs.eorFeeCurrency}
                     onChange={(e) => handleEorCurrencyChange(e.target.value)}
-                    className="border border-gray-200 rounded-input px-3 py-3 font-sans font-medium text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white cursor-pointer"
+                    className="border border-parchment-300 rounded-input px-3 py-3 font-sans font-medium text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white cursor-pointer"
                     aria-label="EOR fee currency"
                   >
                     {eorCurrencyOptions.map((code) => (
@@ -384,7 +384,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                     ))}
                   </select>
                 </div>
-                <p className="mt-1 text-sm text-gray-500 font-sans">
+                <p className="mt-1 text-sm text-parchment-600 font-sans">
                   {inputs.eorFeeCurrency === inputs.country.currency ? (
                     <>
                       Pre-filled with the market average for {inputs.country.name}. Update if you
@@ -393,7 +393,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                   ) : (
                     <>
                       Used in calculations as{' '}
-                      <span className="font-medium text-black">
+                      <span className="font-medium text-forest-700">
                         {getCurrencySymbol(inputs.country.currency)}
                         {inputs.eorFeePerMonth.toLocaleString()}
                       </span>{' '}
@@ -412,7 +412,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
             type="button"
             onClick={handleShowCrossover}
             disabled={!inputs.country || !plannedValid}
-            className="bg-forest text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-forest-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-forest"
+            className="bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-sienna-500"
           >
             Show my crossover →
           </button>

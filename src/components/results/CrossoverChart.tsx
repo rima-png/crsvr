@@ -25,6 +25,23 @@ interface CrossoverChartProps {
   threshold: number
 }
 
+/**
+ * Recharts components want hex literals, so we keep a small palette object
+ * here rather than relying on Tailwind class names. Each entry traces back
+ * to a token defined in tailwind.config.ts.
+ */
+const CHART = {
+  zoneWait: '#C9BEAD', // parchment-400
+  zonePlan: '#C79140', // warning (Kraft Yellow)
+  zoneAct: '#5F7F4B', // success (Postmark Green)
+  lineEor: '#C4654A', // sienna-500
+  lineEnt: '#8B9E7E', // sage-500
+  grid: '#E5DDD0', // parchment-300
+  axis: '#6B6155', // parchment-600
+  refCost: '#2D3B2D', // forest-700 (Deep Forest)
+  refHead: '#A37F52', // amber-700
+} as const
+
 function CustomTooltip({
   active,
   payload,
@@ -41,13 +58,15 @@ function CustomTooltip({
   const entity = payload.find((p) => p.dataKey === 'entityCumulative')?.value ?? 0
   const diff = entity - eor
   return (
-    <div className="bg-white border border-grey-mid rounded-card p-4 shadow-lg">
-      <p className="font-sans font-bold text-black mb-2">Month {label}</p>
-      <p className="font-sans text-sm text-black">EOR (cumulative): {formatCurrency(eor, currency)}</p>
-      <p className="font-sans text-sm text-black">
+    <div className="bg-white border border-parchment-300 rounded-card p-4 shadow-card">
+      <p className="font-sans font-bold text-forest-700 mb-2">Month {label}</p>
+      <p className="font-sans text-sm text-forest-700">
+        EOR (cumulative): {formatCurrency(eor, currency)}
+      </p>
+      <p className="font-sans text-sm text-forest-700">
         Entity (cumulative): {formatCurrency(entity, currency)}
       </p>
-      <p className="font-sans text-sm text-forest mt-1">
+      <p className="font-sans text-sm text-sienna-700 mt-1">
         Difference: {formatCurrency(diff, currency)}
       </p>
     </div>
@@ -87,13 +106,13 @@ export function CrossoverChart({
     <div className="w-full">
       <ResponsiveContainer width="100%" height={380}>
         <LineChart data={dataPoints} margin={{ top: 30, right: 20, left: 20, bottom: 50 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
+          <CartesianGrid strokeDasharray="3 3" stroke={CHART.grid} />
           <XAxis
             dataKey="month"
             axisLine={false}
             tickLine={false}
             tickFormatter={(v) => `Month ${v}`}
-            tick={{ fontSize: 12, fill: '#6b7280' }}
+            tick={{ fontSize: 12, fill: CHART.axis }}
             interval={5}
             domain={[1, 36]}
           />
@@ -105,26 +124,26 @@ export function CrossoverChart({
               if (v >= 10_000) return `${Math.round(v / 1000)}k`
               return String(v)
             }}
-            tick={{ fontSize: 12, fill: '#6b7280' }}
+            tick={{ fontSize: 12, fill: CHART.axis }}
           />
           <Tooltip
             content={<CustomTooltip currency={currency} />}
-            cursor={{ stroke: '#E5E5E5', strokeWidth: 1 }}
+            cursor={{ stroke: CHART.grid, strokeWidth: 1 }}
           />
           {/* Wait zone — neither signal cleared */}
           <ReferenceArea
             x1={1}
             x2={firstCleared ?? 36}
-            fill="#9CA3AF"
-            fillOpacity={0.1}
+            fill={CHART.zoneWait}
+            fillOpacity={0.22}
           />
           {/* Plan zone — one signal cleared */}
           {firstCleared != null && bothCleared != null && firstCleared !== bothCleared && (
             <ReferenceArea
               x1={firstCleared}
               x2={bothCleared}
-              fill="#F59E0B"
-              fillOpacity={0.13}
+              fill={CHART.zonePlan}
+              fillOpacity={0.16}
             />
           )}
           {/* Plan zone — only one signal ever fires inside the window */}
@@ -132,8 +151,8 @@ export function CrossoverChart({
             <ReferenceArea
               x1={firstCleared}
               x2={36}
-              fill="#F59E0B"
-              fillOpacity={0.13}
+              fill={CHART.zonePlan}
+              fillOpacity={0.16}
             />
           )}
           {/* Act zone — both signals cleared */}
@@ -141,19 +160,19 @@ export function CrossoverChart({
             <ReferenceArea
               x1={bothCleared}
               x2={36}
-              fill="#4B8E82"
-              fillOpacity={0.14}
+              fill={CHART.zoneAct}
+              fillOpacity={0.18}
             />
           )}
           {crossoverMonth && (
             <ReferenceLine
               x={crossoverMonth}
-              stroke="#31695F"
+              stroke={CHART.refCost}
               strokeDasharray="4 4"
               label={{
                 value: 'Cost',
                 position: 'top',
-                fill: '#31695F',
+                fill: CHART.refCost,
                 fontSize: 11,
               }}
             />
@@ -161,12 +180,12 @@ export function CrossoverChart({
           {complexityClearedMonth && (
             <ReferenceLine
               x={complexityClearedMonth}
-              stroke="#D97706"
+              stroke={CHART.refHead}
               strokeDasharray="4 4"
               label={{
                 value: 'Headcount',
                 position: 'top',
-                fill: '#D97706',
+                fill: CHART.refHead,
                 fontSize: 11,
                 offset: 14,
               }}
@@ -175,7 +194,7 @@ export function CrossoverChart({
           <Line
             type="monotone"
             dataKey="eorCumulative"
-            stroke="#4B8E82"
+            stroke={CHART.lineEor}
             strokeWidth={2.5}
             name="EOR Cost"
             dot={false}
@@ -183,7 +202,7 @@ export function CrossoverChart({
           <Line
             type="monotone"
             dataKey="entityCumulative"
-            stroke="#FFA287"
+            stroke={CHART.lineEnt}
             strokeWidth={2.5}
             name="Entity Cost"
             dot={false}
@@ -191,7 +210,7 @@ export function CrossoverChart({
           <Legend
             wrapperStyle={{ paddingTop: 20 }}
             formatter={(value) => (
-              <span className="font-sans text-sm text-black">
+              <span className="font-sans text-sm text-forest-700">
                 {value === 'EOR Cost' ? 'EOR (cumulative)' : 'Entity (cumulative)'}
               </span>
             )}
@@ -200,24 +219,36 @@ export function CrossoverChart({
           />
         </LineChart>
       </ResponsiveContainer>
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-xs text-gray-600">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-xs text-parchment-700">
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-gray-400/30" />
-          Wait — neither signal cleared
+          <span
+            aria-hidden
+            className="w-3 h-3 rounded-sm"
+            style={{ backgroundColor: CHART.zoneWait, opacity: 0.6 }}
+          />
+          Wait, neither signal cleared
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-amber-400/40" />
-          Plan — one cleared
+          <span
+            aria-hidden
+            className="w-3 h-3 rounded-sm"
+            style={{ backgroundColor: CHART.zonePlan, opacity: 0.55 }}
+          />
+          Plan, one cleared
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-forest/40" />
-          Act — both cleared
+          <span
+            aria-hidden
+            className="w-3 h-3 rounded-sm"
+            style={{ backgroundColor: CHART.zoneAct, opacity: 0.6 }}
+          />
+          Act, both cleared
         </span>
       </div>
       {!crossoverMonth && (
-        <p className="font-sans text-gray-500 text-sm mt-3">
-          At your current headcount, EOR remains more cost-effective for the full 3-year window.
-          We&apos;ll remind you when to review.
+        <p className="font-sans text-parchment-600 text-sm mt-3">
+          At your current headcount in {country.name}, EOR remains more cost-effective for the
+          full 3-year window. We&apos;ll remind you when to review.
         </p>
       )}
     </div>

@@ -17,7 +17,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
     <div className="w-full max-w-3xl mx-auto px-4 py-6">
       <Link
         href="/"
-        className="inline-block text-sm text-gray-500 hover:text-forest transition-colors mb-4"
+        className="inline-block text-sm text-parchment-600 hover:text-sienna-700 transition-colors mb-4"
       >
         ← Back to calculator home
       </Link>
@@ -36,10 +36,10 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                     transition-colors
                     ${
                       isActive
-                        ? 'bg-forest text-white'
+                        ? 'bg-sienna-500 text-white shadow-cta'
                         : isCompleted
-                          ? 'bg-forest text-white'
-                          : 'bg-grey-mid text-gray-400'
+                          ? 'bg-sienna-500 text-white'
+                          : 'bg-parchment-200 text-parchment-500'
                     }
                   `}
                 >
@@ -64,10 +64,10 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                 <span
                   className={`mt-2 text-sm text-center max-w-[100px] ${
                     isActive
-                      ? 'text-forest font-bold'
+                      ? 'text-sienna-700 font-bold'
                       : isCompleted
-                        ? 'text-forest font-medium'
-                        : 'text-gray-400'
+                        ? 'text-sienna-700 font-medium'
+                        : 'text-parchment-500'
                   }`}
                 >
                   {step.label}
@@ -76,7 +76,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
               {index < STEPS.length - 1 && (
                 <div
                   className={`flex-1 h-0.5 mx-2 mt-5 min-w-[20px] ${
-                    lineCompleted ? 'bg-forest' : 'bg-grey-mid'
+                    lineCompleted ? 'bg-sienna-500' : 'bg-parchment-300'
                   }`}
                 />
               )}

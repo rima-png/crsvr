@@ -100,13 +100,15 @@ export interface MonthlyDataPoint {
   headcount: number
 }
 
+export type CalculationStatus = 'BELOW_THRESHOLD' | 'NEAR_THRESHOLD' | 'ABOVE_THRESHOLD'
+
 export interface CalculationResult {
   dataPoints: MonthlyDataPoint[]
   crossoverMonth: number | null
   totalEorCost: number
   totalEntityCost: number
   totalSavings: number
-  status: 'BELOW_THRESHOLD' | 'NEAR_THRESHOLD' | 'ABOVE_THRESHOLD'
+  status: CalculationStatus
   readinessScore: number
   readinessItems: ReadinessItem[]
   setupCostUsed: number

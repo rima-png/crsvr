@@ -9,37 +9,78 @@ import {
 } from '@/lib/freshness'
 import { convertCurrency } from '@/lib/fx'
 
-// Brand fonts (General Sans / Instrument Sans) loaded from /public/fonts.
-// Registration must run once per cold start; idempotent calls are fine.
+/**
+ * Font registration for @react-pdf/renderer.
+ *
+ * Previously this ran at module top. That intermittently failed with
+ * "Could not resolve font for Instrument Sans, fontWeight 400" because, with
+ * `experimental.serverComponentsExternalPackages: ['@react-pdf/renderer']`,
+ * the package's Font registry can end up in a different module instance from
+ * the one rendering the PDF after a dev hot-reload.
+ *
+ * Fix: re-register inside the POST handler. Font.register is idempotent, so
+ * re-running it is cheap. Production deployments need the TTFs bundled into
+ * the serverless function — see `outputFileTracingIncludes` in next.config.js.
+ */
 const fontsDir = path.join(process.cwd(), 'public', 'fonts')
 
-Font.register({
-  family: 'General Sans',
-  fonts: [
-    { src: path.join(fontsDir, 'GeneralSans-Regular.ttf'), fontWeight: 400 },
-    { src: path.join(fontsDir, 'GeneralSans-Medium.ttf'), fontWeight: 500 },
-    { src: path.join(fontsDir, 'GeneralSans-Semibold.ttf'), fontWeight: 600 },
-    { src: path.join(fontsDir, 'GeneralSans-Bold.ttf'), fontWeight: 700 },
-  ],
-})
+function registerFonts() {
+  Font.register({
+    family: 'General Sans',
+    fonts: [
+      { src: path.join(fontsDir, 'GeneralSans-Regular.ttf'), fontWeight: 400 },
+      { src: path.join(fontsDir, 'GeneralSans-Medium.ttf'), fontWeight: 500 },
+      { src: path.join(fontsDir, 'GeneralSans-Semibold.ttf'), fontWeight: 600 },
+      { src: path.join(fontsDir, 'GeneralSans-Bold.ttf'), fontWeight: 700 },
+    ],
+  })
 
-Font.register({
-  family: 'Instrument Sans',
-  fonts: [
-    { src: path.join(fontsDir, 'InstrumentSans-Regular.ttf'), fontWeight: 400 },
-    { src: path.join(fontsDir, 'InstrumentSans-Medium.ttf'), fontWeight: 500 },
-    { src: path.join(fontsDir, 'InstrumentSans-Semibold.ttf'), fontWeight: 600 },
-    { src: path.join(fontsDir, 'InstrumentSans-Bold.ttf'), fontWeight: 700 },
-  ],
-})
+  Font.register({
+    family: 'Instrument Sans',
+    fonts: [
+      { src: path.join(fontsDir, 'InstrumentSans-Regular.ttf'), fontWeight: 400 },
+      { src: path.join(fontsDir, 'InstrumentSans-Medium.ttf'), fontWeight: 500 },
+      { src: path.join(fontsDir, 'InstrumentSans-Semibold.ttf'), fontWeight: 600 },
+      { src: path.join(fontsDir, 'InstrumentSans-Bold.ttf'), fontWeight: 700 },
+    ],
+  })
+}
+
+/**
+ * Brand palette — matched to the new Teamed website (Starr Conspiracy rebuild)
+ * staging at https://teamed-website-platform.vercel.app/. See
+ * tailwind.config.ts for the web equivalent.
+ */
+const PALETTE = {
+  ink: '#121213', // black headings on light
+  inkSoft: '#4A4238', // parchment-700 — body
+  inkMuted: '#6B6155', // parchment-600 — labels
+  inkFade: '#9E9382', // parchment-500 — footer
+  surface: '#FAFAF7', // parchment-50
+  surfaceSoft: '#F5F1EA', // parchment-100
+  hairline: '#E5DDD0', // parchment-300
+  brand: '#C4654A', // sienna-500 — primary
+  brandDark: '#924530', // sienna-700
+  brandSoft: '#F2D9CE', // sienna-100
+  brandDeep: '#5C2B1D', // sienna-900
+  forest: '#2D3B2D', // forest-700 — deep ink for titles
+  sageSoft: '#DFE6D8', // sage-100
+  sage: '#5F6F52', // sage-700
+  amberSoft: '#F5E6CF', // amber-100
+  amberInk: '#6B5235', // amber-900
+  warning: '#C79140', // Kraft Yellow
+  success: '#5F7F4B', // Postmark Green
+  successDot: '#8B9E7E', // sage-500
+} as const
 
 const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontFamily: 'Instrument Sans',
     fontSize: 10,
-    color: '#121213',
+    color: PALETTE.ink,
     lineHeight: 1.5,
+    backgroundColor: PALETTE.surface,
   },
   header: {
     flexDirection: 'row',
@@ -51,22 +92,23 @@ const styles = StyleSheet.create({
     fontFamily: 'General Sans',
     fontSize: 18,
     fontWeight: 700,
-    color: '#4B8E82',
+    color: PALETTE.brand,
   },
   memoLabel: {
     fontSize: 10,
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
   },
   title: {
     fontFamily: 'General Sans',
     fontSize: 20,
     fontWeight: 700,
+    color: PALETTE.forest,
     marginBottom: 16,
   },
   preparedFor: {
     fontSize: 12,
     marginBottom: 24,
-    color: '#374151',
+    color: PALETTE.inkSoft,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -76,27 +118,28 @@ const styles = StyleSheet.create({
   },
   statBox: {
     width: '48%',
-    border: '1px solid #4B8E82',
+    border: `1px solid ${PALETTE.hairline}`,
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
+    backgroundColor: PALETTE.surfaceSoft,
   },
   statLabel: {
     fontSize: 9,
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
     marginBottom: 4,
   },
   statValue: {
     fontFamily: 'General Sans',
     fontSize: 14,
     fontWeight: 700,
-    color: '#121213',
+    color: PALETTE.forest,
   },
   summary: {
     fontSize: 11,
     lineHeight: 1.5,
     marginBottom: 20,
-    color: '#374151',
+    color: PALETTE.inkSoft,
   },
   countryIntel: {
     fontSize: 10,
@@ -105,6 +148,7 @@ const styles = StyleSheet.create({
   readiness: {
     fontSize: 10,
     marginBottom: 24,
+    color: PALETTE.inkSoft,
   },
   sectionTitle: {
     fontFamily: 'General Sans',
@@ -112,12 +156,12 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     marginTop: 16,
     marginBottom: 8,
-    color: '#121213',
+    color: PALETTE.forest,
   },
   bulletList: {
     fontSize: 9,
     marginBottom: 8,
-    color: '#374151',
+    color: PALETTE.inkSoft,
   },
   checklistItem: {
     flexDirection: 'row',
@@ -140,7 +184,7 @@ const styles = StyleSheet.create({
     left: 40,
     right: 40,
     fontSize: 8,
-    color: '#9ca3af',
+    color: PALETTE.inkFade,
     textAlign: 'center',
   },
   memoHeader: {
@@ -150,16 +194,16 @@ const styles = StyleSheet.create({
     fontSize: 9,
   },
   memoHeaderLeft: {
-    color: '#374151',
+    color: PALETTE.inkSoft,
   },
   memoHeaderRight: {
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
     maxWidth: '65%',
     textAlign: 'right',
   },
   memoHeaderRule: {
     borderBottomWidth: 1,
-    borderBottomColor: '#4B8E82',
+    borderBottomColor: PALETTE.brand,
     marginBottom: 16,
   },
   confidenceBadge: {
@@ -172,43 +216,43 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   confidenceVerified: {
-    backgroundColor: '#DEF1EC',
-    color: '#2F6B61',
+    backgroundColor: PALETTE.sageSoft,
+    color: PALETTE.sage,
   },
   confidenceBaseline: {
-    backgroundColor: '#FEF3C7',
-    color: '#92400E',
+    backgroundColor: PALETTE.amberSoft,
+    color: PALETTE.amberInk,
   },
   confidenceTierDefault: {
-    backgroundColor: '#F3F4F6',
-    color: '#4B5563',
+    backgroundColor: PALETTE.surfaceSoft,
+    color: PALETTE.inkSoft,
   },
   marginWarning: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: PALETTE.brandSoft,
     borderLeftWidth: 3,
-    borderLeftColor: '#F43855',
+    borderLeftColor: PALETTE.brandDark,
     padding: 8,
     marginBottom: 16,
     fontSize: 9,
-    color: '#991B1B',
+    color: PALETTE.brandDeep,
   },
   statRange: {
     fontSize: 8,
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
     marginTop: 2,
   },
   terminationBlock: {
     borderWidth: 1,
-    borderColor: '#FCA5A5',
+    borderColor: PALETTE.brand,
     borderRadius: 6,
     padding: 10,
     marginBottom: 16,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: PALETTE.brandSoft,
   },
   footnote: {
     fontSize: 8,
     fontStyle: 'italic',
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
     marginLeft: 6,
     marginTop: 2,
     marginBottom: 4,
@@ -218,78 +262,78 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: PALETTE.hairline,
   },
   assumptionsRow: {
     flexDirection: 'row',
     fontSize: 9,
     marginBottom: 3,
-    color: '#374151',
+    color: PALETTE.inkSoft,
   },
   assumptionsLabel: {
     width: '40%',
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
   },
   assumptionsValue: {
     width: '60%',
-    color: '#121213',
+    color: PALETTE.ink,
   },
   reviewedDate: {
     fontSize: 8,
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
     marginTop: -8,
     marginBottom: 12,
   },
   planningWindowWarning: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: PALETTE.amberSoft,
     borderLeftWidth: 3,
-    borderLeftColor: '#D97706',
+    borderLeftColor: PALETTE.warning,
     padding: 8,
     marginBottom: 16,
     fontSize: 9,
-    color: '#92400E',
+    color: PALETTE.amberInk,
   },
   upcomingChangeRow: {
     marginBottom: 8,
     paddingLeft: 6,
     borderLeftWidth: 2,
-    borderLeftColor: '#D97706',
+    borderLeftColor: PALETTE.warning,
   },
   upcomingChangeTitle: {
     fontFamily: 'General Sans',
     fontSize: 10,
     fontWeight: 700,
-    color: '#121213',
+    color: PALETTE.forest,
     marginBottom: 2,
   },
   upcomingChangeDate: {
     fontSize: 8,
-    color: '#6b7280',
+    color: PALETTE.inkMuted,
     marginBottom: 2,
   },
   upcomingChangeSummary: {
     fontSize: 9,
-    color: '#374151',
+    color: PALETTE.inkSoft,
     lineHeight: 1.4,
   },
   justificationSummary: {
     fontFamily: 'General Sans',
     fontSize: 10,
     fontWeight: 700,
-    color: '#121213',
+    color: PALETTE.forest,
     marginTop: 4,
     marginBottom: 6,
     lineHeight: 1.4,
   },
   justificationSection: {
     fontSize: 9,
-    color: '#374151',
+    color: PALETTE.inkSoft,
     marginBottom: 4,
     lineHeight: 1.4,
   },
   justificationSectionHeading: {
     fontWeight: 700,
-    color: '#121213',
+    color: PALETTE.ink,
   },
 })
 
@@ -344,8 +388,8 @@ function formatDatePdf(date: Date): string {
 
 function confidenceBadgeLabel(confidence: 'verified' | 'baseline' | 'tier_default'): string {
   if (confidence === 'verified') return 'Advisor-verified figures'
-  if (confidence === 'baseline') return 'Baseline estimates — contact Teamed to verify'
-  return 'Regional tier averages — contact Teamed for country-specific figures'
+  if (confidence === 'baseline') return 'Baseline estimates, contact Teamed to verify'
+  return 'Regional tier averages, contact Teamed for country-specific figures'
 }
 
 function CrossoverMemoDoc({
@@ -389,12 +433,12 @@ function CrossoverMemoDoc({
         <View style={styles.memoHeader}>
           <Text style={styles.memoHeaderLeft}>Prepared on {formatDatePdf(new Date())}</Text>
           <Text style={styles.memoHeaderRight}>
-            Based on inputs submitted at this date. Advisory only — refresh before any board or legal decision.
+            Based on inputs submitted at this date. Advisory only, refresh before any board or legal decision.
           </Text>
         </View>
         <View style={styles.memoHeaderRule} />
 
-        <Text style={styles.title}>EOR vs Entity Analysis — {country.name}</Text>
+        <Text style={styles.title}>EOR vs Entity Analysis, {country.name}</Text>
         <Text style={styles.preparedFor}>
           Prepared for: {lead.firstName}, {lead.companyName}
         </Text>
@@ -410,10 +454,10 @@ function CrossoverMemoDoc({
           ]}
         >
           {country.dataConfidence === 'verified' && stale
-            ? `Advisor-verified — refresh due — ${country.name}`
+            ? `Advisor-verified, refresh due, ${country.name}`
             : country.dataConfidence === 'baseline' && stale
-              ? `Baseline estimates — refresh due — ${country.name}`
-              : `${confidenceBadgeLabel(country.dataConfidence)} — ${country.name}`}
+              ? `Baseline estimates, refresh due, ${country.name}`
+              : `${confidenceBadgeLabel(country.dataConfidence)}, ${country.name}`}
         </Text>
 
         {country.lastReviewedDate && (
@@ -425,7 +469,7 @@ function CrossoverMemoDoc({
         {result.marginFlag && (
           <Text style={styles.marginWarning}>
             The cost range straddles the decision point. Low and high setup-cost scenarios give
-            opposite recommendations. Treat this memo as directional, not determinative — refine
+            opposite recommendations. Treat this memo as directional, not determinative, refine
             with a local advisor before committing.
           </Text>
         )}
@@ -484,10 +528,10 @@ function CrossoverMemoDoc({
 
         {country.terminationCostPerEmployee != null && (
           <View style={styles.terminationBlock}>
-            <Text style={{ fontFamily: 'General Sans', fontSize: 11, fontWeight: 700, color: '#991B1B', marginBottom: 4 }}>
+            <Text style={{ fontFamily: 'General Sans', fontSize: 11, fontWeight: 700, color: PALETTE.brandDeep, marginBottom: 4 }}>
               If you wind the entity down at month 36
             </Text>
-            <Text style={{ fontSize: 10, color: '#374151', marginBottom: 4 }}>
+            <Text style={{ fontSize: 10, color: PALETTE.inkSoft, marginBottom: 4 }}>
               Estimated exit cost:{' '}
               {formatCurrencyPdf(
                 country.terminationCostPerEmployee * inputs.plannedHeadcount,
@@ -581,12 +625,18 @@ function CrossoverMemoDoc({
                 styles.checklistDot,
                 {
                   backgroundColor:
-                    item.status === 'green' ? '#4B8E82' : item.status === 'amber' ? '#EAB308' : '#F43855',
+                    item.status === 'green'
+                      ? PALETTE.successDot
+                      : item.status === 'amber'
+                        ? PALETTE.warning
+                        : PALETTE.brandDark,
                 },
               ]}
             />
             <View>
-              <Text style={{ fontSize: 9, fontWeight: 600 }}>{item.criterion}</Text>
+              <Text style={{ fontSize: 9, fontWeight: 600, color: PALETTE.forest }}>
+                {item.criterion}
+              </Text>
               <Text style={styles.bulletList}>{item.question}</Text>
               <Text style={styles.bulletList}>{item.detail}</Text>
             </View>
@@ -597,8 +647,8 @@ function CrossoverMemoDoc({
           {result.readinessScore >= 4
             ? ' You look ready to move.'
             : result.readinessScore >= 2
-              ? " You're getting closer — a few things to address."
-              : ' Not yet — stay on EOR and review when you grow.'}
+              ? " You're getting closer, a few things to address."
+              : ' Not yet, stay on EOR and review when you grow.'}
         </Text>
 
         <View style={styles.assumptionsBlock}>
@@ -621,8 +671,8 @@ function CrossoverMemoDoc({
             <Text style={styles.assumptionsLabel}>Operating language</Text>
             <Text style={styles.assumptionsValue}>
               {inputs.operatesInLocalLanguage
-                ? `Native (${country.name}) — threshold ${country.thresholdNative}`
-                : `Non-native — threshold ${country.thresholdNonNative} (Language Buffer Rule applied)`}
+                ? `Native (${country.name}), threshold ${country.thresholdNative}`
+                : `Non-native, threshold ${country.thresholdNonNative} (Language Buffer Rule applied)`}
             </Text>
           </View>
           <View style={styles.assumptionsRow}>
@@ -679,6 +729,12 @@ function CrossoverMemoDoc({
 
 export async function POST(request: Request) {
   try {
+    // Re-register fonts on every request. With Next.js + @react-pdf and
+    // experimental.serverComponentsExternalPackages, the Font registry can be
+    // reset between hot-reloads in dev. Idempotent and cheap given the buffers
+    // are cached at module load.
+    registerFonts()
+
     const body = await request.json()
     const { inputs, result, lead } = body as {
       inputs: UserInputs

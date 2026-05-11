@@ -79,7 +79,7 @@ export function NextSteps({
   }
 
   return (
-    <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm space-y-4">
+    <div className="bg-white rounded-card border border-parchment-300 p-6 shadow-card space-y-4">
       <div className="flex flex-wrap gap-3">
         <a
           href="https://www.teamed.global/contact-teamed"
@@ -91,7 +91,7 @@ export function NextSteps({
               status: result.status,
             })
           }
-          className="inline-block bg-forest text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-forest-dark transition-colors"
+          className="inline-block bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all"
         >
           Book a call with our global employment team
         </a>
@@ -99,18 +99,18 @@ export function NextSteps({
           type="button"
           onClick={handleDownloadPdf}
           disabled={pdfLoading}
-          className="border border-forest text-forest rounded-btn px-6 py-3 font-heading font-bold hover:bg-forest/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border border-sienna-500 text-sienna-700 rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {pdfLoading ? 'Generating...' : 'Download your Crossover Memo'}
         </button>
       </div>
 
-      <p className="font-sans text-gray-500 text-sm pt-4 border-t border-grey-mid">
+      <p className="font-sans text-parchment-600 text-sm pt-4 border-t border-parchment-300">
         Want to model a different country or headcount?{' '}
         <button
           type="button"
           onClick={onReset}
-          className="text-forest font-medium hover:underline"
+          className="text-sienna-700 font-medium hover:underline"
         >
           Restart the calculator
         </button>

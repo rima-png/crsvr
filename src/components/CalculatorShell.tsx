@@ -37,7 +37,7 @@ export function CalculatorShell() {
   }
 
   return (
-    <div className="min-h-screen bg-grey-light">
+    <div className="min-h-screen bg-parchment-50">
       <StepIndicator currentStep={step} />
       {step === 1 && (
         <Step1Situation

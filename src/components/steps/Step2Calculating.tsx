@@ -18,21 +18,21 @@ const EOR_PROVIDERS = [
 const STATUS_STYLES = {
   BELOW_THRESHOLD: {
     label: 'EOR fits today',
-    container: 'border-forest/30 bg-forest/5',
-    dot: 'bg-forest',
-    text: 'text-forest',
+    container: 'border-sage-500/30 bg-sage-100',
+    dot: 'bg-sage-500',
+    text: 'text-sage-700',
   },
   NEAR_THRESHOLD: {
     label: 'Approaching your crossover',
-    container: 'border-amber-500/30 bg-amber-50',
-    dot: 'bg-amber-500',
-    text: 'text-amber-700',
+    container: 'border-warning/30 bg-amber-100',
+    dot: 'bg-warning',
+    text: 'text-warning',
   },
   ABOVE_THRESHOLD: {
     label: 'Past your crossover',
-    container: 'border-teamed-red/30 bg-teamed-red/5',
-    dot: 'bg-teamed-red',
-    text: 'text-teamed-red',
+    container: 'border-sienna-700/30 bg-sienna-100',
+    dot: 'bg-sienna-700',
+    text: 'text-sienna-700',
   },
 } as const
 
@@ -125,13 +125,13 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
   }
 
   const inputClass =
-    'w-full border border-gray-200 rounded-input px-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white'
+    'w-full border border-parchment-300 rounded-input px-4 py-3 font-sans text-forest-700 focus:outline-none focus:ring-2 focus:ring-sienna-500 bg-white'
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
       {/* Top card: result headline + email gate */}
-      <div className="bg-white rounded-card border border-grey-mid p-6 sm:p-8 shadow-sm">
-        <p className="text-center font-sans text-xs font-semibold uppercase tracking-wider text-gray-500">
+      <div className="bg-white rounded-card border border-parchment-300 p-6 sm:p-8 shadow-card">
+        <p className="text-center font-sans text-xs font-semibold uppercase tracking-wider text-parchment-600">
           Your {country.flag} {country.name} crossover report is ready
         </p>
 
@@ -142,13 +142,13 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
           <span className={`font-heading font-bold text-lg ${status.text}`}>{status.label}</span>
         </div>
 
-        <p className="mt-4 text-center font-sans text-sm text-gray-600">
+        <p className="mt-4 text-center font-sans text-sm text-parchment-700">
           Enter your work email to see the full report. We&apos;ll also send you a PDF copy.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="block font-sans font-medium text-black mb-2">Work email *</label>
+            <label className="block font-sans font-medium text-forest-700 mb-2">Work email *</label>
             <input
               type="email"
               required
@@ -158,13 +158,13 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
               placeholder="you@company.com"
               className={inputClass}
             />
-            {errors.email && <p className="mt-1 text-sm text-teamed-red">{errors.email}</p>}
+            {errors.email && <p className="mt-1 text-sm text-error">{errors.email}</p>}
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-forest text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-forest-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>
@@ -195,16 +195,16 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
             )}
           </button>
 
-          <details className="group rounded-input border border-grey-mid bg-grey-light/40 px-4 py-3">
-            <summary className="flex cursor-pointer items-center justify-between font-sans text-sm font-medium text-gray-600 marker:hidden">
+          <details className="group rounded-input border border-parchment-300 bg-parchment-100/60 px-4 py-3">
+            <summary className="flex cursor-pointer items-center justify-between font-sans text-sm font-medium text-parchment-700 marker:hidden">
               <span>Add a few details (optional)</span>
-              <span aria-hidden className="text-gray-400 transition-transform group-open:rotate-180">
+              <span aria-hidden className="text-parchment-500 transition-transform group-open:rotate-180">
                 ▾
               </span>
             </summary>
             <div className="mt-4 space-y-4">
               <div>
-                <label className="block font-sans font-medium text-black mb-2">First name</label>
+                <label className="block font-sans font-medium text-forest-700 mb-2">First name</label>
                 <input
                   type="text"
                   value={leadForm.firstName}
@@ -213,7 +213,7 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
                 />
               </div>
               <div>
-                <label className="block font-sans font-medium text-black mb-2">Company name</label>
+                <label className="block font-sans font-medium text-forest-700 mb-2">Company name</label>
                 <input
                   type="text"
                   value={leadForm.companyName}
@@ -222,7 +222,7 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
                 />
               </div>
               <div>
-                <label className="block font-sans font-medium text-black mb-2">
+                <label className="block font-sans font-medium text-forest-700 mb-2">
                   Current EOR provider
                 </label>
                 <select
@@ -243,11 +243,11 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
             </div>
           </details>
 
-          <p className="text-center font-sans text-xs text-gray-500">
+          <p className="text-center font-sans text-xs text-parchment-600">
             We&apos;ll email you a PDF copy and never spam.{' '}
             <a
               href="https://www.teamed.global/privacy-policy"
-              className="text-gray-600 underline hover:text-black"
+              className="text-parchment-700 underline hover:text-forest-700"
             >
               Privacy policy
             </a>
@@ -257,8 +257,8 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
       </div>
 
       {/* Bottom card: blurred preview of the full report */}
-      <div className="bg-white rounded-card border border-grey-mid p-6 sm:p-8 shadow-sm">
-        <p className="text-center font-sans text-sm font-semibold text-black">
+      <div className="bg-white rounded-card border border-parchment-300 p-6 sm:p-8 shadow-card">
+        <p className="text-center font-sans text-sm font-semibold text-forest-700">
           What you&apos;ll see when you unlock
         </p>
         <div className="relative mt-4">
@@ -276,13 +276,13 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
             />
           </div>
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="rounded-full bg-white/90 px-5 py-2 font-heading font-bold text-black shadow-lg backdrop-blur flex items-center gap-2">
+            <div className="rounded-full bg-white/90 px-5 py-2 font-heading font-bold text-forest-700 shadow-lg backdrop-blur flex items-center gap-2">
               <span aria-hidden>🔒</span>
               Locked
             </div>
           </div>
         </div>
-        <p className="mt-4 text-center font-sans text-sm text-gray-500">
+        <p className="mt-4 text-center font-sans text-sm text-parchment-600">
           Plus the full chart with three-zone weighting, country intel, and your next steps.
         </p>
       </div>

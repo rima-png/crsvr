@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Caveat, Permanent_Marker } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 
@@ -28,6 +29,23 @@ const instrumentSans = localFont({
   display: 'swap',
 })
 
+// Editorial accent fonts from the new Teamed brand kit. Used sparingly:
+// Permanent Marker for hand-drawn captions (the Polaroid signature), Caveat
+// for postcard-style citations and short flourishes.
+const permanentMarker = Permanent_Marker({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-marker',
+  display: 'swap',
+})
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  variable: '--font-script',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'EOR vs Entity Crossover Calculator | Teamed',
   description: 'Calculate when it makes sense to switch from EOR to your own entity.',
@@ -41,8 +59,11 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID
 
   return (
-    <html lang="en" className={`${generalSans.variable} ${instrumentSans.variable}`}>
-      <body className="bg-grey-light min-h-screen font-sans antialiased">
+    <html
+      lang="en"
+      className={`${generalSans.variable} ${instrumentSans.variable} ${permanentMarker.variable} ${caveat.variable}`}
+    >
+      <body className="bg-parchment-50 min-h-screen font-sans antialiased text-forest-700">
         {gaId && (
           <>
             <Script

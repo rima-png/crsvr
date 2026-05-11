@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
-// Copy Revision v0.2.1 — 21st April 2026
-// Brand-aligned to Teamed Brand Kit (AirOps 13640): Chloé voice, Crossover Economics,
-// Graduation Model, GEMO (Global Employment Management and Operations), no em dashes,
-// UK English, sentence case headings.
+// Copy Revision v0.3.0 — 11th May 2026
+// Reskinned to match the new Teamed website (Starr Conspiracy rebuild) at
+// https://teamed-website-platform.vercel.app/. Warm parchment palette,
+// sienna CTAs, editorial typography. Voice unchanged (Chloé). UK English,
+// sentence case headings, no em dashes.
 
 export const metadata: Metadata = {
   title:
@@ -21,31 +22,30 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <main className="min-h-screen">
+      <main className="min-h-screen bg-parchment-50">
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-forest/5 via-grey-light to-pastel-purple/10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,#4B8E8220,transparent)]" />
-          <div className="absolute top-20 right-10 w-64 h-64 rounded-full bg-pastel-red/20 blur-3xl" />
-          <div className="absolute bottom-10 left-10 w-48 h-48 rounded-full bg-pastel-purple/20 blur-3xl" />
-          <div className="relative max-w-3xl mx-auto px-6 pt-20 pb-16 text-center">
-            <h1 className="font-heading font-bold text-black text-4xl sm:text-5xl leading-tight mb-6">
+        <section className="relative">
+          <div className="relative max-w-3xl mx-auto px-6 pt-24 pb-20 text-center">
+            <p className="font-sans text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-sienna-700 mb-6">
+              The EOR that tells you when to stop using EOR.
+            </p>
+            <h1 className="font-heading font-bold text-forest-700 text-4xl sm:text-5xl leading-tight mb-6">
               EOR works. Until the maths says it doesn&apos;t.
             </h1>
-            <p className="font-sans text-xl text-gray-700 leading-relaxed mb-10">
+            <p className="font-sans text-lg sm:text-xl text-parchment-700 leading-relaxed mb-10">
               The signals that say it&apos;s time to look beyond EOR. Modelled on Crossover
-              Economics, the data layer behind the Graduation Model we&apos;ve applied
-              advising over 1,000 companies across 187+ countries.
+              Economics, applied across 1,000+ companies and 187+ countries.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/calculator"
-                className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
+                className="inline-block bg-sienna-500 text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-sienna-700 transition-colors shadow-cta hover:shadow-cta-hover"
               >
                 Calculate your Crossover Point
               </Link>
               <a
                 href="#learn-more"
-                className="group inline-flex items-center gap-2 font-sans text-base font-semibold text-forest hover:text-forest-dark px-6 py-4 rounded-btn border border-forest/30 hover:border-forest/60 hover:bg-forest/5 transition-colors"
+                className="group inline-flex items-center gap-2 font-sans text-base font-semibold text-sienna-700 hover:text-sienna-900 px-6 py-4 rounded-btn border border-sienna-500/60 hover:border-sienna-700 hover:bg-sienna-100/40 transition-colors"
               >
                 Learn more
                 <svg
@@ -70,172 +70,187 @@ export default function Home() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="py-16 bg-white">
+        <section id="how-it-works" className="py-20 bg-parchment-100 border-y border-parchment-300">
           <div className="max-w-4xl mx-auto px-6">
-            <h2 className="font-heading font-bold text-black text-2xl text-center mb-14">
+            <h2 className="font-heading font-bold text-forest-700 text-2xl sm:text-3xl text-center mb-14">
               How it works
             </h2>
-            <div className="grid sm:grid-cols-3 gap-8 sm:gap-6">
-              <div className="relative flex flex-col items-center text-center p-6 rounded-2xl bg-gradient-to-b from-forest/5 to-transparent border border-forest/10">
-                <div className="w-14 h-14 rounded-full bg-forest flex items-center justify-center mb-4 text-white shadow-md">
+            <div className="grid sm:grid-cols-3 gap-6">
+              <div className="relative flex flex-col items-center text-center p-7 rounded-card bg-parchment-50 border border-parchment-300">
+                <div className="w-14 h-14 rounded-full bg-sienna-500 flex items-center justify-center mb-5 text-white shadow-cta">
                   <span className="font-heading font-bold text-xl">1</span>
                 </div>
-                <h3 className="font-heading font-bold text-black mb-2">
+                <h3 className="font-heading font-bold text-forest-700 mb-2">
                   Tell us where you&apos;re hiring
                 </h3>
-                <p className="font-sans text-gray-600 text-sm">
+                <p className="font-sans text-parchment-700 text-sm leading-relaxed">
                   Select your country and enter your current and planned headcount.
                 </p>
-                <div className="hidden sm:block absolute top-14 -right-4 w-8 h-0.5 bg-forest/40" aria-hidden />
+                <div
+                  className="hidden sm:block absolute top-14 -right-3 w-6 h-0.5 bg-parchment-400"
+                  aria-hidden
+                />
               </div>
-              <div className="relative flex flex-col items-center text-center p-6 rounded-2xl bg-gradient-to-b from-forest-dark/5 to-transparent border border-forest-dark/20">
-                <div className="w-14 h-14 rounded-full bg-forest-dark flex items-center justify-center mb-4 text-white shadow-md">
+              <div className="relative flex flex-col items-center text-center p-7 rounded-card bg-parchment-50 border border-parchment-300">
+                <div className="w-14 h-14 rounded-full bg-amber-500 flex items-center justify-center mb-5 text-forest-700 shadow-card">
                   <span className="font-heading font-bold text-xl">2</span>
                 </div>
-                <h3 className="font-heading font-bold text-black mb-2">
+                <h3 className="font-heading font-bold text-forest-700 mb-2">
                   We model the Crossover Economics
                 </h3>
-                <p className="font-sans text-gray-600 text-sm">
-                  EOR cost against entity cost over 36 months, using real setup and ongoing
-                  costs by country.
+                <p className="font-sans text-parchment-700 text-sm leading-relaxed">
+                  EOR cost against entity cost over 36 months, using real setup and ongoing costs
+                  by country.
                 </p>
-                <div className="hidden sm:block absolute top-14 -right-4 w-8 h-0.5 bg-forest-dark/40" />
+                <div
+                  className="hidden sm:block absolute top-14 -right-3 w-6 h-0.5 bg-parchment-400"
+                  aria-hidden
+                />
               </div>
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-gradient-to-b from-pastel-purple/20 to-transparent border border-pastel-purple/30">
-                <div className="w-14 h-14 rounded-full bg-pastel-purple flex items-center justify-center mb-4 text-white shadow-md">
+              <div className="flex flex-col items-center text-center p-7 rounded-card bg-parchment-50 border border-parchment-300">
+                <div className="w-14 h-14 rounded-full bg-sage-500 flex items-center justify-center mb-5 text-white shadow-card">
                   <span className="font-heading font-bold text-xl">3</span>
                 </div>
-                <h3 className="font-heading font-bold text-black mb-2">
+                <h3 className="font-heading font-bold text-forest-700 mb-2">
                   See your Crossover Point
                 </h3>
-                <p className="font-sans text-gray-600 text-sm">
-                  The exact month, the three-year savings, and a Crossover Memo you can take
-                  to your board.
+                <p className="font-sans text-parchment-700 text-sm leading-relaxed">
+                  The exact month, the three-year economics, and a Crossover Memo you can take to
+                  your board.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Second-chance CTA — single primary on a soft band */}
-        <section className="py-16 bg-grey-light border-y border-grey-mid">
+        {/* Second-chance CTA */}
+        <section className="py-20 bg-parchment-50">
           <div className="max-w-2xl mx-auto px-6 text-center">
-            <h2 className="font-heading font-bold text-black text-2xl mb-3">
+            <h2 className="font-heading font-bold text-forest-700 text-2xl sm:text-3xl mb-3">
               See your Crossover Point in 2 minutes
             </h2>
-            <p className="font-sans text-gray-600 mb-8">
+            <p className="font-sans text-parchment-700 mb-8">
               Country-specific data, three-year economics, and a Crossover Memo you can share.
             </p>
             <Link
               href="/calculator"
-              className="inline-block bg-forest text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-forest-dark transition-colors shadow-lg shadow-forest/25"
+              className="inline-block bg-sienna-500 text-white rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-sienna-700 transition-colors shadow-cta hover:shadow-cta-hover"
             >
               Calculate your Crossover Point
             </Link>
           </div>
         </section>
 
-        {/* Tom pull quote — standalone break before FAQ */}
-        <section className="py-16 bg-grey-light">
+        {/* Tom pull quote */}
+        <section className="py-20 bg-parchment-100 border-y border-parchment-300">
           <div className="max-w-3xl mx-auto px-6">
-            <figure className="border-l-4 border-forest pl-6 sm:pl-8">
-              <blockquote className="font-heading font-bold text-black text-2xl sm:text-3xl leading-snug mb-6">
-                &ldquo;It&rsquo;s a dirty little hidden secret. Tons of people are on EOR when
-                they should be managing their own entity. It&rsquo;s not in any EOR
-                provider&rsquo;s interest to move you off the model, so they don&rsquo;t.&rdquo;
+            <figure className="border-l-4 border-sienna-500 pl-6 sm:pl-8">
+              <blockquote className="font-heading font-bold text-forest-700 text-2xl sm:text-3xl leading-snug mb-6">
+                &ldquo;It&rsquo;s a dirty little hidden secret. Tons of people are on EOR when they
+                should be managing their own entity. It&rsquo;s not in any EOR provider&rsquo;s
+                interest to move you off the model, so they don&rsquo;t.&rdquo;
               </blockquote>
-              <figcaption className="font-sans text-gray-500 text-sm">
+              <figcaption className="font-script text-sienna-900 text-2xl leading-none">
                 Tom Price-Daniel, Co-founder and CRO, Teamed
               </figcaption>
             </figure>
           </div>
         </section>
 
-        {/* FAQ with schema */}
+        {/* FAQ */}
         <section
           id="learn-more"
-          className="py-16 bg-gradient-to-b from-pastel-red/5 to-grey-light"
+          className="py-20 bg-parchment-50"
           aria-labelledby="faq-heading"
         >
           <div className="max-w-3xl mx-auto px-6">
             <h2
               id="faq-heading"
-              className="font-heading font-bold text-black text-2xl text-center mb-12"
+              className="font-heading font-bold text-forest-700 text-2xl sm:text-3xl text-center mb-12"
             >
               Frequently asked questions
             </h2>
-            <div className="space-y-6">
-              <details className="group bg-white rounded-card border border-forest/20 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <summary className="font-heading font-bold text-black cursor-pointer list-none flex justify-between items-center">
+            <div className="space-y-4">
+              <details className="group bg-parchment-100 rounded-card border border-parchment-300 p-6 hover:shadow-card transition-shadow">
+                <summary className="font-heading font-bold text-forest-700 cursor-pointer list-none flex justify-between items-center gap-4">
                   What is the Graduation Model?
-                  <span className="text-forest group-open:rotate-180 transition-transform">▼</span>
+                  <span className="text-sienna-500 group-open:rotate-180 transition-transform">
+                    ▼
+                  </span>
                 </summary>
-                <p className="font-sans text-gray-700 mt-4 leading-relaxed">
+                <p className="font-sans text-parchment-700 mt-4 leading-relaxed">
                   Contractor, EOR, owned entity. That&apos;s the Graduation Model we&apos;ve
-                  watched companies move through. The Crossover Point is the month where
-                  running your own legal entity becomes cheaper than staying on EOR. The
-                  calculator gives you that target month so you can plan the move instead
-                  of reacting to it, or jumping too early before the maths supports it.
+                  watched companies move through. The Crossover Point is the month where running
+                  your own legal entity becomes cheaper than staying on EOR. The calculator gives
+                  you that target month so you can plan the move instead of reacting to it, or
+                  jumping too early before the maths supports it.
                 </p>
               </details>
-              <details className="group bg-white rounded-card border border-forest/20 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <summary className="font-heading font-bold text-black cursor-pointer list-none flex justify-between items-center">
+              <details className="group bg-parchment-100 rounded-card border border-parchment-300 p-6 hover:shadow-card transition-shadow">
+                <summary className="font-heading font-bold text-forest-700 cursor-pointer list-none flex justify-between items-center gap-4">
                   When should I set up my own entity vs stay on EOR?
-                  <span className="text-forest group-open:rotate-180 transition-transform">▼</span>
+                  <span className="text-sienna-500 group-open:rotate-180 transition-transform">
+                    ▼
+                  </span>
                 </summary>
-                <p className="font-sans text-gray-700 mt-4 leading-relaxed">
-                  It depends on headcount concentration, trajectory, and commitment. If you
-                  have enough employees in one country to pass the Crossover Point inside a
-                  reasonable timeframe, typically twelve to twenty-four months, and headcount
-                  is growing or stable, an entity usually makes sense. If you&apos;re below
-                  the threshold or headcount is flat or declining, EOR is usually still the
-                  right structure. The calculator shows your exact Crossover Point so you can
-                  decide with numbers rather than a guess.
+                <p className="font-sans text-parchment-700 mt-4 leading-relaxed">
+                  It depends on headcount concentration, trajectory, and commitment. If you have
+                  enough employees in one country to pass the Crossover Point inside a reasonable
+                  timeframe, typically twelve to twenty-four months, and headcount is growing or
+                  stable, an entity usually makes sense. If you&apos;re below the threshold or
+                  headcount is flat or declining, EOR is usually still the right structure. The
+                  calculator shows your exact Crossover Point so you can decide with numbers
+                  rather than a guess.
                 </p>
               </details>
-              <details className="group bg-white rounded-card border border-forest-dark/20 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <summary className="font-heading font-bold text-black cursor-pointer list-none flex justify-between items-center">
+              <details className="group bg-parchment-100 rounded-card border border-parchment-300 p-6 hover:shadow-card transition-shadow">
+                <summary className="font-heading font-bold text-forest-700 cursor-pointer list-none flex justify-between items-center gap-4">
                   How does EOR vs entity cost comparison work?
-                  <span className="text-forest-dark group-open:rotate-180 transition-transform">▼</span>
+                  <span className="text-sienna-500 group-open:rotate-180 transition-transform">
+                    ▼
+                  </span>
                 </summary>
-                <p className="font-sans text-gray-700 mt-4 leading-relaxed">
+                <p className="font-sans text-parchment-700 mt-4 leading-relaxed">
                   EOR charges a per-employee fee each month. Entity costs include an upfront
                   setup, plus ongoing payroll, compliance, and local infrastructure. Over 36
                   months, entity costs are front-loaded. EOR costs accumulate linearly. The
                   Crossover Point is where cumulative entity cost falls below cumulative EOR
-                  cost. The model uses real setup estimates and ongoing costs for each
-                  country covered.
+                  cost. The model uses real setup estimates and ongoing costs for each country
+                  covered.
                 </p>
               </details>
-              <details className="group bg-white rounded-card border border-pastel-purple/30 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <summary className="font-heading font-bold text-black cursor-pointer list-none flex justify-between items-center">
+              <details className="group bg-parchment-100 rounded-card border border-parchment-300 p-6 hover:shadow-card transition-shadow">
+                <summary className="font-heading font-bold text-forest-700 cursor-pointer list-none flex justify-between items-center gap-4">
                   How many employees before I should consider my own entity?
-                  <span className="text-pastel-purple group-open:rotate-180 transition-transform">▼</span>
+                  <span className="text-sienna-500 group-open:rotate-180 transition-transform">
+                    ▼
+                  </span>
                 </summary>
-                <p className="font-sans text-gray-700 mt-4 leading-relaxed">
+                <p className="font-sans text-parchment-700 mt-4 leading-relaxed">
                   It varies by country complexity. In straightforward markets, typically from 10
-                  employees in the local language, or 13–15 if not. In moderate markets, 15–20 / 20–30.
-                  In complex markets, 25–35 / 35–50 if operating in another language. The calculator
-                  applies these thresholds per country and combines them with your 3-year EOR vs
-                  entity economics.
+                  employees in the local language, or 13 to 15 if not. In moderate markets, 15 to
+                  20 / 20 to 30. In complex markets, 25 to 35 / 35 to 50 if operating in another
+                  language. The calculator applies these thresholds per country and combines them
+                  with your 3-year EOR vs entity economics.
                 </p>
               </details>
             </div>
           </div>
         </section>
 
-        {/* Footer CTA — final dark-section conversion */}
-        <section className="py-16 bg-black text-white">
+        {/* Footer CTA */}
+        <section className="py-20 bg-parchment-900 text-parchment-50">
           <div className="max-w-2xl mx-auto px-6 text-center">
-            <h2 className="font-heading font-bold text-white text-2xl mb-3">
+            <h2 className="font-heading font-bold text-parchment-50 text-2xl sm:text-3xl mb-3">
               Stop guessing when to graduate off EOR
             </h2>
-            <p className="font-sans text-gray-300 mb-8">
-              The Crossover Point gives you the target month. Two minutes, no signup until you want the memo.
+            <p className="font-sans text-parchment-300 mb-8">
+              The Crossover Point gives you the target month. Two minutes, no signup until you
+              want the memo.
             </p>
             <Link
               href="/calculator"
-              className="inline-block bg-white text-black rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg shadow-white/10"
+              className="inline-block bg-parchment-50 text-parchment-900 rounded-btn px-8 py-4 font-heading font-bold text-lg hover:bg-white transition-colors shadow-lg"
             >
               Calculate your Crossover Point
             </Link>
@@ -280,7 +295,7 @@ export default function Home() {
                 name: 'How many employees before I should consider my own entity?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'It varies by country complexity. In straightforward markets, typically from 10 employees in the local language, or 13–15 if not. In moderate markets, 15–20 / 20–30. In complex markets, 25–35 / 35–50 if operating in another language. The calculator applies these thresholds per country and combines them with your 3-year EOR vs entity economics.',
+                  text: 'It varies by country complexity. In straightforward markets, typically from 10 employees in the local language, or 13 to 15 if not. In moderate markets, 15 to 20 / 20 to 30. In complex markets, 25 to 35 / 35 to 50 if operating in another language. The calculator applies these thresholds per country and combines them with your 3-year EOR vs entity economics.',
                 },
               },
             ],
