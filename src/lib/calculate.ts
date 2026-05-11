@@ -170,14 +170,14 @@ function buildReadinessItems(
   return [
     {
       criterion: 'Employee concentration',
-      question: `Have you reached or exceeded the GEMO threshold (${threshold} employees) for ${country.name}, accounting for local-language operation?`,
+      question: `Have you reached or exceeded the ${threshold}-employee threshold for ${country.name}, accounting for local-language operation?`,
       status: concentrationStatus,
       detail:
         concentrationStatus === 'green'
-          ? `At or above the Tier ${country.tier} threshold — entity concentration criteria are met.`
+          ? `At or above the Tier ${country.tier} threshold. Entity concentration criteria are met.`
           : concentrationStatus === 'amber'
-            ? `Within 20% of threshold — flag for review per GEMO (e.g. 8+ in Tier 1).`
-            : `Below threshold — GEMO recommends staying on EOR until closer to ${threshold} employees.`,
+            ? 'Within 20% of threshold. Worth a review at this point.'
+            : `Below threshold. Stay on EOR until closer to ${threshold} employees.`,
     },
     {
       criterion: 'Long-term commitment',
@@ -186,10 +186,10 @@ function buildReadinessItems(
       status: commitmentStatus,
       detail:
         commitmentStatus === 'green'
-          ? 'Growing headcount supports amortising entity setup (GEMO criterion 2).'
+          ? 'Growing headcount supports amortising entity setup.'
           : commitmentStatus === 'amber'
-            ? 'Flat headcount — ensure multi-year payback still works for entity setup.'
-            : 'Declining headcount — GEMO suggests EOR may remain the better fit.',
+            ? 'Flat headcount. Ensure multi-year payback still works for entity setup.'
+            : 'Declining headcount. EOR may remain the better fit.',
     },
     {
       criterion: 'Economic viability',
@@ -197,10 +197,10 @@ function buildReadinessItems(
         'Over 3 years, do total EOR costs exceed entity setup plus ongoing entity costs in this model?',
       status: economicsStatus,
       detail: entityEconomicallyViable
-        ? 'Three-year projection favours entity — aligns with GEMO cost comparison.'
+        ? 'Three-year projection favours entity on cost.'
         : crossoverMonth !== null
-          ? 'Monthly crossover appears before 36 months, but 3-year totals still favour EOR — validate inputs and setup assumptions.'
-          : 'EOR remains cheaper on a 3-year cumulative view — GEMO suggests staying on EOR unless other drivers apply.',
+          ? 'Monthly crossover appears before 36 months, but 3-year totals still favour EOR. Validate inputs and setup assumptions.'
+          : 'EOR remains cheaper on a 3-year cumulative view. Stay on EOR unless other drivers apply.',
     },
     {
       criterion: 'Control requirements',
@@ -208,7 +208,7 @@ function buildReadinessItems(
         'Do you need direct control over local operations, IP protection, or customer contracts that require a local entity?',
       status: controlStatus,
       detail:
-        'GEMO criterion 4 — only you can confirm. Entity enables direct contracts and bank accounts; EOR keeps the employment relationship with the provider.',
+        'Only you can confirm. Entity enables direct contracts and bank accounts. EOR keeps the employment relationship with the provider.',
     },
     {
       criterion: 'Operational readiness',
@@ -217,9 +217,9 @@ function buildReadinessItems(
       status: readinessStatus,
       detail:
         readinessStatus === 'green'
-          ? `Tier ${country.tier} (${country.complexityLabel}): allow ${country.setupMonthsLow}–${country.setupMonthsHigh} months for establishment per GEMO.`
+          ? `Tier ${country.tier} (${country.complexityLabel}): allow ${country.setupMonthsLow}–${country.setupMonthsHigh} months to establish.`
           : readinessStatus === 'amber'
-            ? `Tier ${country.tier}: plan for local payroll, accounting, and HR advisory — typically ${country.setupMonthsLow}–${country.setupMonthsHigh} months to establish.`
+            ? `Tier ${country.tier}: plan for local payroll, accounting, and HR advisory. Typically ${country.setupMonthsLow}–${country.setupMonthsHigh} months to establish.`
             : `Tier ${country.tier} (high complexity): budget ${country.setupMonthsLow}–${country.setupMonthsHigh} months and specialist in-country support.`,
     },
   ]

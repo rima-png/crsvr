@@ -143,14 +143,14 @@ function seedFromTierRow(displayName: string, tier: 1 | 2 | 3): CountrySeed {
     eorMarketRateMonthly: econ.eorMarketRateMonthly,
     currency,
     complexityFactors: [
-      `GEMO Tier ${tier} (${tierLabel} complexity): thresholds and timelines follow the Country Concentration & Entity Transition Framework.`,
-      'Operating language vs local language affects the concentration threshold (Language Buffer Rule).',
-      'Model uses tier-typical setup and ongoing cost bands — refine with local quotes before decisions.',
+      `Tier ${tier} (${tierLabel} complexity): thresholds and timelines follow the Graduation Model.`,
+      'Operating language vs local language affects the concentration threshold.',
+      'Model uses tier-typical setup and ongoing cost bands. Refine with local quotes before decisions.',
     ],
     redFlags: [
       'Political, regulatory, or FX instability in your planning window?',
       'Below threshold, market-testing phase, or dispersed micro-teams across many countries?',
-      'Missing local HR, payroll, tax, and legal capacity (or budget for outsourced GEMO-style support)?',
+      'Missing local HR, payroll, tax, and legal capacity (or budget for outsourced support)?',
     ],
     languageBufferApplies: tier !== 1,
     thresholdNative: override?.thresholdNative,

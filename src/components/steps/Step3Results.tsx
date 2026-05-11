@@ -1,14 +1,18 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { StatCards } from '@/components/results/StatCards'
 import { CountryIntelPanel } from '@/components/results/CountryIntelPanel'
 import { ReadinessChecklist } from '@/components/results/ReadinessChecklist'
+import { Recommendation } from '@/components/results/Recommendation'
 import { NextSteps } from '@/components/results/NextSteps'
 import { trackEvent } from '@/lib/analytics'
+import { convertCurrency } from '@/lib/fx'
 import { changesInWindow, formatReviewedDate } from '@/lib/freshness'
 import type { UserInputs, CalculationResult, LeadData } from '@/lib/types'
+
+const RESERVE_CURRENCIES = ['USD', 'GBP', 'EUR'] as const
 
 const CrossoverChartDynamic = dynamic(
   () => import('@/components/results/CrossoverChart').then((m) => ({ default: m.CrossoverChart })),
@@ -32,6 +36,37 @@ export function Step3Results({
 }: Step3ResultsProps) {
   const country = inputs.country!
 
+  const [displayCurrency, setDisplayCurrency] = useState(inputs.eorFeeCurrency)
+
+  const currencyOptions = useMemo(() => {
+    const local = country.currency
+    if ((RESERVE_CURRENCIES as readonly string[]).includes(local)) {
+      return [...RESERVE_CURRENCIES]
+    }
+    return [local, ...RESERVE_CURRENCIES]
+  }, [country.currency])
+
+  const displayResult = useMemo<CalculationResult>(() => {
+    const fx = (n: number) => convertCurrency(n, country.currency, displayCurrency)
+    return {
+      ...result,
+      totalEorCost: fx(result.totalEorCost),
+      totalEntityCost: fx(result.totalEntityCost),
+      totalSavings: fx(result.totalSavings),
+      totalEntityCostLow: fx(result.totalEntityCostLow),
+      totalEntityCostHigh: fx(result.totalEntityCostHigh),
+      totalSavingsLow: fx(result.totalSavingsLow),
+      totalSavingsHigh: fx(result.totalSavingsHigh),
+      dataPoints: result.dataPoints.map((p) => ({
+        ...p,
+        eorCumulative: fx(p.eorCumulative),
+        entityCumulative: fx(p.entityCumulative),
+        eorMonthly: fx(p.eorMonthly),
+        entityMonthly: fx(p.entityMonthly),
+      })),
+    }
+  }, [result, displayCurrency, country.currency])
+
   // Material upcoming changes (those that move the threshold or cost) within the
   // 36-month planning horizon. Pure-informational items don't trigger the banner.
   const materialUpcoming = changesInWindow(country.upcomingChanges, 36).filter(
@@ -44,24 +79,58 @@ export function Step3Results({
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-10">
-      <div>
-        <p className="font-sans text-gray-500 text-sm mb-1">Your EOR vs Entity Analysis</p>
-        <h1 className="font-heading font-bold text-black text-2xl">
-          Here&apos;s your crossover model, {lead?.firstName || 'there'}
-        </h1>
-        <p className="font-sans text-gray-500 mt-2">
-          {country.flag} {country.name} · {inputs.currentHeadcount} employees today ·{' '}
-          {inputs.plannedHeadcount} planned in 12 months
-        </p>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <p className="font-sans text-gray-500 text-sm mb-1">Your EOR vs Entity Analysis</p>
+          <h1 className="font-heading font-bold text-black text-2xl">
+            Here&apos;s your crossover model, {lead?.firstName || 'there'}
+          </h1>
+          <p className="font-sans text-gray-500 mt-2">
+            {country.flag} {country.name} · {inputs.currentHeadcount} employees today ·{' '}
+            {inputs.plannedHeadcount} planned in 12 months
+          </p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <label
+            htmlFor="display-currency"
+            className="font-sans text-sm text-gray-500 whitespace-nowrap"
+          >
+            Display in
+          </label>
+          <select
+            id="display-currency"
+            value={displayCurrency}
+            onChange={(e) => setDisplayCurrency(e.target.value)}
+            className="border border-gray-200 rounded-input px-3 py-2 font-sans font-medium text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white cursor-pointer"
+            aria-label="Display currency"
+          >
+            {currencyOptions.map((code) => (
+              <option key={code} value={code}>
+                {code}
+                {code === country.currency ? ' (local)' : ''}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
+
+      {/* Recommendation — moved to top so the headline answer leads */}
+      <Recommendation
+        inputs={inputs}
+        result={displayResult}
+        country={country}
+        lead={lead}
+        displayCurrency={displayCurrency}
+      />
 
       {/* Section A — CrossoverChart */}
       <div className="bg-white rounded-card border border-grey-mid p-6 shadow-sm">
         <CrossoverChartDynamic
-          dataPoints={result.dataPoints}
-          crossoverMonth={result.crossoverMonth}
-          currency={country.currency}
+          dataPoints={displayResult.dataPoints}
+          crossoverMonth={displayResult.crossoverMonth}
+          currency={displayCurrency}
           country={country}
+          threshold={result.threshold}
         />
       </div>
 
@@ -101,23 +170,23 @@ export function Step3Results({
 
       {/* Section B — StatCards */}
       <StatCards
-        crossoverMonth={result.crossoverMonth}
-        totalEorCost={result.totalEorCost}
-        totalEntityCost={result.totalEntityCost}
-        totalSavings={result.totalSavings}
-        currency={country.currency}
+        totalEorCost={displayResult.totalEorCost}
+        totalEntityCost={displayResult.totalEntityCost}
+        currency={displayCurrency}
       />
 
-      {/* Section C — CountryIntelPanel */}
-      <CountryIntelPanel country={country} threshold={result.threshold} />
+      {/* Section C — CountryIntelPanel (anchor target for "Learn more about why" CTA) */}
+      <div id="why" className="scroll-mt-8">
+        <CountryIntelPanel country={country} threshold={result.threshold} />
+      </div>
 
       {/* Section D — ReadinessChecklist */}
-      <ReadinessChecklist items={result.readinessItems} score={result.readinessScore} />
+      <ReadinessChecklist items={result.readinessItems} />
 
-      {/* Section E — NextSteps */}
+      {/* Section E — NextSteps (tools footer) */}
       <NextSteps
         inputs={inputs}
-        result={result}
+        result={displayResult}
         country={country}
         lead={lead}
         pdfBase64={pdfBase64}

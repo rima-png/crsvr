@@ -272,51 +272,55 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                 </div>
               </div>
 
-              {/* Input 3 — Planned headcount */}
+              {/* Input 3 — Planned growth */}
               <div>
                 <label className="block font-sans font-medium text-black mb-2">
-                  Planned headcount in 12 months
+                  Planned growth over next 12 months
                 </label>
                 <div className="flex gap-4 items-center">
                   <input
                     type="range"
-                    min={inputs.currentHeadcount}
-                    max={50}
-                    value={inputs.plannedHeadcount}
-                    onChange={(e) =>
+                    min={0}
+                    max={Math.max(0, 50 - inputs.currentHeadcount)}
+                    value={Math.max(0, inputs.plannedHeadcount - inputs.currentHeadcount)}
+                    onChange={(e) => {
+                      const growth = parseInt(e.target.value, 10) || 0
                       setInputs({
                         ...inputs,
-                        plannedHeadcount: parseInt(e.target.value, 10),
+                        plannedHeadcount: inputs.currentHeadcount + growth,
                       })
-                    }
+                    }}
                     className="flex-1 accent-forest"
                   />
                   <input
                     type="number"
-                    min={inputs.currentHeadcount}
-                    max={50}
-                    value={inputs.plannedHeadcount}
+                    min={0}
+                    max={Math.max(0, 50 - inputs.currentHeadcount)}
+                    value={Math.max(0, inputs.plannedHeadcount - inputs.currentHeadcount)}
                     onChange={(e) => {
-                      const v = Math.min(
-                        50,
-                        Math.max(inputs.currentHeadcount, parseInt(e.target.value, 10) || inputs.currentHeadcount)
+                      const max = Math.max(0, 50 - inputs.currentHeadcount)
+                      const growth = Math.min(
+                        max,
+                        Math.max(0, parseInt(e.target.value, 10) || 0)
                       )
-                      setInputs({ ...inputs, plannedHeadcount: v })
+                      setInputs({
+                        ...inputs,
+                        plannedHeadcount: inputs.currentHeadcount + growth,
+                      })
                     }}
-                    className={`w-20 border rounded-input px-4 py-3 font-sans focus:outline-none focus:ring-2 focus:ring-forest bg-white ${
-                      plannedValid ? 'border-gray-200 text-black' : 'border-teamed-red text-teamed-red'
-                    }`}
+                    className="w-20 border border-gray-200 rounded-input px-4 py-3 font-sans text-black focus:outline-none focus:ring-2 focus:ring-forest bg-white"
                   />
                 </div>
-                {!plannedValid && (
-                  <p className="mt-1 text-sm text-teamed-red">Must be ≥ current headcount</p>
-                )}
+                <p className="mt-1 text-sm text-gray-500 font-sans">
+                  Extra hires on top of your current {inputs.currentHeadcount} in{' '}
+                  {inputs.country.name}.
+                </p>
               </div>
 
               {/* Input 4 — Operating language */}
               <div>
                 <label className="block font-sans font-medium text-black mb-2">
-                  How does your team operate?
+                  What language does your team operate in?
                 </label>
                 <div className="flex rounded-input border border-gray-200 overflow-hidden">
                   <button
@@ -328,7 +332,7 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                         : 'bg-white text-black hover:bg-grey-mid'
                     }`}
                   >
-                    We work in {inputs.country.name}&apos;s language
+                    Local language
                   </button>
                   <button
                     type="button"
@@ -339,16 +343,14 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                         : 'bg-white text-black hover:bg-grey-mid'
                     }`}
                   >
-                    We work in English or another language
+                    English or another language
                   </button>
                 </div>
-                {!inputs.operatesInLocalLanguage && (
-                  <p className="mt-2 text-sm text-amber-600 flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-                    We&apos;ll apply a language adjustment to your threshold — operating in a
-                    non-native language increases complexity.
-                  </p>
-                )}
+                <p className="mt-2 text-sm text-gray-500 font-sans">
+                  {inputs.operatesInLocalLanguage
+                    ? 'Working in the local language reduces compliance complexity. Your team can read employment docs and engage authorities directly, which lowers the entity threshold.'
+                    : "Working in another language adds compliance complexity. You'll need translation or advisory support, which pushes the entity threshold up."}
+                </p>
               </div>
 
               {/* Input 5 — EOR fee with currency picker */}
