@@ -102,8 +102,9 @@ export function CountryIntelPanel({
         <div className="rounded-input border border-parchment-300 bg-parchment-100/60 p-3">
           <p className="font-sans text-sm text-forest-700">
             <span className="font-medium">Operating language:</span>{' '}
-            {operatesInLocalLanguage ? `${country.name}'s local language` : 'English or another'}
-            . We capture this to tailor your planning conversation, not to move the threshold.
+            {operatesInLocalLanguage
+              ? `your team operates in ${country.name}'s local language, which eases day-to-day compliance and direct engagement with authorities.`
+              : `your team operates in English or another non-local language. Expect added complications around employment paperwork, translation, and authority engagement.`}
           </p>
         </div>
 
@@ -112,10 +113,8 @@ export function CountryIntelPanel({
             <p className="font-sans text-sm text-forest-700">
               <span className="font-semibold text-warning">Multi-state flag.</span>{' '}
               You&apos;re hiring across more than one US state. Each state adds its own
-              registration, tax filings, and compliance overhead. The {threshold}-employee
-              threshold still triggers the planning conversation, but expect operational
-              break-even to land closer to 40 to 50 employees once the team is properly
-              spread.
+              registration, tax filings, and compliance overhead. Operational complexity
+              scales with each state you add.
             </p>
           </div>
         )}

@@ -347,8 +347,22 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                   </button>
                 </div>
                 <p className="mt-2 text-base font-sans text-forest-700">
-                  We capture this to tailor your planning conversation, not to move the
-                  threshold.
+                  {inputs.operatesInLocalLanguage ? (
+                    <>
+                      Working in the local language{' '}
+                      <span className="font-semibold text-sienna-700">
+                        eases day-to-day compliance
+                      </span>
+                      . Your team can read employment docs and engage authorities directly.
+                    </>
+                  ) : (
+                    <>
+                      Working in another language{' '}
+                      <span className="font-semibold text-sienna-700">adds complications</span>
+                      : translation, advisory support around employment paperwork, and slower
+                      authority engagement.
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -387,8 +401,23 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                     </button>
                   </div>
                   <p className="mt-2 text-base font-sans text-forest-700">
-                    We use this to flag state-complexity on your results, not to move the
-                    threshold.
+                    {inputs.singleStateConcentration !== false ? (
+                      <>
+                        Hiring in one state{' '}
+                        <span className="font-semibold text-sienna-700">
+                          keeps payroll and compliance straightforward
+                        </span>
+                        .
+                      </>
+                    ) : (
+                      <>
+                        Hiring across multiple states{' '}
+                        <span className="font-semibold text-sienna-700">
+                          adds per-state registrations, tax filings, and compliance overhead
+                        </span>
+                        . Operational complexity scales with each state you add.
+                      </>
+                    )}
                   </p>
                 </div>
               )}
