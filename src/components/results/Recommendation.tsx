@@ -73,18 +73,20 @@ export function Recommendation({
         <>
           <div>
             <h2 className="font-heading font-bold text-forest-700 text-xl mb-2">
-              Stay on EOR, for now.
+              EOR fits today. Plan for tomorrow.
             </h2>
             <p className="font-sans text-forest-700">
-              At {inputs.currentHeadcount} in {country.name}, EOR still wins on the maths.{' '}
+              At {inputs.currentHeadcount} in {country.name}, EOR still wins on the maths today.{' '}
               {inputs.plannedHeadcount > inputs.currentHeadcount ? (
                 <>
-                  Your trajectory to {inputs.plannedHeadcount} in 12 months is worth watching.{' '}
+                  Your trajectory to {inputs.plannedHeadcount} in 12 months puts the crossover on
+                  the horizon.{' '}
                 </>
               ) : (
-                <>Keep an eye on headcount, the entity threshold sits at {result.threshold}.{' '}</>
+                <>The entity threshold sits at {result.threshold}, knowing it keeps you ready.{' '}</>
               )}
-              When you want to talk it through, we&apos;re here. No rush.
+              Plan the transition now, while the maths is calm, so you move on your timing rather
+              than under cost pressure later.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -92,10 +94,10 @@ export function Recommendation({
               href="https://www.teamed.global/contact-teamed"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleCtaClick('Have a 15-min call when ready')}
+              onClick={() => handleCtaClick('Plan ahead with us')}
               className="inline-block bg-sienna-500 text-white rounded-btn px-6 py-3 font-heading font-bold hover:bg-sienna-700 shadow-cta hover:shadow-cta-hover transition-all"
             >
-              Have a 15-min call when ready
+              Plan ahead with us
             </a>
             <button
               type="button"

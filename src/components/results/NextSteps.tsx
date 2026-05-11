@@ -83,7 +83,7 @@ export function NextSteps({
   // call now" mismatch).
   const callLabel =
     result.status === 'BELOW_THRESHOLD'
-      ? 'Have a 15-min call when ready'
+      ? 'Plan ahead with us'
       : result.status === 'NEAR_THRESHOLD'
         ? 'Book a planning call'
         : 'Book a priority transition call'
