@@ -8,11 +8,12 @@
  * Recommendation on step 3 as a warm anchor before the analytical content.
  *
  * Presentation-only: takes country, status, and crossover month, renders a
- * tilted white card with washi tape and a Permanent Marker caption. No data
- * fetching, no state, no side effects.
+ * tilted white card with washi tape, a landmark photo for the country, and a
+ * Permanent Marker caption underneath. No data fetching, no state.
  */
 
 import type { Country, CalculationStatus } from '@/lib/types'
+import { getLandmark } from '@/lib/landmarks'
 
 interface CountryPolaroidProps {
   country: Country
@@ -37,29 +38,44 @@ function subCaption(status: CalculationStatus, crossoverMonth: number | null): s
 }
 
 export function CountryPolaroid({ country, status, crossoverMonth }: CountryPolaroidProps) {
+  const landmark = getLandmark(country.code)
+
   return (
     <div className="flex justify-center">
       <div
-        className="relative bg-white border border-parchment-300 shadow-card px-6 pt-10 pb-6 w-[260px] sm:w-[280px]"
+        className="relative bg-white border border-parchment-300 shadow-card px-4 pt-10 pb-5 w-[260px] sm:w-[280px]"
         style={{ transform: 'rotate(-1.5deg)' }}
       >
         {/* Washi tape */}
         <div
           aria-hidden
-          className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-24 h-5 bg-amber-300/70"
+          className="absolute top-[-10px] left-1/2 w-24 h-5 bg-amber-300/70"
           style={{ transform: 'translate(-50%, 0) rotate(-3deg)' }}
         />
 
-        {/* Flag photo area */}
-        <div className="flex items-center justify-center bg-parchment-100 rounded-sm py-6">
-          <span className="text-6xl leading-none" aria-hidden>
-            {country.flag}
-          </span>
+        {/* Landmark photo — square crop, parchment fallback if missing */}
+        <div className="relative w-full aspect-square overflow-hidden bg-parchment-100">
+          {landmark.src ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={landmark.src}
+              alt={landmark.alt}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              draggable={false}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-6xl leading-none" aria-hidden>
+                {country.flag}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Country name + secondary detail */}
         <p className="font-heading font-bold text-forest-700 text-center mt-4 text-base">
-          {country.name}
+          {country.flag} {country.name}
         </p>
         <p className="font-sans text-parchment-600 text-center text-xs mt-1">
           {subCaption(status, crossoverMonth)}
@@ -67,7 +83,7 @@ export function CountryPolaroid({ country, status, crossoverMonth }: CountryPola
 
         {/* Hand-written caption */}
         <p
-          className="font-marker text-sienna-900 text-center mt-3 text-2xl leading-none"
+          className="font-marker text-sienna-900 text-center mt-3 text-3xl leading-none"
           aria-label={`Recommendation: ${CAPTIONS[status]}`}
         >
           {CAPTIONS[status]}
