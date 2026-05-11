@@ -57,7 +57,7 @@ export function NextSteps({
     if (!lead) return
     setPdfLoading(true)
     try {
-      const res = await fetch('/api/generate-pdf', {
+      const res = await fetch('/tools/crossover/api/generate-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inputs, result, lead }),

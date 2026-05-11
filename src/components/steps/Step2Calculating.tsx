@@ -105,7 +105,7 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
       },
     }
 
-    fetch('/api/submit-lead', {
+    fetch('/tools/crossover/api/submit-lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(leadPayload),
@@ -115,7 +115,7 @@ export function Step2Calculating({ inputs, result, onComplete }: Step2Calculatin
 
     let pdfBase64: string | null = null
     try {
-      const pdfRes = await fetch('/api/generate-pdf', {
+      const pdfRes = await fetch('/tools/crossover/api/generate-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inputs, result, lead: leadForm }),

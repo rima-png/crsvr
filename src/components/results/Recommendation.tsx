@@ -42,7 +42,7 @@ export function Recommendation({
     setReminderLoading(true)
     setReminderError(null)
     try {
-      const res = await fetch('/api/set-reminder', {
+      const res = await fetch('/tools/crossover/api/set-reminder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

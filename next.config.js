@@ -1,11 +1,22 @@
+/**
+ * basePath ('/tools/crossover') so the tool can be served at
+ * `teamed.global/tools/crossover/*` via a Next.js rewrite in the new Teamed
+ * site (also Vercel-hosted). All internal <Link> + router navigation gets
+ * auto-prefixed. Raw fetch('/api/...') calls are prefixed manually in the
+ * consumer files. The standalone deploy now serves at
+ * `crso-cal.vercel.app/tools/crossover/...` (the bare `/` returns 404 by
+ * design; the tool will never be hit at the bare URL once embedded).
+ */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: '/tools/crossover',
   experimental: {
     serverComponentsExternalPackages: ['@react-pdf/renderer'],
-    // Bundle brand-font TTFs into the /api/generate-pdf serverless function so
-    // @react-pdf can resolve them via path.join(process.cwd(), 'public', 'fonts').
-    // Without this, Vercel only ships /public/ as static assets, not into the
-    // function bundle, and the PDF route 500s on font lookup in production.
+    // Bundle brand-font TTFs into the /tools/crossover/api/generate-pdf
+    // serverless function so @react-pdf can resolve them via
+    // path.join(process.cwd(), 'public', 'fonts'). Without this, Vercel only
+    // ships /public/ as static assets, not into the function bundle, and the
+    // PDF route 500s on font lookup in production.
     outputFileTracingIncludes: {
       '/api/generate-pdf': ['./public/fonts/*.ttf'],
     },
