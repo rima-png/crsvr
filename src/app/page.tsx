@@ -29,11 +29,11 @@ export default function Home() {
           <div className="absolute bottom-10 left-10 w-48 h-48 rounded-full bg-pastel-purple/20 blur-3xl" />
           <div className="relative max-w-3xl mx-auto px-6 pt-20 pb-16 text-center">
             <h1 className="font-heading font-bold text-black text-4xl sm:text-5xl leading-tight mb-6">
-              When does EOR stop being the right structure?
+              EOR works. Until the maths says it doesn&apos;t.
             </h1>
             <p className="font-sans text-xl text-gray-700 leading-relaxed mb-10">
-              Find the exact month an owned entity becomes cheaper than EOR. Modelled on
-              Crossover Economics, the data layer behind the Graduation Model we&apos;ve applied
+              The signals that say it&apos;s time to look beyond EOR. Modelled on Crossover
+              Economics, the data layer behind the Graduation Model we&apos;ve applied
               advising over 1,000 companies across 187+ countries.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
@@ -139,27 +139,26 @@ export default function Home() {
         <section id="learn-more" className="py-16 bg-white border-t border-grey-mid">
           <article className="max-w-3xl mx-auto px-6">
             <h2 className="font-heading font-bold text-black text-2xl mb-6">
-              What is the EOR to entity Crossover Point?
+              Why the Graduation Model matters
             </h2>
+            <p className="font-sans text-gray-700 leading-relaxed mb-4">
+              Contractor, EOR, owned entity. That&apos;s the Graduation Model we&apos;ve
+              watched companies move through.
+            </p>
             <p className="font-sans text-gray-700 leading-relaxed mb-4">
               The Crossover Point is the month where running your own legal entity becomes
               cheaper than staying on an Employer of Record. Before it, EOR is usually the
               right structure. You avoid setup costs, payroll infrastructure, and compliance
               overhead. Past it, the fixed costs of an entity spread across enough employees
-              that in-house employment pulls ahead. Most companies never calculate this
-              number. They stay on EOR long past the point where it serves them, or rush into
-              entity setup before the maths supports it.
+              that in-house employment pulls ahead.
             </p>
-
-            <h2 className="font-heading font-bold text-black text-2xl mt-10 mb-6">
-              Why the Graduation Model matters
-            </h2>
             <p className="font-sans text-gray-700 leading-relaxed mb-4">
-              Contractor, EOR, owned entity. That&apos;s the Graduation Model we&apos;ve
-              watched companies move through. Knowing your Crossover Point lets you plan the
-              move instead of reacting to it. Start too late and you overpay for months.
-              Start too early and you tie up management attention before the savings land.
-              The calculator gives you the target month so you can work backwards.
+              Most companies never calculate this number. They stay on EOR long past the
+              point where it serves them, or rush into entity setup before the maths
+              supports it. Knowing your Crossover Point lets you plan the move instead of
+              reacting to it. Start too late and you overpay for months. Start too early
+              and you tie up management attention before the savings land. The calculator
+              gives you the target month so you can work backwards.
             </p>
 
             <h2 className="font-heading font-bold text-black text-2xl mt-10 mb-6">
