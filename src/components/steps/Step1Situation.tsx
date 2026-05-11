@@ -348,10 +348,26 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                     English or another language
                   </button>
                 </div>
-                <p className="mt-2 text-sm text-parchment-600 font-sans">
-                  {inputs.operatesInLocalLanguage
-                    ? 'Working in the local language reduces compliance complexity. Your team can read employment docs and engage authorities directly, which lowers the entity threshold.'
-                    : "Working in another language adds compliance complexity. You'll need translation or advisory support, which pushes the entity threshold up."}
+                <p className="mt-2 text-base font-sans text-forest-700">
+                  {inputs.operatesInLocalLanguage ? (
+                    <>
+                      Working in the local language{' '}
+                      <span className="font-semibold text-sienna-700">
+                        reduces compliance complexity
+                      </span>
+                      . Your team can read employment docs and engage authorities directly,
+                      which <span className="font-semibold">lowers the entity threshold</span>.
+                    </>
+                  ) : (
+                    <>
+                      Working in another language{' '}
+                      <span className="font-semibold text-sienna-700">
+                        adds compliance complexity
+                      </span>
+                      . You&apos;ll need translation or advisory support, which{' '}
+                      <span className="font-semibold">pushes the entity threshold up</span>.
+                    </>
+                  )}
                 </p>
               </div>
 
