@@ -347,23 +347,8 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                   </button>
                 </div>
                 <p className="mt-2 text-base font-sans text-forest-700">
-                  {inputs.operatesInLocalLanguage ? (
-                    <>
-                      Working in the local language{' '}
-                      <span className="font-semibold text-sienna-700">eases compliance</span>:
-                      your team can read employment docs and engage authorities directly. We
-                      capture this for context, but it does not change the threshold.
-                    </>
-                  ) : (
-                    <>
-                      Working in another language{' '}
-                      <span className="font-semibold text-sienna-700">
-                        adds a planning consideration
-                      </span>
-                      , translation or advisory support around employment paperwork. We capture
-                      it for context but treat it as a soft signal, not a threshold driver.
-                    </>
-                  )}
+                  We capture this to tailor your planning conversation, not to move the
+                  threshold.
                 </p>
               </div>
 
@@ -402,21 +387,8 @@ export function Step1Situation({ inputs, setInputs, onComplete }: Step1Situation
                     </button>
                   </div>
                   <p className="mt-2 text-base font-sans text-forest-700">
-                    {inputs.singleStateConcentration !== false ? (
-                      <>
-                        Single-state hiring keeps payroll and compliance{' '}
-                        <span className="font-semibold text-sienna-700">straightforward</span>.
-                        The 10 / 14 threshold applies cleanly.
-                      </>
-                    ) : (
-                      <>
-                        Multiple states means{' '}
-                        <span className="font-semibold text-sienna-700">
-                          per-state registrations, tax filings, and compliance
-                        </span>
-                        . We treat this as a flag on your results, not a threshold change.
-                      </>
-                    )}
+                    We use this to flag state-complexity on your results, not to move the
+                    threshold.
                   </p>
                 </div>
               )}

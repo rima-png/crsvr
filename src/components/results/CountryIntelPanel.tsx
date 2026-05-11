@@ -101,11 +101,9 @@ export function CountryIntelPanel({
 
         <div className="rounded-input border border-parchment-300 bg-parchment-100/60 p-3">
           <p className="font-sans text-sm text-forest-700">
-            <span className="font-medium">Operating language</span> is a planning consideration
-            here, not a threshold driver. You said your team operates{' '}
-            {operatesInLocalLanguage
-              ? `in ${country.name}'s local language, which eases compliance day-to-day.`
-              : `in English or another non-local language. Expect employment paperwork and authority engagement to land closer to ${country.thresholdNonNative}-employee complexity. Treat as a soft signal.`}
+            <span className="font-medium">Operating language:</span>{' '}
+            {operatesInLocalLanguage ? `${country.name}'s local language` : 'English or another'}
+            . We capture this to tailor your planning conversation, not to move the threshold.
           </p>
         </div>
 
