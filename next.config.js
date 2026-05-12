@@ -32,6 +32,22 @@ const nextConfig = {
       ],
     },
   ],
+  /**
+   * Bare-URL forwarder: `crso-cal.vercel.app/` would otherwise 404 because
+   * `basePath` mounts the app under `/tools/crossover`. Send the root to
+   * the tool so old links / typed URLs land in the right place.
+   * `basePath: false` is essential — without it, the source `/` is
+   * interpreted as `/tools/crossover/` (already the tool) and the
+   * redirect never fires.
+   */
+  redirects: async () => [
+    {
+      source: '/',
+      destination: '/tools/crossover',
+      permanent: false,
+      basePath: false,
+    },
+  ],
 }
 
 module.exports = nextConfig
