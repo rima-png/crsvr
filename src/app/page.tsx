@@ -11,11 +11,11 @@ export const metadata: Metadata = {
   title:
     'EOR vs entity crossover calculator | When EOR stops being the right structure | Teamed',
   description:
-    'Crossover Economics, modelled for your country and headcount. See the month an owned entity becomes cheaper than EOR. Built on the Graduation Model applied across 187+ countries.',
+    'Crossover Economics, modelled for your country and headcount. See when an owned entity becomes cheaper than EOR. Built on the Graduation Model applied across 187+ countries.',
   openGraph: {
     title: 'EOR vs entity crossover calculator | Teamed',
     description:
-      'See the month an owned entity becomes cheaper than EOR. Modelled on Crossover Economics and the Graduation Model.',
+      'See when an owned entity becomes cheaper than EOR. Modelled on Crossover Economics and the Graduation Model.',
   },
 }
 
@@ -109,7 +109,7 @@ export default function Home() {
                     See your Crossover Point
                   </h3>
                   <p className="font-sans text-parchment-700 text-sm leading-relaxed">
-                    The exact month, the three-year economics, and a Crossover Memo you can take
+                    The month, the three-year economics, and a Crossover Memo you can take
                     to your board.
                   </p>
                 </div>
@@ -251,7 +251,7 @@ export default function Home() {
                   timeframe, typically twelve to twenty-four months, and headcount is growing or
                   stable, an entity usually makes sense. If you&apos;re below the threshold or
                   headcount is flat or declining, EOR is usually still the right structure. The
-                  calculator shows your exact Crossover Point so you can decide with numbers
+                  calculator shows your Crossover Point so you can decide with numbers
                   rather than a guess.
                 </p>
               </details>
@@ -331,7 +331,7 @@ export default function Home() {
                 name: 'When should I set up my own entity vs stay on EOR?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: "It depends on headcount concentration, trajectory, and commitment. If you have enough employees in one country to pass the Crossover Point inside a reasonable timeframe, typically twelve to twenty-four months, and headcount is growing or stable, an entity usually makes sense. If you're below the threshold or headcount is flat or declining, EOR is usually still the right structure. The calculator shows your exact Crossover Point so you can decide with numbers rather than a guess.",
+                  text: "It depends on headcount concentration, trajectory, and commitment. If you have enough employees in one country to pass the Crossover Point inside a reasonable timeframe, typically twelve to twenty-four months, and headcount is growing or stable, an entity usually makes sense. If you're below the threshold or headcount is flat or declining, EOR is usually still the right structure. The calculator shows your Crossover Point so you can decide with numbers rather than a guess.",
                 },
               },
               {

@@ -230,7 +230,7 @@ export function Recommendation({
             </h2>
             <p className="font-sans text-forest-700">
               At {inputs.currentHeadcount} in {country.name}, you&apos;re past both thresholds.
-              Every month on EOR is costing you{' '}
+              Every month on EOR could cost you{' '}
               <span className="font-bold">
                 {formatCurrency(monthlyDifference, displayCurrency)}
               </span>{' '}
