@@ -153,7 +153,7 @@ export default function Home() {
                   <div className="h-10 sm:h-12 w-full flex items-center justify-center mb-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`/customers/${c.file}`}
+                      src={`/tools/crossover/customers/${c.file}`}
                       alt={`${c.name} logo`}
                       className="max-h-full max-w-[120px] object-contain"
                       loading="lazy"
