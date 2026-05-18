@@ -14,7 +14,7 @@ const generalSans = localFont({
     { path: '../../public/fonts/GeneralSans-Semibold.ttf', weight: '600', style: 'normal' },
     { path: '../../public/fonts/GeneralSans-Bold.ttf', weight: '700', style: 'normal' },
   ],
-  variable: '--font-heading',
+  variable: '--font-general-sans',
   display: 'swap',
 })
 
@@ -25,7 +25,7 @@ const instrumentSans = localFont({
     { path: '../../public/fonts/InstrumentSans-Semibold.ttf', weight: '600', style: 'normal' },
     { path: '../../public/fonts/InstrumentSans-Bold.ttf', weight: '700', style: 'normal' },
   ],
-  variable: '--font-sans',
+  variable: '--font-instrument-sans',
   display: 'swap',
 })
 
@@ -35,14 +35,14 @@ const instrumentSans = localFont({
 const permanentMarker = Permanent_Marker({
   subsets: ['latin'],
   weight: '400',
-  variable: '--font-marker',
+  variable: '--font-permanent-marker',
   display: 'swap',
 })
 
 const caveat = Caveat({
   subsets: ['latin'],
   weight: ['500', '700'],
-  variable: '--font-script',
+  variable: '--font-caveat',
   display: 'swap',
 })
 

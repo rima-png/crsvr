@@ -37,6 +37,7 @@ const config: Config = {
           100: '#F2D9CE',
           300: '#D99682',
           500: '#C4654A',
+          600: '#B44C2D',
           700: '#924530',
           900: '#5C2B1D',
         },
@@ -79,12 +80,19 @@ const config: Config = {
       },
 
       fontFamily: {
-        // Existing brand fonts (self-hosted in /public/fonts)
-        heading: ['var(--font-heading)', 'sans-serif'],
-        sans: ['var(--font-sans)', 'sans-serif'],
-        // Editorial accent fonts loaded from Google in layout.tsx
-        marker: ['var(--font-marker)', 'system-ui', 'sans-serif'],
-        script: ['var(--font-script)', 'cursive'],
+        // Live-site role names (preferred for new code). All point at the
+        // role aliases defined in globals.css :root, so swapping the underlying
+        // typeface is a one-line change there.
+        display: ['var(--font-family-display)', 'sans-serif'],
+        body: ['var(--font-family-body)', 'sans-serif'],
+        handwritten: ['var(--font-family-handwritten)', 'cursive'],
+        script: ['var(--font-family-script)', 'cursive'],
+        // Legacy aliases — existing components use `font-heading`, `font-sans`,
+        // `font-marker`. Aliased to the role names above so they continue to
+        // work unchanged. Migrate to the role names when touching a file.
+        heading: ['var(--font-family-display)', 'sans-serif'],
+        sans: ['var(--font-family-body)', 'sans-serif'],
+        marker: ['var(--font-family-handwritten)', 'cursive'],
       },
 
       borderRadius: {
