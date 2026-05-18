@@ -2,6 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Brand tokens — mirrored from teamed.global live site CSS.
+   Source of truth: https://www.teamed.global/_next/static/chunks/0o84xfbsngkb-.css
+   Update workflow: re-extract from live site, diff, update here. */
+:root {
+  /* Font family role aliases — point at the raw next/font variables
+     emitted by layout.tsx. Component code should use the role names
+     so swapping the underlying typeface is a one-line change here. */
+  --font-family-display:     var(--font-general-sans),    "General Sans",   system-ui, sans-serif;
+  --font-family-body:        var(--font-instrument-sans), "Instrument Sans", system-ui, sans-serif;
+  --font-family-handwritten: var(--font-permanent-marker), "Permanent Marker", "Marker Felt", cursive;
+  --font-family-script:      var(--font-caveat), "Caveat", "Shelley Script", cursive;
+
+  /* Parchment — warm neutral surface ramp */
+  --parchment-50:  #fafaf7;
+  --parchment-100: #f5f1ea;
+  --parchment-200: #f0ebe3;
+  --parchment-300: #e5ddd0;
+  --parchment-400: #c9bead;
+  --parchment-500: #9e9382;
+  --parchment-600: #6b6155;
+  --parchment-700: #4a4238;
+  --parchment-800: #3a3632;
+  --parchment-900: #24211e;
+
+  /* Sienna — primary CTA + EOR-cost chart line */
+  --sienna-100: #f2d9ce;
+  --sienna-300: #d99682;
+  --sienna-500: #c4654a;
+  --sienna-600: #b44c2d;
+  --sienna-700: #924530;
+  --sienna-900: #5c2b1d;
+
+  /* Amber — accent */
+  --amber-100: #f5e6cf;
+  --amber-300: #e4c399;
+  --amber-500: #d4a574;
+  --amber-700: #a37f52;
+  --amber-900: #6b5235;
+
+  /* Sage — success + entity-cost chart line */
+  --sage-100: #dfe6d8;
+  --sage-300: #b4c2a8;
+  --sage-500: #8b9e7e;
+  --sage-700: #5f6f52;
+  --sage-900: #384130;
+
+  /* Forest — deep ink for headlines on light */
+  --forest-100: #d6dcd3;
+  --forest-300: #8fa18b;
+  --forest-500: #5a6b56;
+  --forest-700: #2d3b2d;
+  --forest-900: #1a2419;
+
+  /* Semantic roles */
+  --cta-primary:      #8e2e24;
+  --body-on-dark:     #d4c9bc;
+  --success:          #5f7f4b;
+  --success-on-light: #4a6638;
+  --warning:          #c79140;
+  --error:            #8e2e24;
+  --info:             #3e5670;
+}
+
 /* Optional film-grain overlay for editorial surfaces.
    Apply with `<div class="grain absolute inset-0 pointer-events-none" />`
    inside a positioned parent. Honour reduced-motion preferences. */
